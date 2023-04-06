@@ -1,6 +1,6 @@
 package entity;
 
-public class User {
+public abstract class User {
     private String name, surname, gender, phone, address, username, password;
 
     public User(String name, String surname, String gender, String phone, String address, String username, String password) {
