@@ -3,6 +3,9 @@ package entity;
 import java.time.LocalDateTime;
 
 public class ScheduledTreatment {
+    private static int count = 0;
+
+    private int id;
     private Client client;
     private TreatmentType treatmentType;
     private Beautician beautician;
@@ -11,12 +14,21 @@ public class ScheduledTreatment {
     private double price;
 
     public ScheduledTreatment(Client client, TreatmentType treatmentType, Beautician beautician, LocalDateTime dateTime, double price) {
+        this.id = ++count;
         this.client = client;
         this.treatmentType = treatmentType;
         this.beautician = beautician;
         this.dateTime = dateTime;
         this.state = State.SCHEDULED;
         this.price = price;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Client getClient() {
