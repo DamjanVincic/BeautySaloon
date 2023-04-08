@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class ClientManager {
     private String clientFile;
@@ -16,6 +17,17 @@ public class ClientManager {
     public ClientManager(String clientFile) {
         this.clientFile = clientFile;
         this.clients = new ArrayList<>();
+    }
+
+    public Client findClientByUsername(String username) {
+        Client client = null;
+        try {
+            ArrayList<Client> filtered = new ArrayList<Client>(this.clients.stream()
+                                                                .filter(c -> c.getUsername().equals(username))
+                                                                .collect(Collectors.toList()));
+            client = filtered.get(0);
+        } catch (IndexOutOfBoundsException ex) { }
+        return client;
     }
 
     public boolean loadData() {
@@ -51,4 +63,31 @@ public class ClientManager {
         this.clients.add(new Client(name, surname, gender, phone, address, username, password));
         this.saveData();
     }
+
+    public void edit(String username, String name, String surname, String gender, String phone, String address, String password) {
+		Client client = this.findClientByUsername(username);
+        if (client == null) {
+            System.out.println("Klijent ne postoji.");
+            return;
+        }
+        client.setName(name);
+        client.setSurname(surname);
+        client.setGender(gender);
+        client.setPhone(phone);
+        client.setAddress(address);
+        client.setUsername(username);
+        client.setPassword(password);
+
+		this.saveData();
+	}
+
+	public void remove(String username) {
+        Client client = this.findClientByUsername(username);
+        if (client == null) {
+            System.out.println("Klijent ne postoji.");
+            return;
+        }
+        this.clients.remove(client);
+        this.saveData();
+	}
 }
