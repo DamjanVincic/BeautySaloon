@@ -1,16 +1,31 @@
 package entity;
 
+import java.util.ArrayList;
+
 public class Treatment {
-    private String type; // manikir pedikir
+    private String treatment; // manikir pedikir
+    private ArrayList<Beautician> beauticians;
 
-    public Treatment(String type) {
-        this.type = type;
+    public Treatment(String treatment) {
+        this.treatment = treatment;
+        this.beauticians = new ArrayList<>();
     }
 
-    public String getType() {
-        return this.type;
+    public String getTreatment() {
+        return this.treatment;
     }
-    public void setType(String type) {
-        this.type = type;
+    public void setTreatment(String treatment) {
+        this.treatment = treatment;
+    }
+
+    public ArrayList<Beautician> getBeauticians() {
+        return this.beauticians;
+    }
+    public void setBeauticians(ArrayList<Beautician> beauticans) {
+        this.beauticians = beauticans;
+    }
+
+    public void addBeautician(Beautician beautician) {
+        this.beauticians.add(beautician);
     }
 }
