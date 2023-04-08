@@ -8,13 +8,15 @@ public class ScheduledTreatment {
     private Beautician beautician;
     private LocalDateTime dateTime;
     private State state;
+    private double price;
 
-    public ScheduledTreatment(Client client, TreatmentType treatmentType, Beautician beautician, LocalDateTime dateTime) {
+    public ScheduledTreatment(Client client, TreatmentType treatmentType, Beautician beautician, LocalDateTime dateTime, double price) {
         this.client = client;
         this.treatmentType = treatmentType;
         this.beautician = beautician;
         this.dateTime = dateTime;
         this.state = State.SCHEDULED;
+        this.price = price;
     }
 
     public Client getClient() {
@@ -51,5 +53,13 @@ public class ScheduledTreatment {
 
     public void setState(State state) {
         this.state = state;
+    }
+
+    public double getPrice() {
+        return this.price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }
