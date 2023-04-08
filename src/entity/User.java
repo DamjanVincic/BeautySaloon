@@ -61,4 +61,14 @@ public abstract class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
+    @Override
+    public String toString() {
+        return String.format("Username: %s, Name: %s, Surname: %s, Gender: %s, Phone Number: %s, Address: %s", this.getUsername(), this.getName(), this.getSurname(), this.getGender(), this.getPhone(), this.getAddress());
+    }
+
+    public String toFileString() {
+        return this.name + "," + this.surname + "," + this.gender + "," + this.phone + "," + this.address + "," + this.username + "," + this.password;
+    }
 }
