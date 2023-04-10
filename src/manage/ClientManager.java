@@ -41,6 +41,7 @@ public class ClientManager {
 			}
 			br.close();
 		} catch (IOException e) {
+            System.out.println("Error with saving data.");
 			return false;
 		}
 		return true;
@@ -54,20 +55,30 @@ public class ClientManager {
             }
 			pw.close();
 		} catch (IOException e) {
+            System.out.println("Error with loading data.");
 			return false;
 		}
 		return true;
 	}
 
     public void add(String name, String surname, String gender, String phone, String address, String username, String password) {
+        if (this.findClientByUsername(username) != null) {
+            System.out.println("Client with given username already exists.");
+            return;
+        }
+        
         this.clients.add(new Client(name, surname, gender, phone, address, username, password));
-        this.saveData();
+        if (!this.saveData()) {
+            return;
+        }
+        
+        System.out.println("Client successfully added.");
     }
 
-    public void edit(String username, String name, String surname, String gender, String phone, String address, String password) {
+    public void update(String name, String surname, String gender, String phone, String address, String username, String password) {
 		Client client = this.findClientByUsername(username);
         if (client == null) {
-            System.out.println("Klijent ne postoji.");
+            System.out.println("Client with given username does not exist.");
             return;
         }
         client.setName(name);
@@ -78,16 +89,23 @@ public class ClientManager {
         client.setUsername(username);
         client.setPassword(password);
 
-		this.saveData();
+		if (!this.saveData()) {
+            return;
+        }
+
+        System.out.println("Client successfully edited.");
 	}
 
-	public void remove(String username) {
+	public void delete(String username) {
         Client client = this.findClientByUsername(username);
         if (client == null) {
-            System.out.println("Klijent ne postoji.");
+            System.out.println("Client does not exist.");
             return;
         }
         this.clients.remove(client);
-        this.saveData();
+        if (!this.saveData()) {
+            return;
+        }
+        System.out.println("Client successfully deleted.");
 	}
 }

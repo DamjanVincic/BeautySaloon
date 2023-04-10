@@ -109,7 +109,7 @@ public class EmployeeManager {
 		System.out.println("Employee successfully added.");
     }
 
-    public void edit(String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary, EmployeeRole employeeRole) {
+    public void update(String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary, EmployeeRole employeeRole) {
 		Employee employee = this.findEmployeeByUsername(username);
         if (employee == null) {
             System.out.println("Employe does not exist.");
@@ -132,7 +132,7 @@ public class EmployeeManager {
 		System.out.println("Employee successfully edited.");
 	}
 
-	public void remove(String username) {
+	public void delete(String username) {
         Employee employee = this.findEmployeeByUsername(username);
         if (employee == null) {
             System.out.println("Employee does not exist.");
