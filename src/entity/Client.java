@@ -14,4 +14,9 @@ public class Client extends User {
     public void setLoyaltyCardBalance(double loyaltyCardBalance) {
         this.loyaltyCardBalance = loyaltyCardBalance;
     }
+
+    @Override
+    public String toFileString() {
+        return super.toFileString() + "," + this.loyaltyCardBalance;
+    }
 }

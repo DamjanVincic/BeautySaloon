@@ -1,10 +1,10 @@
 package entity;
 
 public enum EducationLevel {
-    HIGH_SCHOOL("Srednja skola", 0.05),
-    BACHELORS("Fakultet", 0.1),
-    MASTERS("Master", 0.15),
-    DOCTORATE("Doktorat", 0.2);
+    HIGH_SCHOOL("High School", 0.05),
+    BACHELORS("Bachelor's Degree", 0.1),
+    MASTERS("Masters", 0.15),
+    DOCTORATE("Doctorate", 0.2);
 
     private String text;
     private double bonus;
@@ -18,8 +18,7 @@ public enum EducationLevel {
         return this.bonus;
     }
 
-    @Override
-    public String toString() {
+    public String getText() {
         return this.text;
     }
 }

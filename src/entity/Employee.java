@@ -49,4 +49,13 @@ public abstract class Employee extends User {
     public void setEmployeeRole(EmployeeRole employeeRole) {
         this.employeeRole = employeeRole;
     }
+    
+
+    public String toFileString() {
+        return super.toFileString() + "," + this.getEducationLevel() + "," + this.getYearsOfExperience() + "," + this.getBonus() + "," + this.getBaseSalary() + "," + this.getEmployeeRole();
+    }
+
+    public double calculatePaycheck() {
+        return this.baseSalary * (1 + this.yearsOfExperience*0.05 + educationLevel.getBonus());
+    }
 }
