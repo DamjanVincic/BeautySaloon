@@ -1,14 +1,10 @@
 package entity;
 
-import java.util.ArrayList;
-
 public class Treatment {
     private String treatment; // manikir pedikir
-    private ArrayList<Beautician> beauticians;
 
     public Treatment(String treatment) {
         this.treatment = treatment;
-        this.beauticians = new ArrayList<>();
     }
 
     public String getTreatment() {
@@ -18,14 +14,9 @@ public class Treatment {
         this.treatment = treatment;
     }
 
-    public ArrayList<Beautician> getBeauticians() {
-        return this.beauticians;
-    }
-    public void setBeauticians(ArrayList<Beautician> beauticans) {
-        this.beauticians = beauticans;
-    }
 
-    public void addBeautician(Beautician beautician) {
-        this.beauticians.add(beautician);
+    public String toFileString() {
+        // String beautucianString = this.getBeauticians().stream().map(Beautician::getUsername).collect(Collectors.joining(";"));
+        return this.treatment; // + beautucianString;
     }
 }

@@ -16,4 +16,13 @@ public class Beautician extends Employee {
     public void setTreatmentsTrainedFor(ArrayList<Treatment> treatmentsTrainedFor) {
         this.treatmentsTrainedFor = treatmentsTrainedFor;
     }
+    
+
+    public void addTreatment(Treatment treatment) {
+        this.treatmentsTrainedFor.add(treatment);
+    }
+
+    public void removeTreatment(Treatment treatment) {
+        this.treatmentsTrainedFor.remove(treatment);
+    }
 }

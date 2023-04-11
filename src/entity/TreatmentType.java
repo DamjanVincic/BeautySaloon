@@ -1,7 +1,5 @@
 package entity;
 
-import java.util.ArrayList;
-
 public class TreatmentType {
     private Treatment treatment;
     private String type; // gel...
@@ -23,9 +21,5 @@ public class TreatmentType {
     }
     public void setType(String type) {
         this.type = type;
-    }
-
-    public ArrayList<Beautician> getBeauticians() {
-        return treatment.getBeauticians();
     }
 }
