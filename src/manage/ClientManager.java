@@ -20,13 +20,15 @@ public class ClientManager {
     }
 
     public Client findClientByUsername(String username) {
-        Client client = null;
+        Client client;
         try {
             ArrayList<Client> filtered = new ArrayList<Client>(this.clients.stream()
                                                                 .filter(c -> c.getUsername().equals(username))
                                                                 .collect(Collectors.toList()));
             client = filtered.get(0);
-        } catch (IndexOutOfBoundsException ex) { }
+        } catch (IndexOutOfBoundsException ex) {
+            client = null;
+        }
         return client;
     }
 
@@ -50,7 +52,7 @@ public class ClientManager {
     public boolean saveData() {
 		try {
 			PrintWriter pw = new PrintWriter(new FileWriter(this.clientFile, false));
-            for (Client client : clients) {
+            for (Client client : this.clients) {
                 pw.println(client.toFileString());
             }
 			pw.close();
@@ -96,7 +98,7 @@ public class ClientManager {
         System.out.println("Client successfully edited.");
 	}
 
-	public void delete(String username) {
+	public void remove(String username) {
         Client client = this.findClientByUsername(username);
         if (client == null) {
             System.out.println("Client does not exist.");

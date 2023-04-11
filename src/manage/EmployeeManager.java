@@ -132,7 +132,7 @@ public class EmployeeManager {
 		System.out.println("Employee successfully edited.");
 	}
 
-	public void delete(String username) {
+	public void remove(String username) {
         Employee employee = this.findEmployeeByUsername(username);
         if (employee == null) {
             System.out.println("Employee does not exist.");
