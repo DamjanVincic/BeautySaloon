@@ -22,4 +22,8 @@ public class TreatmentType {
     public void setType(String type) {
         this.type = type;
     }
+
+    public String toFileString() {
+        return this.treatment.toFileString() + "," + this.type;
+    }
 }
