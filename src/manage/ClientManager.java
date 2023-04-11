@@ -22,9 +22,9 @@ public class ClientManager {
     public Client findClientByUsername(String username) {
         Client client;
         try {
-            ArrayList<Client> filtered = new ArrayList<Client>(this.clients.stream()
-                                                                .filter(c -> c.getUsername().equals(username))
-                                                                .collect(Collectors.toList()));
+            ArrayList<Client> filtered = new ArrayList<>(this.clients.stream()
+                                                            .filter(c -> c.getUsername().equals(username))
+                                                            .collect(Collectors.toList()));
             client = filtered.get(0);
         } catch (IndexOutOfBoundsException ex) {
             client = null;
@@ -43,7 +43,6 @@ public class ClientManager {
 			}
 			br.close();
 		} catch (IOException e) {
-            System.out.println("Error with saving data.");
 			return false;
 		}
 		return true;
@@ -57,31 +56,25 @@ public class ClientManager {
             }
 			pw.close();
 		} catch (IOException e) {
-            System.out.println("Error with loading data.");
 			return false;
 		}
 		return true;
 	}
 
-    public void add(String name, String surname, String gender, String phone, String address, String username, String password) {
+    public void add(String name, String surname, String gender, String phone, String address, String username, String password) throws Exception {
         if (this.findClientByUsername(username) != null) {
-            System.out.println("Client with given username already exists.");
-            return;
+            throw new Exception("Client with given username already exists.");
         }
         
         this.clients.add(new Client(name, surname, gender, phone, address, username, password));
-        if (!this.saveData()) {
-            return;
-        }
-        
-        System.out.println("Client successfully added.");
+        this.saveData();
+        // System.out.println("Client successfully added.");
     }
 
-    public void update(String name, String surname, String gender, String phone, String address, String username, String password) {
+    public void update(String name, String surname, String gender, String phone, String address, String username, String password) throws Exception {
 		Client client = this.findClientByUsername(username);
         if (client == null) {
-            System.out.println("Client with given username does not exist.");
-            return;
+            throw new Exception("Client with given username does not exist.");
         }
         client.setName(name);
         client.setSurname(surname);
@@ -91,23 +84,17 @@ public class ClientManager {
         client.setUsername(username);
         client.setPassword(password);
 
-		if (!this.saveData()) {
-            return;
-        }
-
-        System.out.println("Client successfully edited.");
+		this.saveData();
+        // System.out.println("Client successfully edited.");
 	}
 
-	public void remove(String username) {
+	public void remove(String username) throws Exception {
         Client client = this.findClientByUsername(username);
         if (client == null) {
-            System.out.println("Client does not exist.");
-            return;
+            throw new Exception("Client does not exist.");
         }
         this.clients.remove(client);
-        if (!this.saveData()) {
-            return;
-        }
-        System.out.println("Client successfully deleted.");
+        this.saveData();
+        // System.out.println("Client successfully deleted.");
 	}
 }
