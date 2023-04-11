@@ -28,9 +28,9 @@ public class EmployeeManager {
 	public Employee findEmployeeByUsername(String username) {
 		Employee employee;
         try {
-            ArrayList<Employee> filtered = new ArrayList<Employee>(this.employees.stream()
-                                                                .filter(e -> e.getUsername().equals(username))
-                                                                .collect(Collectors.toList()));
+            ArrayList<Employee> filtered = new ArrayList<>(this.employees.stream()
+															.filter(e -> e.getUsername().equals(username))
+															.collect(Collectors.toList()));
             employee = filtered.get(0);
         } catch (IndexOutOfBoundsException ex) {
 			employee = null;
@@ -82,10 +82,9 @@ public class EmployeeManager {
 	}
 
 
-	public void add(String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary, EmployeeRole employeeRole) {
+	public void add(String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary, EmployeeRole employeeRole) throws Exception {
 		if (this.findEmployeeByUsername(username) != null) {
-			System.out.println("Employee with given username already exists.");
-			return;
+			throw new Exception("Employee with given username already exists.");
 		}
 
 		Employee employee = null;
@@ -106,14 +105,13 @@ public class EmployeeManager {
         this.employees.add(employee);
         this.saveData();
 
-		System.out.println("Employee successfully added.");
+		// System.out.println("Employee successfully added.");
     }
 
-    public void update(String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary, EmployeeRole employeeRole) {
+    public void update(String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary, EmployeeRole employeeRole) throws Exception {
 		Employee employee = this.findEmployeeByUsername(username);
         if (employee == null) {
-            System.out.println("Employe does not exist.");
-            return;
+            throw new Exception("Employe does not exist.");
         }
         employee.setName(name);
         employee.setSurname(surname);
@@ -129,14 +127,13 @@ public class EmployeeManager {
 		employee.setEmployeeRole(employeeRole);
 
 		this.saveData();
-		System.out.println("Employee successfully edited.");
+		// System.out.println("Employee successfully edited.");
 	}
 
-	public void remove(String username) {
+	public void remove(String username) throws Exception {
         Employee employee = this.findEmployeeByUsername(username);
         if (employee == null) {
-            System.out.println("Employee does not exist.");
-            return;
+            throw new Exception("Employee does not exist.");
         }
         this.employees.remove(employee);
         this.saveData();

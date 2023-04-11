@@ -22,9 +22,9 @@ public class TreatmentManager {
     public Treatment findTreatmentByType(String type) {
         Treatment treatment;
         try {
-            ArrayList<Treatment> filtered = new ArrayList<Treatment>(this.treatments.stream()
-                                                                .filter(t -> t.getTreatment().equals(type))
-                                                                .collect(Collectors.toList()));
+            ArrayList<Treatment> filtered = new ArrayList<>(this.treatments.stream()
+                                                            .filter(t -> t.getTreatment().equals(type))
+                                                            .collect(Collectors.toList()));
             treatment = filtered.get(0);
         } catch (IndexOutOfBoundsException ex) {
             treatment = null;
@@ -42,7 +42,6 @@ public class TreatmentManager {
 			}
 			br.close();
 		} catch (IOException e) {
-            System.out.println("Error with saving data.");
 			return false;
 		}
 		return true;
@@ -56,22 +55,20 @@ public class TreatmentManager {
             }
 			pw.close();
 		} catch (IOException e) {
-            System.out.println("Error with loading data.");
 			return false;
 		}
 		return true;
 	}
 
-    public void add(String type) {
+    public void add(String type) throws Exception {
         if (this.findTreatmentByType(type) != null) {
-            System.out.println("Treatment already exists.");
-            return;
+            throw new Exception("Treatment already exists.");
         }
         
         this.treatments.add(new Treatment(type));
         this.saveData();
         
-        System.out.println("Treatment successfully added.");
+        // System.out.println("Treatment successfully added.");
     }
 
     // public void update(String type) {
@@ -87,11 +84,10 @@ public class TreatmentManager {
     //     System.out.println("Treatment successfully edited.");
 	// }
 
-	public void remove(String type) {
+	public void remove(String type) throws Exception {
         Treatment treatment = this.findTreatmentByType(type);
         if (treatment == null) {
-            System.out.println("Treatment does not exist.");
-            return;
+            throw new Exception("Treatment does not exist.");
         }
         this.treatments.remove(treatment);
         this.saveData();
