@@ -1,14 +1,15 @@
 package utils;
 
 public class AppSettings {
-    private String clientFilename, employeeFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename;
+    private String clientFilename, employeeFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename;
 	
-	public AppSettings(String clientFilename, String employeeFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename) {
+	public AppSettings(String clientFilename, String employeeFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) {
 		this.clientFilename = clientFilename;
         this.employeeFilename = employeeFilename;
         this.treatmentFilename = treatmentFilename;
         this.treatmentTypeFilename = treatmentTypeFilename;
         this.scheduledTreatmentFilename = scheduledTreatmentFilename;
+        this.priceFilename = priceFilename;
 	}
 
     public String getClientFilename() {
@@ -29,5 +30,9 @@ public class AppSettings {
 
     public String getScheduledTreatmentFilename() {
         return this.scheduledTreatmentFilename;
+    }
+
+    public String getPriceFilename() {
+        return this.priceFilename;
     }
 }

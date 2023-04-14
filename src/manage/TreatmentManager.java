@@ -81,7 +81,6 @@ public class TreatmentManager {
 
 	// 	this.saveData();
 
-    //     System.out.println("Treatment successfully edited.");
 	// }
 
 	public void remove(String type) throws Exception {
@@ -91,6 +90,5 @@ public class TreatmentManager {
         }
         this.treatments.remove(treatment);
         this.saveData();
-        System.out.println("Treatment successfully deleted.");
 	}
 }

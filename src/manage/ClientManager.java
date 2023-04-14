@@ -62,13 +62,12 @@ public class ClientManager {
 	}
 
     public void add(String name, String surname, String gender, String phone, String address, String username, String password) throws Exception {
-        if (this.findClientByUsername(username) != null) {
+        if (this.findClientByUsername(username) != null) { // || employeeManager.findEmployeeByUsername(username) != null
             throw new Exception("Client with given username already exists.");
         }
         
         this.clients.add(new Client(name, surname, gender, phone, address, username, password));
         this.saveData();
-        // System.out.println("Client successfully added.");
     }
 
     public void update(String name, String surname, String gender, String phone, String address, String username, String password) throws Exception {
@@ -85,7 +84,6 @@ public class ClientManager {
         client.setPassword(password);
 
 		this.saveData();
-        // System.out.println("Client successfully edited.");
 	}
 
 	public void remove(String username) throws Exception {
@@ -95,6 +93,5 @@ public class ClientManager {
         }
         this.clients.remove(client);
         this.saveData();
-        // System.out.println("Client successfully deleted.");
 	}
 }

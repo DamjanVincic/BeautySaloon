@@ -14,19 +14,26 @@ import entity.TreatmentType;
 public class TreatmentTypeManager {
     private String treatmentTypeFile;
     private TreatmentManager treatmentManager;
+    private PriceListManager priceListManager;
     private ArrayList<TreatmentType> treatmentTypes;
 
     public TreatmentTypeManager(String treatmentTypeFile, TreatmentManager treatmentManager) {
         this.treatmentTypeFile = treatmentTypeFile;
         this.treatmentManager = treatmentManager;
+        // this.priceListManager = priceListManager;
         this.treatmentTypes = new ArrayList<>();
     }
 
-    public TreatmentType findTreatmentTypeByType(String type) {
+    public void setPriceListManager(PriceListManager priceListManager) {
+        this.priceListManager = priceListManager;
+    }
+
+    public TreatmentType findTreatmentTypeByType(String _treatment, String type) {
+        Treatment treatment = this.treatmentManager.findTreatmentByType(_treatment);
         TreatmentType treatmentType;
         try {
             ArrayList<TreatmentType> filtered = new ArrayList<>(this.treatmentTypes.stream()
-                                                                .filter(t -> t.getType().equals(type))
+                                                                .filter(t -> t.getTreatment().getTreatment().equals(treatment.getTreatment()) && t.getType().equals(type))
                                                                 .collect(Collectors.toList()));
             treatmentType = filtered.get(0);
         } catch (IndexOutOfBoundsException ex) {
@@ -64,8 +71,8 @@ public class TreatmentTypeManager {
 		return true;
 	}
 
-    public void add(String treatment, String type) throws Exception {
-        if (this.findTreatmentTypeByType(type) != null) {
+    public void add(String treatment, String type, double price) throws Exception {
+        if (this.findTreatmentTypeByType(treatment, type) != null) {
             throw new Exception("Treatment type already exists.");
         }
         
@@ -74,31 +81,29 @@ public class TreatmentTypeManager {
             throw new Exception("Treatment does not exist.");
         }
         this.treatmentTypes.add(new TreatmentType(treatmentManager.findTreatmentByType(treatment), type));
+        this.priceListManager.add(treatment, type, price);
         this.saveData();
-        
-        // System.out.println("Treatment type successfully added.");
     }
 
-    // public void update(String type) {
-	// 	Treatment treatment = this.findTreatmentByType(type);
-    //     if (treatment == null) {
-    //         System.out.println("Treatment does not exist.");
-    //         return;
-    //     }
-    //     treatment.setTreatment(type);
-
-	// 	this.saveData();
-
-    //     System.out.println("Treatment successfully edited.");
-	// }
-
-	public void remove(String type) throws Exception {
-        TreatmentType treatmentType = this.findTreatmentTypeByType(type);
+    public void update(String treatment, String type, double price) throws Exception {
+		TreatmentType treatmentType = this.findTreatmentTypeByType(treatment, type);
         if (treatmentType == null) {
             throw new Exception("Treatment type does not exist.");
         }
+        try {
+            this.priceListManager.update(treatment, type, price);
+        } catch (Exception ex) { } // pass jer ce uvek postojati u ovom slucaju
+		this.saveData();
+	}
+
+	public void remove(String treatment, String type) throws Exception {
+        TreatmentType treatmentType = this.findTreatmentTypeByType(treatment, type);
+        if (treatmentType == null) {
+            throw new Exception("Treatment type does not exist.");
+        }
+        this.priceListManager.remove(treatment, type);
         this.treatmentTypes.remove(treatmentType);
+
         this.saveData();
-        // System.out.println("Treatment type successfully deleted.");
 	}
 }
