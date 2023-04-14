@@ -13,8 +13,12 @@ public class ManagerFactory {
 
     public ManagerFactory(AppSettings appSettings) {
         this.appSettings = appSettings;
+
         this.clientManager = new ClientManager(this.appSettings.getClientFilename());
         this.employeeManager = new EmployeeManager(this.appSettings.getEmployeeFilename());
+        this.clientManager.setEmployeeManager(employeeManager);
+        this.employeeManager.setClientManager(clientManager);
+
         this.treatmentManager = new TreatmentManager(this.appSettings.getTreatmentFilename());
         
         this.treatmentTypeManager = new TreatmentTypeManager(this.appSettings.getTreatmentTypeFilename(), this.treatmentManager);

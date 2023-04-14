@@ -18,12 +18,16 @@ import entity.Receptionist;
 public class EmployeeManager {
     private String employeeFile;
     private ArrayList<Employee> employees;
+	private ClientManager clientManager;
 
     public EmployeeManager(String employeeFile) {
         this.employeeFile = employeeFile;
         this.employees = new ArrayList<>();
     }
 
+	public void setClientManager(ClientManager clientManager) {
+		this.clientManager = clientManager;
+	}
 
 	public Employee findEmployeeByUsername(String username) {
 		Employee employee;
@@ -83,8 +87,8 @@ public class EmployeeManager {
 
 
 	public void add(String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary, EmployeeRole employeeRole) throws Exception {
-		if (this.findEmployeeByUsername(username) != null) {
-			throw new Exception("Employee with given username already exists.");
+		if (this.findEmployeeByUsername(username) != null && this.clientManager.findClientByUsername(username) != null) {
+			throw new Exception("User with given username already exists.");
 		}
 
 		Employee employee = null;

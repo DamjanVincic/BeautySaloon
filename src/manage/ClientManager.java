@@ -13,10 +13,15 @@ import java.util.stream.Collectors;
 public class ClientManager {
     private String clientFile;
     private ArrayList<Client> clients;
+    private EmployeeManager employeeManager;
 
     public ClientManager(String clientFile) {
         this.clientFile = clientFile;
         this.clients = new ArrayList<>();
+    }
+
+    public void setEmployeeManager(EmployeeManager employeeManager) {
+        this.employeeManager = employeeManager;
     }
 
     public Client findClientByUsername(String username) {
@@ -62,8 +67,8 @@ public class ClientManager {
 	}
 
     public void add(String name, String surname, String gender, String phone, String address, String username, String password) throws Exception {
-        if (this.findClientByUsername(username) != null) { // || employeeManager.findEmployeeByUsername(username) != null
-            throw new Exception("Client with given username already exists.");
+        if (this.findClientByUsername(username) != null && this.employeeManager.findEmployeeByUsername(username) != null) {
+            throw new Exception("User with given username already exists.");
         }
         
         this.clients.add(new Client(name, surname, gender, phone, address, username, password));
