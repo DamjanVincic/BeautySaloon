@@ -1,6 +1,7 @@
 package entity;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ScheduledTreatment {
     private static int count = 0;
@@ -14,12 +15,24 @@ public class ScheduledTreatment {
     private double price;
 
     public ScheduledTreatment(Client client, TreatmentType treatmentType, Beautician beautician, LocalDateTime dateTime, double price) {
-        this.id = ++count;
+        /* this.id = ++count;
         this.client = client;
         this.treatmentType = treatmentType;
         this.beautician = beautician;
         this.dateTime = dateTime;
         this.state = State.SCHEDULED;
+        this.price = price; */
+        this(0, client, treatmentType, beautician, dateTime, State.SCHEDULED, price);
+        this.id = ++count;
+    }
+
+    public ScheduledTreatment(int id, Client client, TreatmentType treatmentType, Beautician beautician, LocalDateTime dateTime, State state, double price) {
+        this.id = id;
+        this.client = client;
+        this.treatmentType = treatmentType;
+        this.beautician = beautician;
+        this.dateTime = dateTime;
+        this.state = state;
         this.price = price;
     }
 
@@ -73,5 +86,13 @@ public class ScheduledTreatment {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public static void setCount(int count) {
+        ScheduledTreatment.count = count;
+    }
+
+    public String toFileString() {
+        return this.id + "," + this.client.getUsername() + "," + this.treatmentType.toFileString() + "," + this.beautician.getUsername() + "," + this.dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy. HH")) + "," + this.state + "," + this.price;
     }
 }
