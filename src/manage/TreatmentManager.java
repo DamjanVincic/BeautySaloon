@@ -6,23 +6,29 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import entity.Treatment;
 
 public class TreatmentManager {
     private String treatmentFile;
-    private ArrayList<Treatment> treatments;
+    // private ArrayList<Treatment> treatments;
+    private HashMap<Integer, Treatment> treatments;
 
     public TreatmentManager(String treatmentFile) {
         this.treatmentFile = treatmentFile;
-        this.treatments = new ArrayList<>();
+        this.treatments = new HashMap<>();
+    }
+
+    public Treatment findTreatmentByID(int id) {
+        return treatments.get(0);
     }
 
     public Treatment findTreatmentByType(String type) {
         Treatment treatment;
         try {
-            ArrayList<Treatment> filtered = new ArrayList<>(this.treatments.stream()
+            ArrayList<Treatment> filtered = new ArrayList<>(this.treatments.values().stream()
                                                             .filter(t -> t.getTreatment().equals(type))
                                                             .collect(Collectors.toList()));
             treatment = filtered.get(0);
@@ -37,10 +43,14 @@ public class TreatmentManager {
 			BufferedReader br = new BufferedReader(new FileReader(this.treatmentFile));
 			String line = null;
 			while ((line = br.readLine()) != null) {
-                Treatment treatment = new Treatment(line);
-				this.treatments.add(treatment);
+                String[] data = line.split(",");
+                Treatment treatment = new Treatment(Integer.parseInt(data[0]), data[1]);
+				this.treatments.put(treatment.getId(), treatment);
 			}
 			br.close();
+            if (!this.treatments.isEmpty()) {
+                Treatment.setCount(this.treatments.values().stream().map(Treatment::getId).max(Integer::compare).get());
+            }
 		} catch (IOException e) {
 			return false;
 		}
@@ -49,10 +59,8 @@ public class TreatmentManager {
 
     public boolean saveData() {
 		try {
-			PrintWriter pw = new PrintWriter(new FileWriter(this.treatmentFile, false));
-            for (Treatment treatment : this.treatments) {
-                pw.println(treatment.toFileString());
-            }
+			PrintWriter pw = new PrintWriter(new FileWriter(this.treatmentFile));
+            this.treatments.values().forEach(v -> pw.println(v.toFileString()));
 			pw.close();
 		} catch (IOException e) {
 			return false;
@@ -64,8 +72,8 @@ public class TreatmentManager {
         if (this.findTreatmentByType(type) != null) {
             throw new Exception("Treatment already exists.");
         }
-        
-        this.treatments.add(new Treatment(type));
+        Treatment treatment = new Treatment(type);
+        this.treatments.put(treatment.getId(), treatment);
         this.saveData();
         
         // System.out.println("Treatment successfully added.");
@@ -83,12 +91,12 @@ public class TreatmentManager {
 
 	// }
 
-	public void remove(String type) throws Exception {
-        Treatment treatment = this.findTreatmentByType(type);
+	public void remove(int id) throws Exception {
+        Treatment treatment = this.findTreatmentByID(id);
         if (treatment == null) {
             throw new Exception("Treatment does not exist.");
         }
-        this.treatments.remove(treatment);
+        this.treatments.remove(id);
         this.saveData();
 	}
 }
