@@ -10,15 +10,15 @@ public class CosmeticSaloon {
     private AppSettings appSettings;
     private ManagerFactory managerFactory;
 
-    public CosmeticSaloon(String clientFilename, String employeeFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) {
+    public CosmeticSaloon(String userFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) {
         // this.appSettings = new AppSettings(clientFilename, employeeFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename);
         // this.managerFactory = new ManagerFactory(appSettings);
-        this(0, clientFilename, employeeFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename);
+        this(0, userFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename);
         this.id = ++count;
     }
 
-    public CosmeticSaloon(int id, String clientFilename, String employeeFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) {
-        this.appSettings = new AppSettings(clientFilename, employeeFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename);
+    public CosmeticSaloon(int id, String userFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) {
+        this.appSettings = new AppSettings(userFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename);
         this.managerFactory = new ManagerFactory(appSettings);
         this.id = id;
     }
@@ -36,7 +36,7 @@ public class CosmeticSaloon {
     }
 
     public String toFileString() {
-        return this.getId() + "," + this.appSettings.getClientFilename() + "," + this.appSettings.getEmployeeFilename() + "," + this.appSettings.getTreatmentFilename() + "," + this.appSettings.getTreatmentTypeFilename() + "," + this.appSettings.getScheduledTreatmentFilename() + "," + this.appSettings.getPriceFilename();
+        return this.getId() + "," + this.appSettings.getUserFilename() + "," + this.appSettings.getTreatmentFilename() + "," + this.appSettings.getTreatmentTypeFilename() + "," + this.appSettings.getScheduledTreatmentFilename() + "," + this.appSettings.getPriceFilename();
     }
 
     public static void setCount(int count) {

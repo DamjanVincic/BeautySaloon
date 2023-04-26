@@ -5,47 +5,37 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
+import java.util.HashMap;
 
 import entity.CosmeticSaloon;
 
 public class CosmeticSaloonManager {
     private String cosmeticSaloonFile;
-    private ArrayList<CosmeticSaloon> cosmeticSaloons;
+    private HashMap<Integer, CosmeticSaloon> cosmeticSaloons;
 
     public CosmeticSaloonManager(String cosmeticSaloonFile) {
         this.cosmeticSaloonFile = cosmeticSaloonFile;
-        this.cosmeticSaloons = new ArrayList<>();
+        this.cosmeticSaloons = new HashMap<>();
     }
 
     public CosmeticSaloon findCosmeticSaloonById(int id) {
-        CosmeticSaloon cosmeticSaloon;
-        try {
-            ArrayList<CosmeticSaloon> filtered = new ArrayList<>(this.cosmeticSaloons.stream()
-                                                                .filter(cs -> cs.getId() == id)
-                                                                .collect(Collectors.toList()));
-            cosmeticSaloon = filtered.get(0);
-        } catch (IndexOutOfBoundsException ex) {
-            cosmeticSaloon = null;
-        }
-        return cosmeticSaloon;
+        return this.cosmeticSaloons.get(id);
     }
 
     public boolean loadData() {
         try {
 			BufferedReader br = new BufferedReader(new FileReader(this.cosmeticSaloonFile));
 			String line = null;
-            int count = 0;
+            // int count = 0;
 			while ((line = br.readLine()) != null) {
 				String[] data = line.split(",");
-                CosmeticSaloon cosmeticSaloon = new CosmeticSaloon(Integer.parseInt(data[0]), data[1], data[2], data[3], data[4], data[5], data[6]);
-				this.cosmeticSaloons.add(cosmeticSaloon);
-                count++;
+                CosmeticSaloon cosmeticSaloon = new CosmeticSaloon(Integer.parseInt(data[0]), data[1], data[2], data[3], data[4], data[5]);
+				this.cosmeticSaloons.put(cosmeticSaloon.getId(), cosmeticSaloon);
+                // count++;
 			}
 			br.close();
-            if (count > 0) {
-                CosmeticSaloon.setCount(cosmeticSaloons.stream().map(CosmeticSaloon::getId).max(Integer::compare).get());
+            if (!this.cosmeticSaloons.isEmpty()) {
+                CosmeticSaloon.setCount(cosmeticSaloons.keySet().stream().max(Integer::compare).get());
             }
 		} catch (IOException e) {
 			return false;
@@ -56,9 +46,7 @@ public class CosmeticSaloonManager {
     public boolean saveData() {
 		try {
 			PrintWriter pw = new PrintWriter(new FileWriter(this.cosmeticSaloonFile));
-            for (CosmeticSaloon cosmeticSaloon : this.cosmeticSaloons) {
-                pw.println(cosmeticSaloon.toFileString());
-            }
+            this.cosmeticSaloons.values().forEach(v -> pw.println(v.toFileString()));
 			pw.close();
 		} catch (IOException e) {
 			return false;
@@ -66,8 +54,9 @@ public class CosmeticSaloonManager {
 		return true;
 	}
 
-    public void add(String clientFilename, String employeeFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) throws Exception {
-        this.cosmeticSaloons.add(new CosmeticSaloon(clientFilename, employeeFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename));
+    public void add(String userFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) throws Exception {
+        CosmeticSaloon cosmeticSaloon = new CosmeticSaloon(userFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename);
+        this.cosmeticSaloons.put(cosmeticSaloon.getId(), cosmeticSaloon);
         this.saveData();
     }
 
@@ -82,11 +71,10 @@ public class CosmeticSaloonManager {
 	// }
 
 	public void remove(int id) throws Exception {
-        CosmeticSaloon cosmeticSaloon = this.findCosmeticSaloonById(id);
-        if (cosmeticSaloon == null) {
+        if (!this.cosmeticSaloons.containsKey(id)) {
             throw new Exception("Cosmetic saloon does not exist.");
         }
-        this.cosmeticSaloons.remove(cosmeticSaloon);
+        this.cosmeticSaloons.remove(id);
         this.saveData();
 	}
 }
