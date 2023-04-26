@@ -4,8 +4,7 @@ import utils.AppSettings;
 
 public class ManagerFactory {
     private AppSettings appSettings;
-    private ClientManager clientManager;
-    private EmployeeManager employeeManager;
+    private UserManager userManager;
     private TreatmentManager treatmentManager;
     private TreatmentTypeManager treatmentTypeManager;
     private ScheduledTreatmentManager scheduledTreatmentManager;
@@ -14,26 +13,18 @@ public class ManagerFactory {
     public ManagerFactory(AppSettings appSettings) {
         this.appSettings = appSettings;
 
-        this.clientManager = new ClientManager(this.appSettings.getClientFilename());
-        this.employeeManager = new EmployeeManager(this.appSettings.getEmployeeFilename());
-        this.clientManager.setEmployeeManager(employeeManager);
-        this.employeeManager.setClientManager(clientManager);
-
         this.treatmentManager = new TreatmentManager(this.appSettings.getTreatmentFilename());
-        
+        this.userManager = new UserManager(this.appSettings.getUserFilename(), treatmentManager);
+
         this.treatmentTypeManager = new TreatmentTypeManager(this.appSettings.getTreatmentTypeFilename(), this.treatmentManager);
         this.priceListManager = new PriceListManager(this.appSettings.getPriceFilename(), this.treatmentTypeManager);
-        this.treatmentTypeManager.setPriceListManager(priceListManager);
+        // this.treatmentTypeManager.setPriceListManager(priceListManager);
         
-        this.scheduledTreatmentManager = new ScheduledTreatmentManager(this.appSettings.getScheduledTreatmentFilename(), this.clientManager, this.treatmentTypeManager, this.employeeManager);
+        this.scheduledTreatmentManager = new ScheduledTreatmentManager(this.appSettings.getScheduledTreatmentFilename(), this.userManager, this.treatmentTypeManager);
     }
 
-    public ClientManager getClientManager() {
-        return this.clientManager;
-    }
-
-    public EmployeeManager getEmployeeManager() {
-        return this.employeeManager;
+    public UserManager getUserManager() {
+        return this.userManager;
     }
 
     public TreatmentManager getTreatmentManager() {
@@ -53,10 +44,8 @@ public class ManagerFactory {
     }
 
     public void loadData() {
-        this.clientManager.loadData();
-        this.employeeManager.loadData();
         this.treatmentManager.loadData();
-        this.treatmentManager.loadData();
+        this.userManager.loadData();
         this.treatmentTypeManager.loadData();
         this.scheduledTreatmentManager.loadData();
         this.priceListManager.loadData();

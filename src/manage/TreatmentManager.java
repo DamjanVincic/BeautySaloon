@@ -13,7 +13,6 @@ import entity.Treatment;
 
 public class TreatmentManager {
     private String treatmentFile;
-    // private ArrayList<Treatment> treatments;
     private HashMap<Integer, Treatment> treatments;
 
     public TreatmentManager(String treatmentFile) {
@@ -22,7 +21,7 @@ public class TreatmentManager {
     }
 
     public Treatment findTreatmentByID(int id) {
-        return treatments.get(0);
+        return treatments.get(id);
     }
 
     public Treatment findTreatmentByType(String type) {

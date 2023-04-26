@@ -1,23 +1,18 @@
 package utils;
 
 public class AppSettings {
-    private String clientFilename, employeeFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename;
+    private String userFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename;
 	
-	public AppSettings(String clientFilename, String employeeFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) {
-		this.clientFilename = clientFilename;
-        this.employeeFilename = employeeFilename;
+	public AppSettings(String userFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) {
+		this.userFilename = userFilename;
         this.treatmentFilename = treatmentFilename;
         this.treatmentTypeFilename = treatmentTypeFilename;
         this.scheduledTreatmentFilename = scheduledTreatmentFilename;
         this.priceFilename = priceFilename;
 	}
 
-    public String getClientFilename() {
-        return this.clientFilename;
-    }
-    
-    public String getEmployeeFilename() {
-        return this.employeeFilename;
+    public String getUserFilename() {
+        return this.userFilename;
     }
 
     public String getTreatmentFilename() {
