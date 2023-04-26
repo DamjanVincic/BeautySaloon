@@ -1,9 +1,13 @@
 package entity;
 
 public abstract class User {
+    private static int count = 0;
+    
+    private int id;
     private String name, surname, gender, phone, address, username, password;
+    private Role role;
 
-    public User(String name, String surname, String gender, String phone, String address, String username, String password) {
+    public User(int id, Role role, String name, String surname, String gender, String phone, String address, String username, String password) {
         this.name = name;
         this.surname = surname;
         this.gender = gender;
@@ -11,6 +15,21 @@ public abstract class User {
         this.address = address;
         this.username = username;
         this.password = password;
+        this.role = role;
+        this.id = id;
+    }
+
+    public User(Role role, String name, String surname, String gender, String phone, String address, String username, String password) {
+        this(0, role, name, surname, gender, phone, address, username, password);
+        this.id = ++count;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -62,6 +81,17 @@ public abstract class User {
         this.password = password;
     }
 
+    public Role getRole() {
+        return this.role;
+    }
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public static void setCount(int count) {
+        User.count = count;
+    }
+
 
     @Override
     public String toString() {
@@ -69,6 +99,6 @@ public abstract class User {
     }
 
     public String toFileString() {
-        return this.name + "," + this.surname + "," + this.gender + "," + this.phone + "," + this.address + "," + this.username + "," + this.password;
+        return this.id + "," + this.role + "," + this.name + "," + this.surname + "," + this.gender + "," + this.phone + "," + this.address + "," + this.username + "," + this.password;
     }
 }

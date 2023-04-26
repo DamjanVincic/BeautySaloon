@@ -4,15 +4,21 @@ public abstract class Employee extends User {
     private EducationLevel educationLevel;
     private int yearsOfExperience;
     private double bonus, baseSalary;
-    private EmployeeRole employeeRole;
 
-    public Employee(String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary, EmployeeRole employeeRole) {
-        super(name, surname, gender, phone, address, username, password);
+    public Employee(Role role, String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary) {
+        super(role, name, surname, gender, phone, address, username, password);
         this.educationLevel = educationLevel;
         this.yearsOfExperience = yearsOfExperience;
         this.bonus = bonus;
         this.baseSalary = baseSalary;
-        this.employeeRole = employeeRole;
+    }
+
+    public Employee(int id, Role role, String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary) {
+        super(id, role, name, surname, gender, phone, address, username, password);
+        this.educationLevel = educationLevel;
+        this.yearsOfExperience = yearsOfExperience;
+        this.bonus = bonus;
+        this.baseSalary = baseSalary;
     }
 
     public EducationLevel getEducationLevel() {
@@ -43,16 +49,9 @@ public abstract class Employee extends User {
         this.baseSalary = baseSalary;
     }
 
-    public EmployeeRole getEmployeeRole() {
-        return this.employeeRole;
-    }
-    public void setEmployeeRole(EmployeeRole employeeRole) {
-        this.employeeRole = employeeRole;
-    }
-    
 
     public String toFileString() {
-        return super.toFileString() + "," + this.getEducationLevel() + "," + this.getYearsOfExperience() + "," + this.getBonus() + "," + this.getBaseSalary() + "," + this.getEmployeeRole();
+        return super.toFileString() + "," + this.getEducationLevel() + "," + this.getYearsOfExperience() + "," + this.getBonus() + "," + this.getBaseSalary();
     }
 
     public double calculatePaycheck() {

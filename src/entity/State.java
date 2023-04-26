@@ -13,8 +13,7 @@ public enum State {
         this.text = text;
     }
 
-    @Override
-    public String toString() {
+    public String getText() {
         return this.text;
     }
 }

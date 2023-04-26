@@ -1,6 +1,7 @@
 package entity;
 
-public enum EmployeeRole {
+public enum Role {
+    CLIENT,
     MANAGER,
     BEAUTICIAN,
     RECEPTIONIST;
