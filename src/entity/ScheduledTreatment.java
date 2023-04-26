@@ -93,6 +93,6 @@ public class ScheduledTreatment {
     }
 
     public String toFileString() {
-        return this.id + "," + this.client.getUsername() + "," + this.treatmentType.toFileString() + "," + this.beautician.getUsername() + "," + this.dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy. HH")) + "," + this.state + "," + this.price;
+        return this.id + "," + this.client.getId() + "," + this.treatmentType.getId() + "," + this.beautician.getId() + "," + this.dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy. HH")) + "," + this.state + "," + this.price;
     }
 }
