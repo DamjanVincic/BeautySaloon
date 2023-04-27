@@ -35,12 +35,9 @@ public class PriceListManager {
                 String[] data = line.split(",");
                 // HashMap<TreatmentType, Double> prices = Stream.of(data[1].split("|")).collect(Collectors.toMap(e -> this.treatmentTypeManager.findTreatmentByID(Integer.parseInt(e.split(";")[1])), e -> Double.parseDouble(e.split(";")[1])));
                 HashMap<TreatmentType, Double> prices = new HashMap<>();
-                Stream.of(data[1].split("\\|")).forEach(e -> prices.put(this.treatmentTypeManager.findTreatmentTypeByID(Integer.parseInt(e.split(";")[0])), Double.parseDouble(e.split(";")[1])));
-                // for (String s : data[1].split("|")) {
-                //     String[] data2 = s.split(";");
-                //     prices.put(this.treatmentTypeManager.findTreatmentTypeByID(Integer.parseInt(data2[0])), Double.parseDouble(data2[1]));
-                // }
-                // this.prices.put(this.treatmentTypeManager.findTreatmentTypeByType(data[0], data[1]), Double.parseDouble(data[2]));
+                try {
+                    Stream.of(data[1].split("\\|")).forEach(e -> prices.put(this.treatmentTypeManager.findTreatmentTypeByID(Integer.parseInt(e.split(";")[0])), Double.parseDouble(e.split(";")[1])));
+                } catch (ArrayIndexOutOfBoundsException ex) { }
                 PriceList priceList = new PriceList(Integer.parseInt(data[0]));
                 priceList.setPrices(prices);
                 this.priceLists.put(Integer.parseInt(data[0]), priceList);
@@ -133,7 +130,7 @@ public class PriceListManager {
             throw new Exception("Treatment type does not have a price set.");
         }
         priceList.remove(treatmentType);
-        this.priceLists.put(priceListID, priceList);
+        // this.priceLists.put(priceListID, priceList);
         this.saveData();
 	}
 }
