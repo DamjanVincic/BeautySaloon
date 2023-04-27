@@ -54,13 +54,13 @@ public class CosmeticSaloonManager {
 		return true;
 	}
 
-    public void add(String userFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) throws Exception {
+    public void add(String userFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) {
         CosmeticSaloon cosmeticSaloon = new CosmeticSaloon(userFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename);
         this.cosmeticSaloons.put(cosmeticSaloon.getId(), cosmeticSaloon);
         this.saveData();
     }
 
-    // public void update(int id, String clientFilename, String employeeFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) throws Exception {
+    // public void update(int id, String userFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) throws Exception {
 	// 	CosmeticSaloon cosmeticSaloon = this.findCosmeticSaloonById(id);
     //     if (cosmeticSaloon == null) {
     //         throw new Exception("Cosmetic saloon does not exist.");

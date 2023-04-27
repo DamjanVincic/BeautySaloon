@@ -11,8 +11,6 @@ public class CosmeticSaloon {
     private ManagerFactory managerFactory;
 
     public CosmeticSaloon(String userFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) {
-        // this.appSettings = new AppSettings(clientFilename, employeeFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename);
-        // this.managerFactory = new ManagerFactory(appSettings);
         this(0, userFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename);
         this.id = ++count;
     }
