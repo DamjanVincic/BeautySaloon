@@ -36,7 +36,7 @@ public class TreatmentTypeManager {
 			}
 			br.close();
             if (!this.treatmentTypes.isEmpty()) {
-                Treatment.setCount(this.treatmentTypes.values().stream().map(TreatmentType::getId).max(Integer::compare).get());
+                TreatmentType.setCount(this.treatmentTypes.values().stream().map(TreatmentType::getId).max(Integer::compare).get());
             }
 		} catch (IOException e) {
 			return false;

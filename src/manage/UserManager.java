@@ -69,7 +69,6 @@ public class UserManager {
                         ((Beautician) user).setTreatmentsTrainedFor(treatmentsTrainedFor);
                         break;
 					case RECEPTIONIST:
-                        // zavrsi UserManager, izbrisi client i employee managere i izmeni app settings manager factory ili sta vec treba
 						user = new Receptionist(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8],  EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]));
                         break;
 					case MANAGER:
@@ -82,7 +81,7 @@ public class UserManager {
 			}
 			br.close();
             if (!this.users.isEmpty()) {
-                Treatment.setCount(this.users.values().stream().map(User::getId).max(Integer::compare).get());
+                User.setCount(this.users.values().stream().map(User::getId).max(Integer::compare).get());
             }
 		} catch (IOException e) {
 			return false;
@@ -165,20 +164,6 @@ public class UserManager {
         }
 
         Employee employee = (Employee) user;
-
-        // switch(user.getRole()) {
-        //     case BEAUTICIAN:
-        //         user = (Beautician) user;
-        //         break;
-        //     case MANAGER:
-        //         user = (Manager) user;
-        //         break;
-        //     case RECEPTIONIST:
-        //         user = (Receptionist) user;
-        //         break;
-        //     default:
-        //         break;
-        // }
 
         employee.setName(name);
         employee.setSurname(surname);
