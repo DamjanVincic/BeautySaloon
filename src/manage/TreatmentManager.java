@@ -74,21 +74,16 @@ public class TreatmentManager {
         Treatment treatment = new Treatment(type);
         this.treatments.put(treatment.getId(), treatment);
         this.saveData();
-        
-        // System.out.println("Treatment successfully added.");
     }
 
-    // public void update(String type) {
-	// 	Treatment treatment = this.findTreatmentByType(type);
-    //     if (treatment == null) {
-    //         System.out.println("Treatment does not exist.");
-    //         return;
-    //     }
-    //     treatment.setTreatment(type);
-
-	// 	this.saveData();
-
-	// }
+    public void update(int id, String type) throws Exception {
+		Treatment treatment = this.findTreatmentByID(id);
+        if (treatment == null) {
+            throw new Exception("Treatment does not exist.");
+        }
+        treatment.setTreatment(type);
+		this.saveData();
+	}
 
 	public void remove(int id) throws Exception {
         Treatment treatment = this.findTreatmentByID(id);
