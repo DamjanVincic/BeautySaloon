@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 public class PriceList {
     private static int count = 0;
 
-    private HashMap<TreatmentType, Double> prices;
+    private HashMap<Service, Double> prices;
     private int id;
 
     public PriceList() {
@@ -27,23 +27,23 @@ public class PriceList {
         this.id = id;
     }
 
-    public HashMap<TreatmentType, Double> getPrices() {
+    public HashMap<Service, Double> getPrices() {
         return this.prices;
     }
 
-    public void setPrices(HashMap<TreatmentType, Double> prices) {
+    public void setPrices(HashMap<Service, Double> prices) {
         this.prices = prices;
     }
 
-    public Double getPrice(TreatmentType treatmentType) {
+    public Double getPrice(Service treatmentType) {
         return this.prices.get(treatmentType);
     }
 
-    public void setPrice(TreatmentType treatmentType, Double price) {
+    public void setPrice(Service treatmentType, Double price) {
         this.prices.put(treatmentType, price);
     }
 
-    public void remove(TreatmentType treatmentType) {
+    public void remove(Service treatmentType) {
         this.prices.remove(treatmentType);
     }
 

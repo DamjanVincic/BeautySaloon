@@ -17,14 +17,14 @@ import entity.State;
 public class ScheduledTreatmentManager {
     private String scheduledTreatmentFile;
     private UserManager userManager;
-    private TreatmentTypeManager treatmentTypeManager;
+    private ServiceManager serviceManager;
     // private ArrayList<ScheduledTreatment> scheduledTreatments;
     private HashMap<Integer, ScheduledTreatment> scheduledTreatments;
 
-    public ScheduledTreatmentManager(String scheduledTreatmentFile, UserManager userManager, TreatmentTypeManager treatmentTypeManager) {
+    public ScheduledTreatmentManager(String scheduledTreatmentFile, UserManager userManager, ServiceManager serviceManager) {
         this.scheduledTreatmentFile = scheduledTreatmentFile;
         this.userManager = userManager;
-        this.treatmentTypeManager = treatmentTypeManager;
+        this.serviceManager = serviceManager;
         this.scheduledTreatments = new HashMap<>();
     }
 
@@ -39,7 +39,7 @@ public class ScheduledTreatmentManager {
             // int count = 0;
 			while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                ScheduledTreatment scheduledTreatment = new ScheduledTreatment(Integer.parseInt(data[0]), (Client) userManager.findUserById(Integer.parseInt(data[1])), treatmentTypeManager.findTreatmentTypeByID(Integer.parseInt(data[2])), (Beautician) userManager.findUserById(Integer.parseInt(data[3])), LocalDateTime.parse(data[4], DateTimeFormatter.ofPattern("dd.MM.yyyy. HH")), State.valueOf(data[5]), Double.parseDouble(data[6]));
+                ScheduledTreatment scheduledTreatment = new ScheduledTreatment(Integer.parseInt(data[0]), (Client) userManager.findUserById(Integer.parseInt(data[1])), serviceManager.findServiceByID(Integer.parseInt(data[2])), (Beautician) userManager.findUserById(Integer.parseInt(data[3])), LocalDateTime.parse(data[4], DateTimeFormatter.ofPattern("dd.MM.yyyy. HH")), State.valueOf(data[5]), Double.parseDouble(data[6]));
 				this.scheduledTreatments.put(scheduledTreatment.getId(), scheduledTreatment);
                 // count++;
 			}
@@ -64,29 +64,31 @@ public class ScheduledTreatmentManager {
 		return true;
 	}
 
-    public void add(int clientID, int treatmentTypeID, int beauticianID, LocalDateTime dateTime, double price) throws Exception {
-        ScheduledTreatment scheduledTreatment = new ScheduledTreatment((Client)this.userManager.findUserById(clientID), this.treatmentTypeManager.findTreatmentTypeByID(treatmentTypeID), (Beautician)this.userManager.findUserById(beauticianID), dateTime, price);
+    public void add(int clientID, int serviceID, int beauticianID, LocalDateTime dateTime, double price) throws Exception {
+        // ubaci proveru kada user nije kozmeticar ili ne postoji, da li postoji tip usluge itd
+        ScheduledTreatment scheduledTreatment = new ScheduledTreatment((Client)this.userManager.findUserById(clientID), this.serviceManager.findServiceByID(serviceID), (Beautician)this.userManager.findUserById(beauticianID), dateTime, price);
         this.scheduledTreatments.put(scheduledTreatment.getId(), scheduledTreatment);
         this.saveData();
     }
 
-    public void add(int clientID, int treatmentTypeID, int beauticianID, LocalDateTime dateTime) throws Exception {
-        ScheduledTreatment scheduledTreatment = new ScheduledTreatment((Client)this.userManager.findUserById(clientID), this.treatmentTypeManager.findTreatmentTypeByID(treatmentTypeID), (Beautician)this.userManager.findUserById(beauticianID), dateTime, null);
+    public void add(int clientID, int serviceID, int beauticianID, LocalDateTime dateTime) throws Exception {
+        // same
+        ScheduledTreatment scheduledTreatment = new ScheduledTreatment((Client)this.userManager.findUserById(clientID), this.serviceManager.findServiceByID(serviceID), (Beautician)this.userManager.findUserById(beauticianID), dateTime, null);
         this.scheduledTreatments.put(scheduledTreatment.getId(), scheduledTreatment);
         this.saveData();
     }
 
-    public void update(int id, int clientID, int treatmentTypeID, int beauticianID, LocalDateTime dateTime, double price) throws Exception {
+    public void update(int id, int clientID, int serviceID, int beauticianID, LocalDateTime dateTime, double price) throws Exception {
 		ScheduledTreatment scheduledTreatment = this.findScheduledTreatmentById(id);
         if (scheduledTreatment == null) {
             throw new Exception("Scheduled treatment does not exist.");
         }
 
         scheduledTreatment.setClient((Client)this.userManager.findUserById(clientID));
-        scheduledTreatment.setTreatmentType(this.treatmentTypeManager.findTreatmentTypeByID(treatmentTypeID));
+        scheduledTreatment.setService(this.serviceManager.findServiceByID(serviceID));
         scheduledTreatment.setBeautician((Beautician)this.userManager.findUserById(beauticianID));
         scheduledTreatment.setDateTime(dateTime);
-        scheduledTreatment.setPrice(price); // ?
+        scheduledTreatment.setPrice(price);
 
 		this.saveData();
 	}

@@ -9,18 +9,18 @@ import java.util.HashMap;
 import java.util.stream.Stream;
 
 import entity.PriceList;
-import entity.TreatmentType;
+import entity.Service;
 
 public class PriceListManager {
     private String priceFile;
     // private HashMap<TreatmentType, Double> prices;
     private HashMap<Integer, PriceList> priceLists;
-    private TreatmentTypeManager treatmentTypeManager;
+    private ServiceManager serviceManager;
 
-    public PriceListManager(String priceFile, TreatmentTypeManager treatmentTypeManager) {
+    public PriceListManager(String priceFile, ServiceManager serviceManager) {
         this.priceFile = priceFile;
         this.priceLists = new HashMap<>();
-        this.treatmentTypeManager = treatmentTypeManager;
+        this.serviceManager = serviceManager;
     }
 
     public PriceList findPriceListByID(int id) {
@@ -34,9 +34,9 @@ public class PriceListManager {
 			while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
                 // HashMap<TreatmentType, Double> prices = Stream.of(data[1].split("|")).collect(Collectors.toMap(e -> this.treatmentTypeManager.findTreatmentByID(Integer.parseInt(e.split(";")[1])), e -> Double.parseDouble(e.split(";")[1])));
-                HashMap<TreatmentType, Double> prices = new HashMap<>();
+                HashMap<Service, Double> prices = new HashMap<>();
                 try {
-                    Stream.of(data[1].split("\\|")).forEach(e -> prices.put(this.treatmentTypeManager.findTreatmentTypeByID(Integer.parseInt(e.split(";")[0])), Double.parseDouble(e.split(";")[1])));
+                    Stream.of(data[1].split("\\|")).forEach(e -> prices.put(this.serviceManager.findServiceByID(Integer.parseInt(e.split(";")[0])), Double.parseDouble(e.split(";")[1])));
                 } catch (ArrayIndexOutOfBoundsException ex) { }
                 PriceList priceList = new PriceList(Integer.parseInt(data[0]));
                 priceList.setPrices(prices);
@@ -69,41 +69,41 @@ public class PriceListManager {
         this.saveData();
     }
 
-    public void add(int priceListID, int treatmentTypeID, double price) throws Exception {
+    public void add(int priceListID, int serviceID, double price) throws Exception {
         // if (priceListID < 1) id mora biti veci od 0
         PriceList priceList = this.findPriceListByID(priceListID);
         if (priceList == null) {
             priceList = new PriceList(priceListID);
         }
 
-        TreatmentType treatmentType = this.treatmentTypeManager.findTreatmentTypeByID(treatmentTypeID);
-        if (treatmentType == null) {
-            throw new Exception("Treatment type does not exist.");
+        Service service = this.serviceManager.findServiceByID(serviceID);
+        if (service == null) {
+            throw new Exception("Service does not exist.");
         }
-        if (priceList.getPrice(treatmentType) != null) {
-            throw new Exception("Treatment type already has a price set.");
+        if (priceList.getPrice(service) != null) {
+            throw new Exception("Service already has a price set.");
         }
 
-        priceList.setPrice(treatmentType, price);
+        priceList.setPrice(service, price);
         this.priceLists.put(priceListID, priceList);
         this.saveData();
     }
 
-    public void update(int priceListID, int treatmentTypeID, double price) throws Exception {
+    public void update(int priceListID, int serviceID, double price) throws Exception {
         PriceList priceList = this.findPriceListByID(priceListID);
         if (priceList == null) {
             throw new Exception("Price list does not exist.");
         }
 
-        TreatmentType treatmentType = this.treatmentTypeManager.findTreatmentTypeByID(treatmentTypeID);
-        if (treatmentType == null) {
-            throw new Exception("Treatment type does not exist.");
+        Service service = this.serviceManager.findServiceByID(serviceID);
+        if (service == null) {
+            throw new Exception("Service does not exist.");
         }
-        if (priceList.getPrice(treatmentType) == null) {
-            throw new Exception("Treatment type does not have a price set.");
+        if (priceList.getPrice(service) == null) {
+            throw new Exception("Service does not have a price set.");
         }
 
-        priceList.setPrice(treatmentType, price);
+        priceList.setPrice(service, price);
         this.priceLists.put(priceListID, priceList);
         this.saveData();
 	}
@@ -116,20 +116,20 @@ public class PriceListManager {
         this.saveData();
     }
 
-	public void remove(int priceListID, int treatmentTypeID) throws Exception {
+	public void remove(int priceListID, int serviceID) throws Exception {
         PriceList priceList = this.findPriceListByID(priceListID);
         if (priceList == null) {
             throw new Exception("Price list does not exist.");
         }
 
-        TreatmentType treatmentType = this.treatmentTypeManager.findTreatmentTypeByID(treatmentTypeID);
-        if (treatmentType == null) {
-            throw new Exception("Treatment type does not exist.");
+        Service service = this.serviceManager.findServiceByID(serviceID);
+        if (service == null) {
+            throw new Exception("Service does not exist.");
         }
-        if (priceList.getPrice(treatmentType) == null) {
-            throw new Exception("Treatment type does not have a price set.");
+        if (priceList.getPrice(service) == null) {
+            throw new Exception("Service does not have a price set.");
         }
-        priceList.remove(treatmentType);
+        priceList.remove(service);
         // this.priceLists.put(priceListID, priceList);
         this.saveData();
 	}

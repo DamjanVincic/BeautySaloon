@@ -10,13 +10,13 @@ public class CosmeticSaloon {
     private AppSettings appSettings;
     private ManagerFactory managerFactory;
 
-    public CosmeticSaloon(String userFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) {
-        this(0, userFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename);
+    public CosmeticSaloon(String userFilename, String treatmentTypeFilename, String serviceFilename, String scheduledTreatmentFilename, String priceFilename) {
+        this(0, userFilename, treatmentTypeFilename, serviceFilename, scheduledTreatmentFilename, priceFilename);
         this.id = ++count;
     }
 
-    public CosmeticSaloon(int id, String userFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) {
-        this.appSettings = new AppSettings(userFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename);
+    public CosmeticSaloon(int id, String userFilename, String treatmentTypeFilename, String serviceFilename, String scheduledTreatmentFilename, String priceFilename) {
+        this.appSettings = new AppSettings(userFilename, treatmentTypeFilename, serviceFilename, scheduledTreatmentFilename, priceFilename);
         this.managerFactory = new ManagerFactory(appSettings);
         this.id = id;
     }
@@ -34,7 +34,7 @@ public class CosmeticSaloon {
     }
 
     public String toFileString() {
-        return this.getId() + "," + this.appSettings.getUserFilename() + "," + this.appSettings.getTreatmentFilename() + "," + this.appSettings.getTreatmentTypeFilename() + "," + this.appSettings.getScheduledTreatmentFilename() + "," + this.appSettings.getPriceFilename();
+        return this.getId() + "," + this.appSettings.getUserFilename() + "," + this.appSettings.getTreatmentTypeFilename() + "," + this.appSettings.getServiceFilename() + "," + this.appSettings.getScheduledTreatmentFilename() + "," + this.appSettings.getPriceFilename();
     }
 
     public static void setCount(int count) {

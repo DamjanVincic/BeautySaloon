@@ -17,17 +17,17 @@ import entity.Employee;
 import entity.Manager;
 import entity.Receptionist;
 import entity.Role;
-import entity.Treatment;
+import entity.TreatmentType;
 import entity.User;
 
 public class UserManager {
     private String userFile;
     private HashMap<Integer, User> users;
-    private TreatmentManager treatmentManager;
+    private TreatmentTypeManager treatmentTypeManager;
 
-    public UserManager(String userFile, TreatmentManager treatmentManager) {
+    public UserManager(String userFile, TreatmentTypeManager treatmentTypeManager) {
         this.userFile = userFile;
-        this.treatmentManager = treatmentManager;
+        this.treatmentTypeManager = treatmentTypeManager;
         this.users = new HashMap<>();
     }
 
@@ -61,12 +61,12 @@ public class UserManager {
                         user = new Client(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
                         break;
 					case BEAUTICIAN:
-                        ArrayList<Treatment> treatmentsTrainedFor = new ArrayList<>();
+                        ArrayList<TreatmentType> treatmentTypesTrainedFor = new ArrayList<>();
                         try {
-                            Stream.of(data[13].split(";")).forEach(e -> treatmentsTrainedFor.add(this.treatmentManager.findTreatmentByID(Integer.parseInt(e))));
+                            Stream.of(data[13].split(";")).forEach(e -> treatmentTypesTrainedFor.add(this.treatmentTypeManager.findTreatmentTypeByID(Integer.parseInt(e))));
                         } catch (IndexOutOfBoundsException ex) { }
                         user = new Beautician(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8], EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]));
-                        ((Beautician) user).setTreatmentsTrainedFor(treatmentsTrainedFor);
+                        ((Beautician) user).setTreatmentsTrainedFor(treatmentTypesTrainedFor);
                         break;
 					case RECEPTIONIST:
 						user = new Receptionist(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8],  EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]));

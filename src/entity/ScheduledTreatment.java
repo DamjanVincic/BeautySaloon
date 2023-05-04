@@ -8,13 +8,13 @@ public class ScheduledTreatment {
 
     private int id;
     private Client client;
-    private TreatmentType treatmentType;
+    private Service service;
     private Beautician beautician;
     private LocalDateTime dateTime;
     private State state;
     private double price;
 
-    public ScheduledTreatment(Client client, TreatmentType treatmentType, Beautician beautician, LocalDateTime dateTime, Double price) {
+    public ScheduledTreatment(Client client, Service service, Beautician beautician, LocalDateTime dateTime, Double price) {
         /* this.id = ++count;
         this.client = client;
         this.treatmentType = treatmentType;
@@ -22,18 +22,18 @@ public class ScheduledTreatment {
         this.dateTime = dateTime;
         this.state = State.SCHEDULED;
         this.price = price; */
-        this(0, client, treatmentType, beautician, dateTime, State.SCHEDULED, price);
+        this(0, client, service, beautician, dateTime, State.SCHEDULED, price);
         this.id = ++count;
     }
 
-    public ScheduledTreatment(int id, Client client, TreatmentType treatmentType, Beautician beautician, LocalDateTime dateTime, State state, Double price) {
+    public ScheduledTreatment(int id, Client client, Service service, Beautician beautician, LocalDateTime dateTime, State state, Double price) {
         this.id = id;
         this.client = client;
-        this.treatmentType = treatmentType;
+        this.service = service;
         this.beautician = beautician;
         this.dateTime = dateTime;
         this.state = state;
-        this.price = price == null ? treatmentType.getPrice() : price;
+        this.price = price == null ? service.getPrice() : price;
     }
 
     public int getId() {
@@ -51,11 +51,11 @@ public class ScheduledTreatment {
         this.client = client;
     }
 
-    public TreatmentType getTreatmentType() {
-        return this.treatmentType;
+    public Service getService() {
+        return this.service;
     }
-    public void setTreatmentType(TreatmentType treatmentType) {
-        this.treatmentType = treatmentType;
+    public void setService(Service service) {
+        this.service = service;
     }
 
     public Beautician getBeautician() {
@@ -93,6 +93,6 @@ public class ScheduledTreatment {
     }
 
     public String toFileString() {
-        return this.id + "," + this.client.getId() + "," + this.treatmentType.getId() + "," + this.beautician.getId() + "," + this.dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy. HH")) + "," + this.state + "," + this.price;
+        return this.id + "," + this.client.getId() + "," + this.service.getId() + "," + this.beautician.getId() + "," + this.dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy. HH")) + "," + this.state + "," + this.price;
     }
 }
