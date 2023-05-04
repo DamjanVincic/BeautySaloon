@@ -31,7 +31,7 @@ public class TreatmentTypeManager {
 			String line = null;
 			while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                TreatmentType treatmentType = new TreatmentType(Integer.parseInt(data[0]), treatmentManager.findTreatmentByID(Integer.parseInt(data[1])), data[2]);
+                TreatmentType treatmentType = new TreatmentType(Integer.parseInt(data[0]), treatmentManager.findTreatmentByID(Integer.parseInt(data[1])), data[2], Double.parseDouble(data[3]));
 				this.treatmentTypes.put(treatmentType.getId(), treatmentType);
 			}
 			br.close();
@@ -55,18 +55,18 @@ public class TreatmentTypeManager {
 		return true;
 	}
 
-    public void add(int treatmentID, String type) throws Exception {
+    public void add(int treatmentID, String type, double price) throws Exception {
         Treatment treatment = this.treatmentManager.findTreatmentByID(treatmentID);
         if (treatment == null) {
             throw new Exception("Treatment does not exist.");
         }
-        TreatmentType treatmentType = new TreatmentType(treatment, type);
+        TreatmentType treatmentType = new TreatmentType(treatment, type, price);
         this.treatmentTypes.put(treatmentType.getId(), treatmentType);
         // this.priceListManager.add(treatment, type, price);
         this.saveData();
     }
 
-    public void update(int treatmentTypeID, int treatmentID, String type) throws Exception {
+    public void update(int treatmentTypeID, int treatmentID, String type, double price) throws Exception {
 		TreatmentType treatmentType = this.findTreatmentTypeByID(treatmentTypeID);
         if (treatmentType == null) {
             throw new Exception("Treatment type does not exist.");
@@ -79,6 +79,7 @@ public class TreatmentTypeManager {
 
         treatmentType.setTreatment(treatment);
         treatmentType.setType(type);
+        treatmentType.setPrice(price);
 
 		this.saveData();
 	}

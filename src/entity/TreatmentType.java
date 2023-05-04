@@ -7,17 +7,18 @@ public class TreatmentType {
 
     private Treatment treatment;
     private String type; // gel...
+    private double price;
     private int id;
 
-    public TreatmentType(Treatment treatment, String type) {
-        this.treatment = treatment;
-        this.type = type;
+    public TreatmentType(Treatment treatment, String type, double price) {
+        this(0, treatment, type, price);
         this.id = ++count;
     }
 
-    public TreatmentType(int id, Treatment treatment, String type) {
+    public TreatmentType(int id, Treatment treatment, String type, double price) {
         this.treatment = treatment;
         this.type = type;
+        this.price = price;
         this.id = id;
     }
 
@@ -27,6 +28,14 @@ public class TreatmentType {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public double getPrice() {
+        return this.price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public Treatment getTreatment() {
@@ -59,6 +68,6 @@ public class TreatmentType {
 
     public String toFileString() {
         // return this.treatment.toFileString() + "," + this.type;
-        return this.id + "," + this.treatment.getId() + "," + this.type;
+        return this.id + "," + this.treatment.getId() + "," + this.type + "," + this.price;
     }
 }

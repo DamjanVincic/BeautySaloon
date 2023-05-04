@@ -70,6 +70,12 @@ public class ScheduledTreatmentManager {
         this.saveData();
     }
 
+    public void add(int clientID, int treatmentTypeID, int beauticianID, LocalDateTime dateTime) throws Exception {
+        ScheduledTreatment scheduledTreatment = new ScheduledTreatment((Client)this.userManager.findUserById(clientID), this.treatmentTypeManager.findTreatmentTypeByID(treatmentTypeID), (Beautician)this.userManager.findUserById(beauticianID), dateTime, null);
+        this.scheduledTreatments.put(scheduledTreatment.getId(), scheduledTreatment);
+        this.saveData();
+    }
+
     public void update(int id, int clientID, int treatmentTypeID, int beauticianID, LocalDateTime dateTime, double price) throws Exception {
 		ScheduledTreatment scheduledTreatment = this.findScheduledTreatmentById(id);
         if (scheduledTreatment == null) {
