@@ -95,7 +95,7 @@ public abstract class User {
 
     @Override
     public String toString() {
-        return String.format("Username: %s, Name: %s, Surname: %s, Gender: %s, Phone Number: %s, Address: %s", this.getUsername(), this.getName(), this.getSurname(), this.getGender(), this.getPhone(), this.getAddress());
+        return String.format("Role: %s, Username: %s, Name: %s, Surname: %s, Gender: %s, Phone Number: %s, Address: %s", this.getRole(), this.getUsername(), this.getName(), this.getSurname(), this.getGender(), this.getPhone(), this.getAddress());
     }
 
     public String toFileString() {

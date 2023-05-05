@@ -50,6 +50,11 @@ public abstract class Employee extends User {
     }
 
 
+    @Override
+    public String toString() {
+        return String.format("%s, Education Level: %s, Experience: %s, Bonus: %s, Base Salary: %s", super.toString(), this.educationLevel.getText(), this.yearsOfExperience, this.bonus, this.baseSalary);
+    }
+
     public String toFileString() {
         return super.toFileString() + "," + this.getEducationLevel() + "," + this.getYearsOfExperience() + "," + this.getBonus() + "," + this.getBaseSalary();
     }
