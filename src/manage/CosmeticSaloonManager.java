@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalTime;
 import java.util.HashMap;
 
 import entity.CosmeticSaloon;
@@ -29,7 +30,7 @@ public class CosmeticSaloonManager {
             // int count = 0;
 			while ((line = br.readLine()) != null) {
 				String[] data = line.split(",");
-                CosmeticSaloon cosmeticSaloon = new CosmeticSaloon(Integer.parseInt(data[0]), data[1], data[2], data[3], data[4], data[5]);
+                CosmeticSaloon cosmeticSaloon = new CosmeticSaloon(Integer.parseInt(data[0]), data[1], LocalTime.parse(data[2]), LocalTime.parse(data[3]), data[4], data[5], data[6], data[7], data[8]);
 				this.cosmeticSaloons.put(cosmeticSaloon.getId(), cosmeticSaloon);
                 // count++;
 			}
@@ -54,21 +55,23 @@ public class CosmeticSaloonManager {
 		return true;
 	}
 
-    public void add(String userFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) {
-        CosmeticSaloon cosmeticSaloon = new CosmeticSaloon(userFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename);
+    public void add(String name, LocalTime startTime, LocalTime endTime, String userFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) {
+        CosmeticSaloon cosmeticSaloon = new CosmeticSaloon(name, startTime, endTime, userFilename, treatmentFilename, treatmentTypeFilename, scheduledTreatmentFilename, priceFilename);
         this.cosmeticSaloons.put(cosmeticSaloon.getId(), cosmeticSaloon);
         this.saveData();
     }
 
-    // public void update(int id, String userFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) throws Exception {
-	// 	CosmeticSaloon cosmeticSaloon = this.findCosmeticSaloonById(id);
-    //     if (cosmeticSaloon == null) {
-    //         throw new Exception("Cosmetic saloon does not exist.");
-    //     }
-    //     // ...
+    public void update(int id, String name, LocalTime startTime, LocalTime endTime) throws Exception { //, String userFilename, String treatmentFilename, String treatmentTypeFilename, String scheduledTreatmentFilename, String priceFilename) throws Exception {
+		CosmeticSaloon cosmeticSaloon = this.findCosmeticSaloonById(id);
+        if (cosmeticSaloon == null) {
+            throw new Exception("Cosmetic saloon does not exist.");
+        }
+        cosmeticSaloon.setName(name);
+        cosmeticSaloon.setStartTime(startTime);
+        cosmeticSaloon.setEndTime(endTime);
 
-	// 	this.saveData();
-	// }
+		this.saveData();
+	}
 
 	public void remove(int id) throws Exception {
         if (!this.cosmeticSaloons.containsKey(id)) {
