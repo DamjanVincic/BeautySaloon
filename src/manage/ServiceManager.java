@@ -5,7 +5,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import entity.TreatmentType;
 import entity.Service;
@@ -21,6 +23,13 @@ public class ServiceManager {
         this.services = new HashMap<>();
     }
 
+    public HashMap<Integer, Service> getServices() {
+        // return this.services;
+        return (HashMap<Integer, Service>) this.services.entrySet().stream()
+                                        .filter(e -> !e.getValue().isDeleted())
+                                        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+    }
+
     public Service findServiceByID(int id) {
         return this.services.get(id);
     }
@@ -31,7 +40,7 @@ public class ServiceManager {
 			String line = null;
 			while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                Service service = new Service(Integer.parseInt(data[0]), treatmentTypeManager.findTreatmentTypeByID(Integer.parseInt(data[1])), data[2], Double.parseDouble(data[3]));
+                Service service = new Service(Integer.parseInt(data[0]), treatmentTypeManager.findTreatmentTypeByID(Integer.parseInt(data[1])), data[2], Double.parseDouble(data[3]), LocalTime.parse(data[4]), Boolean.parseBoolean(data[5]));
 				this.services.put(service.getId(), service);
 			}
 			br.close();
@@ -55,42 +64,44 @@ public class ServiceManager {
 		return true;
 	}
 
-    public void add(int treatmentTypeID, String type, double price) throws Exception {
+    public void add(int treatmentTypeID, String type, double price, LocalTime length) throws Exception {
         TreatmentType treatmentType = this.treatmentTypeManager.findTreatmentTypeByID(treatmentTypeID);
         if (treatmentType == null) {
             throw new Exception("Treatment type does not exist.");
         }
-        Service service = new Service(treatmentType, type, price);
+        Service service = new Service(treatmentType, type, price, length, false);
         this.services.put(service.getId(), service);
         // this.priceListManager.add(treatment, type, price);
         this.saveData();
     }
 
-    public void update(int serviceID, int treatmentTypeID, String type, double price) throws Exception {
+    public void update(int serviceID, int treatmentTypeID, String type, double price, LocalTime length) throws Exception {
 		Service service = this.findServiceByID(serviceID);
-        if (service == null) {
+        if (service == null || service.isDeleted()) {
             throw new Exception("Service does not exist.");
         }
 
         TreatmentType treatmentType = this.treatmentTypeManager.findTreatmentTypeByID(treatmentTypeID);
-        if (treatmentType == null) {
+        if (treatmentType == null || treatmentType.isDeleted()) {
             throw new Exception("Treatment type does not exist.");
         }
 
         service.setTreatmentType(treatmentType);
         service.setServiceType(type);
         service.setPrice(price);
+        service.setLength(length);
 
 		this.saveData();
 	}
 
 	public void remove(int serviceID) throws Exception {
         Service service = this.findServiceByID(serviceID);
-        if (service == null) {
+        if (service == null || service.isDeleted()) {
             throw new Exception("Service does not exist.");
         }
         // this.priceListManager.remove(treatment, type);
-        this.services.remove(serviceID);
+        // this.services.remove(serviceID);
+        service.delete();
 
         this.saveData();
 	}
