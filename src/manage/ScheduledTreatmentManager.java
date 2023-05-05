@@ -28,6 +28,10 @@ public class ScheduledTreatmentManager {
         this.scheduledTreatments = new HashMap<>();
     }
 
+    public HashMap<Integer, ScheduledTreatment> getScheduledTreatments() {
+        return this.scheduledTreatments;
+    }
+
     public ScheduledTreatment findScheduledTreatmentById(int id) {
         return this.scheduledTreatments.get(id);
     }
@@ -65,7 +69,7 @@ public class ScheduledTreatmentManager {
 	}
 
     public void add(int clientID, int serviceID, int beauticianID, LocalDateTime dateTime, double price) throws Exception {
-        // ubaci proveru kada user nije kozmeticar ili ne postoji, da li postoji tip usluge itd
+        // ubaci proveru kada user nije kozmeticar ili ne postoji, da li postoji tip usluge, da li je kozmeticar obucen itd
         ScheduledTreatment scheduledTreatment = new ScheduledTreatment((Client)this.userManager.findUserById(clientID), this.serviceManager.findServiceByID(serviceID), (Beautician)this.userManager.findUserById(beauticianID), dateTime, price);
         this.scheduledTreatments.put(scheduledTreatment.getId(), scheduledTreatment);
         this.saveData();

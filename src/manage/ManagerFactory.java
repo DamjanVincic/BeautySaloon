@@ -15,8 +15,11 @@ public class ManagerFactory {
 
         this.treatmentTypeManager = new TreatmentTypeManager(this.appSettings.getTreatmentTypeFilename());
         this.userManager = new UserManager(this.appSettings.getUserFilename(), treatmentTypeManager);
+        treatmentTypeManager.setUserManager(userManager);
 
         this.serviceManager = new ServiceManager(this.appSettings.getServiceFilename(), this.treatmentTypeManager);
+        treatmentTypeManager.setServiceManager(serviceManager);
+
         this.priceListManager = new PriceListManager(this.appSettings.getPriceFilename(), this.serviceManager);
         // this.treatmentTypeManager.setPriceListManager(priceListManager);
         
