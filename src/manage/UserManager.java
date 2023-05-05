@@ -31,6 +31,10 @@ public class UserManager {
         this.users = new HashMap<>();
     }
 
+    public HashMap<Integer, User> getUsers() {
+        return this.users;
+    }
+
 	public User findUserById(int id) {
         return this.users.get(id);
 	}
@@ -61,12 +65,12 @@ public class UserManager {
                         user = new Client(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
                         break;
 					case BEAUTICIAN:
-                        ArrayList<TreatmentType> treatmentTypesTrainedFor = new ArrayList<>();
+                        HashMap<Integer, TreatmentType> treatmentTypesTrainedFor = new HashMap<>();
                         try {
-                            Stream.of(data[13].split(";")).forEach(e -> treatmentTypesTrainedFor.add(this.treatmentTypeManager.findTreatmentTypeByID(Integer.parseInt(e))));
+                            Stream.of(data[13].split(";")).forEach(e -> treatmentTypesTrainedFor.put(Integer.parseInt(e), this.treatmentTypeManager.findTreatmentTypeByID(Integer.parseInt(e))));
                         } catch (IndexOutOfBoundsException ex) { }
                         user = new Beautician(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8], EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]));
-                        ((Beautician) user).setTreatmentsTrainedFor(treatmentTypesTrainedFor);
+                        ((Beautician) user).setTreatmentTypesTrainedFor(treatmentTypesTrainedFor);
                         break;
 					case RECEPTIONIST:
 						user = new Receptionist(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8],  EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]));
@@ -154,7 +158,7 @@ public class UserManager {
         this.saveData();
     }
 
-    public void update(int id, String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary) throws Exception {
+    public void update(int id, String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary, ArrayList<Integer> treatmentTypesIDs) throws Exception {
 		User user = this.findUserById(id);
         if (user == null) {
             throw new Exception("User does not exist.");
@@ -176,6 +180,12 @@ public class UserManager {
 		employee.setYearsOfExperience(yearsOfExperience);
 		employee.setBonus(bonus);
 		employee.setBaseSalary(baseSalary);
+
+        if (treatmentTypesIDs != null) {
+            HashMap<Integer, TreatmentType> treatmentTypesTrainedFor = (HashMap<Integer, TreatmentType>)treatmentTypesIDs.stream()
+                                                                                    .collect(Collectors.toMap(e -> e, e -> this.treatmentTypeManager.findTreatmentTypeByID(e)));
+            ((Beautician) employee).setTreatmentTypesTrainedFor(treatmentTypesTrainedFor);
+        }
 
 		this.saveData();
 	}
