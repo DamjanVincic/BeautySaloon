@@ -3,7 +3,7 @@ package main;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import entity.CosmeticSaloon;
 import entity.EducationLevel;
@@ -79,8 +79,8 @@ public class App {
 
             treatmentTypeManager.add("Pedikir");
             serviceManager.add(4, "Spa pedikir", 1600, LocalTime.parse("00:45"));
-            userManager.update(3, "Sima", "Simic", "Musko", "064123125", "Adresa 3", "simke", "sifra2", EducationLevel.DOCTORATE, 1, 0.0, 1200.0, new ArrayList<Integer>(List.of(1, 2)));
-            userManager.update(5, "Jovana", "Jovanovic", "Zensko", "064123127", "Adresa 6", "jad", "sifra6", EducationLevel.BACHELORS, 2, 300, 1100, new ArrayList<Integer>(List.of(2, 4)));
+            userManager.update(3, "Sima", "Simic", "Musko", "064123125", "Adresa 3", "simke", "sifra2", EducationLevel.DOCTORATE, 1, 0.0, 1200.0, new ArrayList<Integer>(Arrays.asList(1, 2)));
+            userManager.update(5, "Jovana", "Jovanovic", "Zensko", "064123127", "Adresa 6", "jad", "sifra6", EducationLevel.BACHELORS, 2, 300, 1100, new ArrayList<Integer>(Arrays.asList(2, 4)));
             
             ScheduledTreatmentManager scheduledTreatmentManager = managerFactory.getScheduledTreatmentManager();
             scheduledTreatmentManager.add(6, 1, 3, LocalDateTime.now());
