@@ -9,15 +9,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+import entity.Role;
+import entity.Service;
 import entity.TreatmentType;
+import entity.Beautician;
 
 public class TreatmentTypeManager {
     private String treatmentTypeFile;
     private HashMap<Integer, TreatmentType> treatmentTypes;
+    private ServiceManager serviceManager;
+    private UserManager userManager;
 
     public TreatmentTypeManager(String treatmentTypeFile) {
         this.treatmentTypeFile = treatmentTypeFile;
         this.treatmentTypes = new HashMap<>();
+    }
+
+    public void setServiceManager(ServiceManager serviceManager) {
+        this.serviceManager = serviceManager;
+    }
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     public TreatmentType findTreatmentTypeByID(int id) {
@@ -43,7 +55,7 @@ public class TreatmentTypeManager {
 			String line = null;
 			while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                TreatmentType treatmentType = new TreatmentType(Integer.parseInt(data[0]), data[1]);
+                TreatmentType treatmentType = new TreatmentType(Integer.parseInt(data[0]), data[1], Boolean.parseBoolean(data[2]));
 				this.treatmentTypes.put(treatmentType.getId(), treatmentType);
 			}
 			br.close();
@@ -68,10 +80,11 @@ public class TreatmentTypeManager {
 	}
 
     public void add(String type) throws Exception {
-        if (this.findTreatmentTypeByType(type) != null) {
+        TreatmentType _treatmentType;
+        if ((_treatmentType = this.findTreatmentTypeByType(type)) != null && !_treatmentType.isDeleted()) {
             throw new Exception("Treatment type already exists.");
         }
-        TreatmentType treatmentType = new TreatmentType(type);
+        TreatmentType treatmentType = new TreatmentType(type, false);
         this.treatmentTypes.put(treatmentType.getId(), treatmentType);
         this.saveData();
     }
@@ -87,10 +100,23 @@ public class TreatmentTypeManager {
 
 	public void remove(int id) throws Exception {
         TreatmentType treatmentType = this.findTreatmentTypeByID(id);
-        if (treatmentType == null) {
+        if (treatmentType == null || treatmentType.isDeleted()) {
             throw new Exception("Treatment type does not exist.");
         }
-        this.treatmentTypes.remove(id);
+        // this.treatmentTypes.remove(id);
+        treatmentType.delete();
+
+        for (Service s : serviceManager.getServices().values()) {
+            if (s.getTreatmentType().getId() == id) {
+                serviceManager.remove(s.getId());
+            }
+        }
+
+        this.userManager.getUsers().values().stream()
+                                            .filter(e -> e.getRole() == Role.BEAUTICIAN && ((Beautician)e).getTreatmentTypesTrainedFor().containsKey(id))
+                                            .forEach(e -> ((Beautician)e).removeTreatmentType(treatmentType));
+        userManager.saveData();
+
         this.saveData();
 	}
 }
