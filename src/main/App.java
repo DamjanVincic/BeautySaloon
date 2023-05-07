@@ -45,9 +45,11 @@ public class App {
             userManager.update(5, "Jovana", "Jovanovic", "Zensko", "064123127", "Adresa 6", "jad", "sifra6", EducationLevel.BACHELORS, 2, 300, 1100, null);
         
             userManager.getUsers().values().forEach(e -> System.out.println(e));
+            System.out.println("---");
 
             userManager.remove(4);
             userManager.getUsers().values().forEach(e -> System.out.println(e));
+            System.out.println("---");
 
             
             TreatmentTypeManager treatmentTypeManager = managerFactory.getTreatmentTypeManager();
@@ -64,40 +66,43 @@ public class App {
             serviceManager.add(2, "Francuski manikir", 1500, LocalTime.parse("00:50"));
             serviceManager.add(2, "Gel lak", 1600, LocalTime.parse("01:20"));
             serviceManager.add(2, "Spa manikir", 2000, LocalTime.parse("01:30"));
-            serviceManager.add(3, "Spa pedikir", 1600, LocalTime.parse("00:45"));
+            serviceManager.add(1, "Spa pedikir", 1600, LocalTime.parse("00:45"));
 
             serviceManager.getServices().values().forEach(e -> System.out.println(e));
+            System.out.println("---");
 
             serviceManager.update(3, 2, "Francuski manikir", 1500, LocalTime.parse("00:55"));
             serviceManager.update(6, 3, "Spa pedikir", 1600, LocalTime.parse("00:45"));
 
             serviceManager.getServices().values().forEach(e -> System.out.println(e));
+            System.out.println("---");
 
             treatmentTypeManager.remove(3);
 
             serviceManager.getServices().values().forEach(e -> System.out.println(e));
+            System.out.println("---");
 
-            treatmentTypeManager.add("Pedikir");
-            serviceManager.add(4, "Spa pedikir", 1600, LocalTime.parse("00:45"));
             userManager.update(3, "Sima", "Simic", "Musko", "064123125", "Adresa 3", "simke", "sifra2", EducationLevel.DOCTORATE, 1, 0.0, 1200.0, new ArrayList<Integer>(Arrays.asList(1, 2)));
-            userManager.update(5, "Jovana", "Jovanovic", "Zensko", "064123127", "Adresa 6", "jad", "sifra6", EducationLevel.BACHELORS, 2, 300, 1100, new ArrayList<Integer>(Arrays.asList(2, 4)));
+            userManager.update(5, "Jovana", "Jovanovic", "Zensko", "064123127", "Adresa 6", "jad", "sifra6", EducationLevel.BACHELORS, 2, 300, 1100, new ArrayList<Integer>(Arrays.asList(2)));
             
             ScheduledTreatmentManager scheduledTreatmentManager = managerFactory.getScheduledTreatmentManager();
             scheduledTreatmentManager.add(6, 1, 3, LocalDateTime.now());
             scheduledTreatmentManager.add(7, 4, 3, LocalDateTime.now());
-            scheduledTreatmentManager.add(7, 7, 5, LocalDateTime.now());
+            scheduledTreatmentManager.add(7, 5, 5, LocalDateTime.now());
 
-            treatmentTypeManager.remove(4);
 
             scheduledTreatmentManager.getScheduledTreatments().values().forEach(e -> System.out.println(e));
+            System.out.println("---");
 
             scheduledTreatmentManager.update(2, 7, 3, 3, LocalDateTime.now(), 1600);
         
             scheduledTreatmentManager.getScheduledTreatments().values().forEach(e -> System.out.println(e));
+            System.out.println("---");
 
             serviceManager.update(1, 1, "Relaks masaza", 1700, LocalTime.parse("00:45"));
 
             scheduledTreatmentManager.getScheduledTreatments().values().forEach(e -> System.out.println(e));
+            System.out.println("---");
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
