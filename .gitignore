@@ -1,2 +1,7 @@
 *.csv
 .metadata
+
+.classpath
+.project
+.settings/
+bin/
