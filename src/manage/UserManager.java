@@ -62,7 +62,7 @@ public class UserManager {
 				User user = null;
 				switch(role) {
                     case CLIENT:
-                        user = new Client(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
+                        user = new Client(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8], Boolean.parseBoolean(data[9]));
                         break;
 					case BEAUTICIAN:
                         HashMap<Integer, TreatmentType> treatmentTypesTrainedFor = new HashMap<>();
