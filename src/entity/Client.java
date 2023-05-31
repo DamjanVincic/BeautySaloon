@@ -1,5 +1,8 @@
 package entity;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public class Client extends User {
     private boolean loyaltyCard;
 
@@ -26,5 +29,18 @@ public class Client extends User {
     @Override
     public String toFileString() {
         return super.toFileString() + "," + this.loyaltyCard;
+    }
+    
+    public boolean isAvailable(LocalDateTime startTime, int duration, List<ScheduledTreatment> treatments) {
+    	LocalDateTime endTime = startTime.plusMinutes(duration);
+    	
+    	for (ScheduledTreatment treatment : treatments) {
+    		LocalDateTime treatmentStartTime = treatment.getDateTime();
+            LocalDateTime treatmentEndTime = treatmentStartTime.plusMinutes(treatment.getService().getLength());
+
+            if (startTime.isBefore(treatmentEndTime) && endTime.isAfter(treatmentStartTime))
+                return false;
+    	}
+    	return true;
     }
 }

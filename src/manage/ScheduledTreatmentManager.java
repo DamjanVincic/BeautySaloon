@@ -73,9 +73,7 @@ public class ScheduledTreatmentManager {
 		return true;
 	}
     
-    public HashMap<Integer, Beautician> getAvailableBeauticians(int serviceID, LocalDateTime dateTime) {
-    	Service service = this.serviceManager.findServiceByID(serviceID);
-    	
+    public HashMap<Integer, Beautician> getAvailableBeauticians(Service service, LocalDateTime dateTime) { 	
     	List<Beautician> beauticians = this.userManager.getUsers().values().stream()
 																			.filter(user -> user instanceof Beautician)
 																			.map(user -> (Beautician) user)
@@ -92,12 +90,25 @@ public class ScheduledTreatmentManager {
     	}
     	return availableBeauticians;
     }
+    
+    public boolean isClientAvailable(int clientID, Service service, LocalDateTime dateTime) {
+    	List<ScheduledTreatment> clientTreatments = this.scheduledTreatments.values().stream()
+																					.filter(item -> item.getState() == State.SCHEDULED && item.getClient().getId() == clientID)
+																					.collect(Collectors.toList());
+    	Client client = (Client)this.userManager.findUserById(clientID);
+    	return client.isAvailable(dateTime, service.getLength(), clientTreatments);
+    }
 
     public void add(int clientID, int serviceID, Integer beauticianID, LocalDateTime dateTime, double price) throws Exception {
         // ubaci proveru kada user nije kozmeticar ili ne postoji, da li postoji tip usluge, da li je kozmeticar obucen itd
     	
     	// dodela jednog od postojecih kozmeticara ako nije vec prosledjen
-    	HashMap<Integer, Beautician> availableBeauticians = getAvailableBeauticians(serviceID, dateTime);
+    	Service service = this.serviceManager.findServiceByID(serviceID);
+    	
+    	if (!isClientAvailable(clientID, service, dateTime))
+    		throw new Exception("You already have a scheduled treatment in that time.");
+    	
+    	HashMap<Integer, Beautician> availableBeauticians = getAvailableBeauticians(service, dateTime);
     
     	if (availableBeauticians.size() == 0)
     		throw new Exception("Ne postoje slobodni kozmeticari obuceni za dati tip tretmana.");
@@ -116,7 +127,12 @@ public class ScheduledTreatmentManager {
     }
 
     public void add(int clientID, int serviceID, Integer beauticianID, LocalDateTime dateTime) throws Exception {
-    	HashMap<Integer, Beautician> availableBeauticians = getAvailableBeauticians(serviceID, dateTime);
+    	Service service = this.serviceManager.findServiceByID(serviceID);
+    	
+    	if (!isClientAvailable(clientID, service, dateTime))
+    		throw new Exception("You already have a scheduled treatment in that time.");
+    	
+    	HashMap<Integer, Beautician> availableBeauticians = getAvailableBeauticians(service, dateTime);
         
     	if (availableBeauticians.size() == 0)
     		throw new Exception("Ne postoje slobodni kozmeticari obuceni za dati tip tretmana.");
