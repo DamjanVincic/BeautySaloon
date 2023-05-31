@@ -14,7 +14,7 @@ public class ScheduledTreatment {
     private State state;
     private double price;
 
-    public ScheduledTreatment(Client client, Service service, Beautician beautician, LocalDateTime dateTime, Double price) {
+    public ScheduledTreatment(Client client, Service service, Beautician beautician, LocalDateTime dateTime) {
         /* this.id = ++count;
         this.client = client;
         this.treatmentType = treatmentType;
@@ -22,8 +22,9 @@ public class ScheduledTreatment {
         this.dateTime = dateTime;
         this.state = State.SCHEDULED;
         this.price = price; */
-        this(0, client, service, beautician, dateTime, State.SCHEDULED, price);
+        this(0, client, service, beautician, dateTime, State.SCHEDULED, null);
         this.id = ++count;
+        this.price = client.hasLoyaltyCard() ? price * 0.9 : price;
     }
 
     public ScheduledTreatment(int id, Client client, Service service, Beautician beautician, LocalDateTime dateTime, State state, Double price) {
