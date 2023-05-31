@@ -122,7 +122,10 @@ public class UserManager {
 		switch(role) {
 			case BEAUTICIAN:
 				// ako se ne izabere ni jedan tip tretmana moze da se prosledi prazna lista i imace isti efekat kao da nije ni prosledjena
-				employee = new Beautician(name, surname, gender, phone, address, username, password, educationLevel, yearsOfExperience, bonus, baseSalary, treatmentTypesTrainedFor);
+				if (treatmentTypesTrainedFor == null)
+					employee = new Beautician(name, surname, gender, phone, address, username, password, educationLevel, yearsOfExperience, bonus, baseSalary);
+				else
+					employee = new Beautician(name, surname, gender, phone, address, username, password, educationLevel, yearsOfExperience, bonus, baseSalary, treatmentTypesTrainedFor);
 				break;
 			case RECEPTIONIST:
 				employee = new Receptionist(name, surname, gender, phone, address, username, password, educationLevel, yearsOfExperience, bonus, baseSalary);
