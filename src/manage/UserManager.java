@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,16 +20,23 @@ import entity.Receptionist;
 import entity.Role;
 import entity.TreatmentType;
 import entity.User;
+import entity.ScheduledTreatment;
+import entity.State;
 
 public class UserManager {
     private String userFile;
     private HashMap<Integer, User> users;
     private TreatmentTypeManager treatmentTypeManager;
+    private ScheduledTreatmentManager scheduledTreatmentManager;
 
     public UserManager(String userFile, TreatmentTypeManager treatmentTypeManager) {
         this.userFile = userFile;
         this.treatmentTypeManager = treatmentTypeManager;
         this.users = new HashMap<>();
+    }
+    
+    public void setScheduledTreatmentManager(ScheduledTreatmentManager scheduledTreatmentManager) {
+    	this.scheduledTreatmentManager = scheduledTreatmentManager;
     }
 
     public HashMap<Integer, User> getUsers() {
@@ -199,5 +207,34 @@ public class UserManager {
         }
         this.users.remove(id);
         this.saveData();
+	}
+	
+	
+	private double getClientMoneySpent(Client client) {
+		double spent = 0;
+		List<ScheduledTreatment> clientTreatments = this.scheduledTreatmentManager.getScheduledTreatments().values().stream()
+																													.filter(item -> item.getClient().getId() == client.getId())
+																													.collect(Collectors.toList());
+		for (ScheduledTreatment scheduledTreatment : clientTreatments) {
+			if (scheduledTreatment.getState() == State.COMPLETED || scheduledTreatment.getState() == State.NOT_SHOWED_UP)
+				spent += scheduledTreatment.getPrice();
+			if (scheduledTreatment.getState() == State.CANCELED_CLIENT)
+				spent += scheduledTreatment.getPrice() * 0.1;
+		}
+		
+		return spent;
+	}
+	
+	public void setLoyaltyCardThreshold(double threshold) {
+		for (User user : this.getUsers().values()) {
+			if (user instanceof Client) {
+				Client client = (Client)user;
+				if (getClientMoneySpent(client) > threshold)
+					client.setLoyaltyCard(true);
+				else
+					client.setLoyaltyCard(false);
+			}
+		}
+		saveData();
 	}
 }

@@ -78,7 +78,7 @@ public class ScheduledTreatmentManager {
 		return true;
 	}
     
-    public HashMap<Integer, Beautician> getAvailableBeauticians(Service service, LocalDateTime dateTime) { 	
+    private HashMap<Integer, Beautician> getAvailableBeauticians(Service service, LocalDateTime dateTime) { 	
     	List<Beautician> beauticians = this.userManager.getUsers().values().stream()
 																			.filter(user -> user instanceof Beautician)
 																			.map(user -> (Beautician) user)
@@ -96,7 +96,7 @@ public class ScheduledTreatmentManager {
     	return availableBeauticians;
     }
     
-    public boolean isClientAvailable(int clientID, Service service, LocalDateTime dateTime) {
+    private boolean isClientAvailable(int clientID, Service service, LocalDateTime dateTime) {
     	List<ScheduledTreatment> clientTreatments = this.scheduledTreatments.values().stream()
 																					.filter(item -> item.getState() == State.SCHEDULED && item.getClient().getId() == clientID)
 																					.collect(Collectors.toList());
