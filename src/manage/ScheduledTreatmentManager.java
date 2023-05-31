@@ -16,9 +16,11 @@ import java.util.stream.Collectors;
 
 import entity.Beautician;
 import entity.Client;
+import entity.Receptionist;
 import entity.ScheduledTreatment;
 import entity.Service;
 import entity.State;
+import entity.User;
 
 public class ScheduledTreatmentManager {
     private String scheduledTreatmentFile;
@@ -174,5 +176,18 @@ public class ScheduledTreatmentManager {
         }
         this.scheduledTreatments.remove(id);
         this.saveData();
+	}
+	
+	public void cancelTreatment(int scheduledTreatmentID, int userID) {
+		// nema validacije jer ce se u guiu prikazivati samo validni
+		
+		User user = this.userManager.findUserById(userID);
+		ScheduledTreatment scheduledTreatment = this.findScheduledTreatmentById(scheduledTreatmentID);
+		if (user instanceof Client)
+			scheduledTreatment.setState(State.CANCELED_CLIENT);
+		else if (user instanceof Receptionist)
+			scheduledTreatment.setState(State.CANCELED_SALOON);
+		
+		saveData();
 	}
 }
