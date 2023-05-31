@@ -10,16 +10,16 @@ public class Service {
     private TreatmentType treatmentType;
     private String serviceType; // gel...
     private double price;
-    private LocalTime length;
+    private int length;
     private boolean deleted;
     private int id;
 
-    public Service(TreatmentType treatmentType, String serviceType, double price, LocalTime length, boolean deleted) {
+    public Service(TreatmentType treatmentType, String serviceType, double price, int length, boolean deleted) {
         this(0, treatmentType, serviceType, price, length, deleted);
         this.id = ++count;
     }
 
-    public Service(int id, TreatmentType treatmentType, String serviceType, double price, LocalTime length, boolean deleted) {
+    public Service(int id, TreatmentType treatmentType, String serviceType, double price, int length, boolean deleted) {
         this.treatmentType = treatmentType;
         this.serviceType = serviceType;
         this.price = price;
@@ -44,11 +44,11 @@ public class Service {
         this.price = price;
     }
 
-    public LocalTime getLength() {
+    public int getLength() {
         return this.length;
     }
 
-    public void setLength(LocalTime length) {
+    public void setLength(int length) {
         this.length = length;
     }
 
@@ -89,11 +89,11 @@ public class Service {
 
     @Override
     public String toString() {
-        return String.format("Treatment type: %s, Service type: %s, Price: %s, Length: %s", this.treatmentType.isDeleted() ? "Deleted" : this.treatmentType, this.serviceType, this.price, this.length.format(DateTimeFormatter.ofPattern("HH:mm")));
+        return String.format("Treatment type: %s, Service type: %s, Price: %s, Length: %s", this.treatmentType.isDeleted() ? "Deleted" : this.treatmentType, this.serviceType, this.price, this.length);
     }
 
     public String toFileString() {
         // return this.treatment.toFileString() + "," + this.type;
-        return this.id + "," + this.treatmentType.getId() + "," + this.serviceType + "," + this.price + "," + this.length.format(DateTimeFormatter.ofPattern("HH:mm")) + "," + this.deleted;
+        return this.id + "," + this.treatmentType.getId() + "," + this.serviceType + "," + this.price + "," + this.length + "," + this.deleted;
     }
 }

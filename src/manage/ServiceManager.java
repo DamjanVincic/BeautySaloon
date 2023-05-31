@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
@@ -40,7 +39,7 @@ public class ServiceManager {
 			String line = null;
 			while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
-                Service service = new Service(Integer.parseInt(data[0]), treatmentTypeManager.findTreatmentTypeByID(Integer.parseInt(data[1])), data[2], Double.parseDouble(data[3]), LocalTime.parse(data[4]), Boolean.parseBoolean(data[5]));
+                Service service = new Service(Integer.parseInt(data[0]), treatmentTypeManager.findTreatmentTypeByID(Integer.parseInt(data[1])), data[2], Double.parseDouble(data[3]), Integer.parseInt(data[4]), Boolean.parseBoolean(data[5]));
 				this.services.put(service.getId(), service);
 			}
 			br.close();
@@ -64,7 +63,7 @@ public class ServiceManager {
 		return true;
 	}
 
-    public void add(int treatmentTypeID, String type, double price, LocalTime length) throws Exception {
+    public void add(int treatmentTypeID, String type, double price, int length) throws Exception {
         TreatmentType treatmentType = this.treatmentTypeManager.findTreatmentTypeByID(treatmentTypeID);
         if (treatmentType == null) {
             throw new Exception("Treatment type does not exist.");
@@ -75,7 +74,7 @@ public class ServiceManager {
         this.saveData();
     }
 
-    public void update(int serviceID, int treatmentTypeID, String type, double price, LocalTime length) throws Exception {
+    public void update(int serviceID, int treatmentTypeID, String type, double price, int length) throws Exception {
 		Service service = this.findServiceByID(serviceID);
         if (service == null || service.isDeleted()) {
             throw new Exception("Service does not exist.");
