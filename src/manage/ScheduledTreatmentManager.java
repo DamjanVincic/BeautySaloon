@@ -7,7 +7,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 import entity.Beautician;
 import entity.Client;
@@ -70,6 +74,22 @@ public class ScheduledTreatmentManager {
 
     public void add(int clientID, int serviceID, int beauticianID, LocalDateTime dateTime, double price) throws Exception {
         // ubaci proveru kada user nije kozmeticar ili ne postoji, da li postoji tip usluge, da li je kozmeticar obucen itd
+    	
+    	// dodela jednog od postojecih kozmeticara ako nije vec prosledjen
+    	List<Beautician> beauticians = this.userManager.getUsers().values().stream()
+    																			.filter(user -> user instanceof Beautician)
+    																			.map(user -> (Beautician) user)
+    																			.collect(Collectors.toList());
+    	ArrayList<Beautician> trainedBeauticians = new ArrayList<>();
+    	for (Beautician beautician : beauticians) {
+    		if (beautician.getTreatmentTypesTrainedFor().containsKey(this.serviceManager.findServiceByID(serviceID).getTreatmentType().getId()))
+    			trainedBeauticians.add(beautician);
+    	}
+    	if (trainedBeauticians.size() == 0)
+    		throw new Exception("Ne postoje kozmeticari obuceni za dati tip tretmana.");
+    	else
+    		clientID = trainedBeauticians.get(new Random().nextInt(trainedBeauticians.size())).getId();
+    	
         ScheduledTreatment scheduledTreatment = new ScheduledTreatment((Client)this.userManager.findUserById(clientID), this.serviceManager.findServiceByID(serviceID), (Beautician)this.userManager.findUserById(beauticianID), dateTime, price);
         this.scheduledTreatments.put(scheduledTreatment.getId(), scheduledTreatment);
         this.saveData();
