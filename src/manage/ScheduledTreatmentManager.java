@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import entity.Beautician;
 import entity.Client;
 import entity.ScheduledTreatment;
+import entity.Service;
 import entity.State;
 
 public class ScheduledTreatmentManager {
@@ -71,32 +72,63 @@ public class ScheduledTreatmentManager {
 		}
 		return true;
 	}
+    
+    public HashMap<Integer, Beautician> getAvailableBeauticians(int serviceID, LocalDateTime dateTime) {
+    	Service service = this.serviceManager.findServiceByID(serviceID);
+    	
+    	List<Beautician> beauticians = this.userManager.getUsers().values().stream()
+																			.filter(user -> user instanceof Beautician)
+																			.map(user -> (Beautician) user)
+																			.collect(Collectors.toList());
+    	HashMap<Integer, Beautician> availableBeauticians = new HashMap<>();
+    	for (Beautician beautician : beauticians) {
+    		if (beautician.getTreatmentTypesTrainedFor().containsKey(service.getTreatmentType().getId())) {
+    			List<ScheduledTreatment> beauticianTreatments = this.scheduledTreatments.values().stream()
+    																							.filter(item -> item.getState() == State.SCHEDULED && item.getBeautician().getId() == beautician.getId())
+    																							.collect(Collectors.toList());
+    			if (beautician.isAvailable(dateTime, service.getLength(), beauticianTreatments))
+    				availableBeauticians.put(beautician.getId(), beautician);
+    		}
+    	}
+    	return availableBeauticians;
+    }
 
-    public void add(int clientID, int serviceID, int beauticianID, LocalDateTime dateTime, double price) throws Exception {
+    public void add(int clientID, int serviceID, Integer beauticianID, LocalDateTime dateTime, double price) throws Exception {
         // ubaci proveru kada user nije kozmeticar ili ne postoji, da li postoji tip usluge, da li je kozmeticar obucen itd
     	
     	// dodela jednog od postojecih kozmeticara ako nije vec prosledjen
-    	List<Beautician> beauticians = this.userManager.getUsers().values().stream()
-    																			.filter(user -> user instanceof Beautician)
-    																			.map(user -> (Beautician) user)
-    																			.collect(Collectors.toList());
-    	ArrayList<Beautician> trainedBeauticians = new ArrayList<>();
-    	for (Beautician beautician : beauticians) {
-    		if (beautician.getTreatmentTypesTrainedFor().containsKey(this.serviceManager.findServiceByID(serviceID).getTreatmentType().getId()))
-    			trainedBeauticians.add(beautician);
+    	HashMap<Integer, Beautician> availableBeauticians = getAvailableBeauticians(serviceID, dateTime);
+    
+    	if (availableBeauticians.size() == 0)
+    		throw new Exception("Ne postoje slobodni kozmeticari obuceni za dati tip tretmana.");
+    	
+    	if (beauticianID == null) {
+    		ArrayList<Beautician> availableBeauticiansValues = new ArrayList<>(availableBeauticians.values());
+    		beauticianID = availableBeauticiansValues.get(new Random().nextInt(availableBeauticians.size())).getId();
+    	} else {
+    		if (!availableBeauticians.containsKey(beauticianID))
+    			throw new Exception("Ne postoji izabrani kozmeticar za unete podatke.");
     	}
-    	if (trainedBeauticians.size() == 0)
-    		throw new Exception("Ne postoje kozmeticari obuceni za dati tip tretmana.");
-    	else
-    		clientID = trainedBeauticians.get(new Random().nextInt(trainedBeauticians.size())).getId();
     	
         ScheduledTreatment scheduledTreatment = new ScheduledTreatment((Client)this.userManager.findUserById(clientID), this.serviceManager.findServiceByID(serviceID), (Beautician)this.userManager.findUserById(beauticianID), dateTime, price);
         this.scheduledTreatments.put(scheduledTreatment.getId(), scheduledTreatment);
         this.saveData();
     }
 
-    public void add(int clientID, int serviceID, int beauticianID, LocalDateTime dateTime) throws Exception {
-        // same
+    public void add(int clientID, int serviceID, Integer beauticianID, LocalDateTime dateTime) throws Exception {
+    	HashMap<Integer, Beautician> availableBeauticians = getAvailableBeauticians(serviceID, dateTime);
+        
+    	if (availableBeauticians.size() == 0)
+    		throw new Exception("Ne postoje slobodni kozmeticari obuceni za dati tip tretmana.");
+    	
+    	if (beauticianID == null) {
+    		ArrayList<Beautician> availableBeauticiansValues = new ArrayList<>(availableBeauticians.values());
+    		beauticianID = availableBeauticiansValues.get(new Random().nextInt(availableBeauticians.size())).getId();
+    	} else {
+    		if (!availableBeauticians.containsKey(beauticianID))
+    			throw new Exception("Ne postoji izabrani kozmeticar za unete podatke.");
+    	}
+    	
         ScheduledTreatment scheduledTreatment = new ScheduledTreatment((Client)this.userManager.findUserById(clientID), this.serviceManager.findServiceByID(serviceID), (Beautician)this.userManager.findUserById(beauticianID), dateTime, null);
         this.scheduledTreatments.put(scheduledTreatment.getId(), scheduledTreatment);
         this.saveData();
