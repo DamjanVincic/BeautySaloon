@@ -1,5 +1,7 @@
 package manage;
 
+import java.time.LocalTime;
+
 import utils.AppSettings;
 
 public class ManagerFactory {
@@ -10,7 +12,7 @@ public class ManagerFactory {
     private ScheduledTreatmentManager scheduledTreatmentManager;
     private PriceListManager priceListManager;
 
-    public ManagerFactory(AppSettings appSettings) {
+    public ManagerFactory(AppSettings appSettings, LocalTime saloonEndTime) {
         this.appSettings = appSettings;
 
         this.treatmentTypeManager = new TreatmentTypeManager(this.appSettings.getTreatmentTypeFilename());
@@ -23,7 +25,7 @@ public class ManagerFactory {
         this.priceListManager = new PriceListManager(this.appSettings.getPriceFilename(), this.serviceManager);
         // this.treatmentTypeManager.setPriceListManager(priceListManager);
         
-        this.scheduledTreatmentManager = new ScheduledTreatmentManager(this.appSettings.getScheduledTreatmentFilename(), this.userManager, this.serviceManager);
+        this.scheduledTreatmentManager = new ScheduledTreatmentManager(this.appSettings.getScheduledTreatmentFilename(), this.userManager, this.serviceManager, saloonEndTime);
     }
 
     public UserManager getUserManager() {

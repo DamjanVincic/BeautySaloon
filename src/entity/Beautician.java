@@ -1,6 +1,7 @@
 package entity;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,8 +50,11 @@ public class Beautician extends Employee {
         return super.toFileString() + "," + treatmentsTrainedForString;
     }
     
-    public boolean isAvailable(LocalDateTime startTime, int duration, List<ScheduledTreatment> treatments) {
+    public boolean isAvailable(LocalDateTime startTime, int duration, List<ScheduledTreatment> treatments, LocalTime saloonEndTime) {
     	LocalDateTime endTime = startTime.plusMinutes(duration);
+    	
+    	if (endTime.toLocalTime().isAfter(saloonEndTime))
+    		return false;
     	
     	for (ScheduledTreatment treatment : treatments) {
     		LocalDateTime treatmentStartTime = treatment.getDateTime();

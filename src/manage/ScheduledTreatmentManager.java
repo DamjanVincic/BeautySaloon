@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,12 +26,14 @@ public class ScheduledTreatmentManager {
     private ServiceManager serviceManager;
     // private ArrayList<ScheduledTreatment> scheduledTreatments;
     private HashMap<Integer, ScheduledTreatment> scheduledTreatments;
+    private LocalTime saloonEndTime;
 
-    public ScheduledTreatmentManager(String scheduledTreatmentFile, UserManager userManager, ServiceManager serviceManager) {
+    public ScheduledTreatmentManager(String scheduledTreatmentFile, UserManager userManager, ServiceManager serviceManager, LocalTime saloonEndTime) {
         this.scheduledTreatmentFile = scheduledTreatmentFile;
         this.userManager = userManager;
         this.serviceManager = serviceManager;
         this.scheduledTreatments = new HashMap<>();
+        this.saloonEndTime = saloonEndTime;
     }
 
     public HashMap<Integer, ScheduledTreatment> getScheduledTreatments() {
@@ -84,7 +87,7 @@ public class ScheduledTreatmentManager {
     			List<ScheduledTreatment> beauticianTreatments = this.scheduledTreatments.values().stream()
     																							.filter(item -> item.getState() == State.SCHEDULED && item.getBeautician().getId() == beautician.getId())
     																							.collect(Collectors.toList());
-    			if (beautician.isAvailable(dateTime, service.getLength(), beauticianTreatments))
+    			if (beautician.isAvailable(dateTime, service.getLength(), beauticianTreatments, this.saloonEndTime))
     				availableBeauticians.put(beautician.getId(), beautician);
     		}
     	}

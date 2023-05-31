@@ -26,7 +26,7 @@ public class CosmeticSaloon {
         this.startTime = startTime;
         this.endTime = endTime;
         this.appSettings = new AppSettings(userFilename, treatmentTypeFilename, serviceFilename, scheduledTreatmentFilename, priceFilename);
-        this.managerFactory = new ManagerFactory(appSettings);
+        this.managerFactory = new ManagerFactory(appSettings, endTime);
         this.id = id;
     }
 
