@@ -106,7 +106,7 @@ public class ScheduledTreatmentManager {
     	Service service = this.serviceManager.findServiceByID(serviceID);
     	
     	if (!isClientAvailable(clientID, service, dateTime))
-    		throw new Exception("You already have a scheduled treatment in that time.");
+    		throw new Exception("Klijent vec ima zakazan treatman u zadato vreme.");
     	
     	HashMap<Integer, Beautician> availableBeauticians = getAvailableBeauticians(service, dateTime);
     
@@ -130,7 +130,7 @@ public class ScheduledTreatmentManager {
     	Service service = this.serviceManager.findServiceByID(serviceID);
     	
     	if (!isClientAvailable(clientID, service, dateTime))
-    		throw new Exception("You already have a scheduled treatment in that time.");
+    		throw new Exception("Klijent vec ima zakazan treatman u zadato vreme.");
     	
     	HashMap<Integer, Beautician> availableBeauticians = getAvailableBeauticians(service, dateTime);
         
