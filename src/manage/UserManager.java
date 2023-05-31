@@ -69,8 +69,7 @@ public class UserManager {
                         try {
                             Stream.of(data[13].split(";")).forEach(e -> treatmentTypesTrainedFor.put(Integer.parseInt(e), this.treatmentTypeManager.findTreatmentTypeByID(Integer.parseInt(e))));
                         } catch (IndexOutOfBoundsException ex) { }
-                        user = new Beautician(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8], EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]));
-                        ((Beautician) user).setTreatmentTypesTrainedFor(treatmentTypesTrainedFor);
+                        user = new Beautician(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8], EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]), treatmentTypesTrainedFor);
                         break;
 					case RECEPTIONIST:
 						user = new Receptionist(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8],  EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]));
@@ -114,7 +113,7 @@ public class UserManager {
         this.saveData();
     }
 
-	public void add(String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary, Role role) throws Exception {
+	public void add(String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary, Role role, HashMap<Integer, TreatmentType> treatmentTypesTrainedFor) throws Exception {
 		if (this.findUserByUsername(username) != null) {
 			throw new Exception("User with given username already exists.");
 		}
@@ -122,7 +121,8 @@ public class UserManager {
 		User employee = null;
 		switch(role) {
 			case BEAUTICIAN:
-				employee = new Beautician(name, surname, gender, phone, address, username, password, educationLevel, yearsOfExperience, bonus, baseSalary);
+				// ako se ne izabere ni jedan tip tretmana moze da se prosledi prazna lista i imace isti efekat kao da nije ni prosledjena
+				employee = new Beautician(name, surname, gender, phone, address, username, password, educationLevel, yearsOfExperience, bonus, baseSalary, treatmentTypesTrainedFor);
 				break;
 			case RECEPTIONIST:
 				employee = new Receptionist(name, surname, gender, phone, address, username, password, educationLevel, yearsOfExperience, bonus, baseSalary);
