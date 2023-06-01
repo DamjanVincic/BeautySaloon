@@ -87,7 +87,7 @@ public class Service {
 
     @Override
     public String toString() {
-        return String.format("Treatment type: %s, Service type: %s, Price: %s, Length: %s", this.treatmentType.isDeleted() ? "Deleted" : this.treatmentType, this.serviceType, this.price, this.length);
+        return String.format("Service type: %s, Treatment type: %s, Price: %s, Length: %s", this.serviceType, this.treatmentType.isDeleted() ? "Deleted" : this.treatmentType, this.price, this.length);
     }
 
     public String toFileString() {
