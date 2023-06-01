@@ -205,4 +205,36 @@ public class ScheduledTreatmentManager {
 		
 		return scheduledTreatmentsReport;
 	}
+	
+	private double getTreatmentEarnings(ScheduledTreatment scheduledTreatment) {
+		double earnings = scheduledTreatment.getPrice();
+		
+		switch(scheduledTreatment.getState()) {
+			case SCHEDULED:
+				earnings = 0;
+				break;
+			case CANCELED_SALOON:
+				earnings = 0;
+				break;
+			case CANCELED_CLIENT:
+				earnings *= 0.1;
+				break;
+			default:
+				break;
+		}
+		
+		return earnings;
+	}
+	
+	public double getEarnings(LocalDate startDate, LocalDate endDate) {
+		double earnings = 0;
+		
+		for (ScheduledTreatment scheduledTreatment : this.getScheduledTreatments().values()) {
+			LocalDate scheduledTreatmentDate = scheduledTreatment.getDateTime().toLocalDate();
+			if (scheduledTreatmentDate.isAfter(startDate) && scheduledTreatmentDate.isBefore(endDate) || scheduledTreatmentDate.isEqual(startDate) || scheduledTreatmentDate.isEqual(endDate))
+				earnings += getTreatmentEarnings(scheduledTreatment);
+		}
+		
+		return earnings;
+	}
 }
