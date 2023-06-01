@@ -27,6 +27,7 @@ public class ManagerFactory {
         
         this.scheduledTreatmentManager = new ScheduledTreatmentManager(this.appSettings.getScheduledTreatmentFilename(), this.userManager, this.serviceManager, saloonEndTime);
         userManager.setScheduledTreatmentManager(scheduledTreatmentManager);
+        serviceManager.setScheduledTreatmentManager(scheduledTreatmentManager);
     }
 
     public UserManager getUserManager() {

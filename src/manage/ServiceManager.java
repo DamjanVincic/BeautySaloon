@@ -5,21 +5,28 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import entity.TreatmentType;
+import entity.ScheduledTreatment;
 import entity.Service;
 
 public class ServiceManager {
     private String serviceFile;
     private TreatmentTypeManager treatmentTypeManager;
+    private ScheduledTreatmentManager scheduledTreatmentManager;
     private HashMap<Integer, Service> services;
 
     public ServiceManager(String serviceFile, TreatmentTypeManager treatmentTypeManager) {
         this.serviceFile = serviceFile;
         this.treatmentTypeManager = treatmentTypeManager;
         this.services = new HashMap<>();
+    }
+    
+    public void setScheduledTreatmentManager(ScheduledTreatmentManager scheduledTreatmentManager) {
+    	this.scheduledTreatmentManager = scheduledTreatmentManager;
     }
 
     public HashMap<Integer, Service> getServices() {
@@ -103,5 +110,49 @@ public class ServiceManager {
         service.delete();
 
         this.saveData();
+	}
+	
+	private double getEarnings(ScheduledTreatment scheduledTreatment) {
+		double earnings = scheduledTreatment.getPrice();
+		
+		switch(scheduledTreatment.getState()) {
+			case SCHEDULED:
+				earnings = 0;
+				break;
+			case CANCELED_SALOON:
+				earnings = 0;
+				break;
+			case CANCELED_CLIENT:
+				earnings *= 0.1;
+				break;
+			default:
+				break;
+		}
+		
+		return earnings;
+	}
+	
+	public HashMap<Integer, HashMap<String, Double>> servicesReport(LocalDate startDate, LocalDate endDate) {
+		// <serviceID, <"scheduledTreatmentNumber" || "earnings", value>
+		HashMap<Integer, HashMap<String, Double>> report = new HashMap<>();
+		
+		for (Service service : this.services.values()) {
+			HashMap<String, Double> serviceReport = new HashMap<>();
+			int scheduledTreatments = 0;
+			double amountEarned = 0;
+			
+			for (ScheduledTreatment scheduledTreatment : this.scheduledTreatmentManager.getScheduledTreatments().values().stream().filter(item -> item.getService().getId() == service.getId()).collect(Collectors.toList())) {
+				LocalDate scheduledTreatmentDate = scheduledTreatment.getDateTime().toLocalDate();
+				if (scheduledTreatmentDate.isAfter(startDate) && scheduledTreatmentDate.isBefore(endDate) || scheduledTreatmentDate.isEqual(startDate) || scheduledTreatmentDate.isEqual(endDate)) {
+					scheduledTreatments += 1;
+					amountEarned += getEarnings(scheduledTreatment);
+				}
+			}
+			serviceReport.put("scheduledTreatmentNumber", (double) scheduledTreatments);
+			serviceReport.put("earnings", amountEarned);
+			
+			report.put(service.getId(), serviceReport);
+		}
+		return report;
 	}
 }
