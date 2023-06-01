@@ -237,4 +237,8 @@ public class UserManager {
 		}
 		saveData();
 	}
+	
+	public ArrayList<Client> getLoyaltyCardEligibleClients() {
+		return new ArrayList<>(this.users.values().stream().filter(item -> item.getRole() == Role.CLIENT && ((Client)item).hasLoyaltyCard()).map(item -> (Client)item).collect(Collectors.toList()));
+	}
 }
