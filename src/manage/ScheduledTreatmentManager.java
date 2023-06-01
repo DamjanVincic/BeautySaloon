@@ -193,4 +193,16 @@ public class ScheduledTreatmentManager {
 		
 		return report;
 	}
+	
+	public HashMap<State, Integer> scheduledTreatmentsStateReport(LocalDate startDate, LocalDate endDate) {
+		HashMap<State, Integer> scheduledTreatmentsReport = new HashMap<>();
+		
+		for (ScheduledTreatment scheduledTreatment : this.getScheduledTreatments().values()) {
+			LocalDate scheduledTreatmentDate = scheduledTreatment.getDateTime().toLocalDate();
+			if (scheduledTreatmentDate.isAfter(startDate) && scheduledTreatmentDate.isBefore(endDate) || scheduledTreatmentDate.isEqual(startDate) || scheduledTreatmentDate.isEqual(endDate))
+				scheduledTreatmentsReport.compute(scheduledTreatment.getState(), (k, v) -> (v == null) ? 1 : v + 1);
+		}
+		
+		return scheduledTreatmentsReport;
+	}
 }
