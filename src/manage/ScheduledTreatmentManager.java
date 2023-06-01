@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 import entity.Beautician;
 import entity.Client;
 import entity.Receptionist;
+import entity.Role;
 import entity.ScheduledTreatment;
 import entity.Service;
 import entity.State;
@@ -165,5 +167,30 @@ public class ScheduledTreatmentManager {
 			scheduledTreatment.setState(State.CANCELED_SALOON);
 		
 		saveData();
+	}
+	
+	public HashMap<Integer, HashMap<String, Double>> beauticiansReport(LocalDate startDate, LocalDate endDate) {
+		// <beauticianID, <numberOfTreatmentsDone, amountEarned>>
+		HashMap<Integer, HashMap<String, Double>> report = new HashMap<>();
+		
+		for (User user : this.userManager.getUsers().values().stream().filter(item -> item.getRole() == Role.BEAUTICIAN).collect(Collectors.toList())) {
+			HashMap<String, Double> beauticianReport = new HashMap<>();
+			int numberOfTreatmentsDone = 0;
+			double amountEarned = 0;
+			Beautician beautician = (Beautician)user;
+			
+			for (ScheduledTreatment scheduledTreatment : this.scheduledTreatments.values().stream().filter(item -> item.getBeautician().getId() == beautician.getId() && item.getState() == State.COMPLETED).collect(Collectors.toList())) {
+				LocalDate scheduledTreatmentDate = scheduledTreatment.getDateTime().toLocalDate();
+				if (scheduledTreatmentDate.isAfter(startDate) && scheduledTreatmentDate.isBefore(endDate) || scheduledTreatmentDate.isEqual(startDate) || scheduledTreatmentDate.isEqual(endDate)) {
+					numberOfTreatmentsDone++;
+					amountEarned += scheduledTreatment.getPrice();
+				}
+			}
+			beauticianReport.put("treatmentNumber", (double) numberOfTreatmentsDone);
+			beauticianReport.put("earnings", amountEarned);
+			report.put(beautician.getId(), beauticianReport);
+		}
+		
+		return report;
 	}
 }
