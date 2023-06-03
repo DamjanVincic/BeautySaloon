@@ -211,18 +211,19 @@ public class UserManager {
 	
 	
 	private double getClientMoneySpent(Client client) {
-		double spent = 0;
-		List<ScheduledTreatment> clientTreatments = this.scheduledTreatmentManager.getScheduledTreatments().values().stream()
-																													.filter(item -> item.getClient().getId() == client.getId())
-																													.collect(Collectors.toList());
-		for (ScheduledTreatment scheduledTreatment : clientTreatments) {
-			if (scheduledTreatment.getState() == State.COMPLETED || scheduledTreatment.getState() == State.NOT_SHOWED_UP)
-				spent += scheduledTreatment.getPrice();
-			if (scheduledTreatment.getState() == State.CANCELED_CLIENT)
-				spent += scheduledTreatment.getPrice() * 0.1;
-		}
-		
-		return spent;
+//		double spent = 0;
+//		List<ScheduledTreatment> clientTreatments = this.scheduledTreatmentManager.getScheduledTreatments().values().stream()
+//																													.filter(item -> item.getClient().getId() == client.getId())
+//																													.collect(Collectors.toList());
+//		for (ScheduledTreatment scheduledTreatment : clientTreatments) {
+//			if (scheduledTreatment.getState() == State.SCHEDULED || scheduledTreatment.getState() == State.COMPLETED || scheduledTreatment.getState() == State.NOT_SHOWED_UP)
+//				spent += scheduledTreatment.getPrice();
+//			if (scheduledTreatment.getState() == State.CANCELED_CLIENT)
+//				spent += scheduledTreatment.getPrice() * 0.1;
+//		}
+//		
+//		return spent;
+		return this.scheduledTreatmentManager.getScheduledTreatments().values().stream().filter(item -> item.getClient().getId() == client.getId()).mapToDouble(item -> this.scheduledTreatmentManager.getTreatmentEarnings(item)).reduce(0, (subtotal, item) -> subtotal + item);
 	}
 	
 	public void setLoyaltyCardThreshold(double threshold) {
@@ -240,5 +241,11 @@ public class UserManager {
 	
 	public ArrayList<Client> getLoyaltyCardEligibleClients() {
 		return new ArrayList<>(this.users.values().stream().filter(item -> item.getRole() == Role.CLIENT && ((Client)item).hasLoyaltyCard()).map(item -> (Client)item).collect(Collectors.toList()));
+	}
+	
+	public double getClientAmountSpent(int clientID) {
+		Client client = (Client) this.findUserById(clientID);
+//		return this.scheduledTreatmentManager.getScheduledTreatments().values().stream().filter(item -> item.getClient().getId() == client.getId()).mapToDouble(item -> this.scheduledTreatmentManager.getTreatmentEarnings(item)).reduce(0, (subtotal, item) -> subtotal + item);
+		return getClientMoneySpent(client);
 	}
 }
