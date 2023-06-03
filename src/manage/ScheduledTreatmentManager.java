@@ -170,6 +170,12 @@ public class ScheduledTreatmentManager {
 		saveData();
 	}
 	
+	public void changeScheduledTreatmentState(int scheduledTreatmentID, State state) {
+		ScheduledTreatment scheduledTreatment = findScheduledTreatmentById(scheduledTreatmentID);
+		scheduledTreatment.setState(state);
+		saveData();
+	}
+	
 	public HashMap<Integer, HashMap<String, Double>> beauticiansReport(LocalDate startDate, LocalDate endDate) {
 		// <beauticianID, <numberOfTreatmentsDone, amountEarned>>
 		HashMap<Integer, HashMap<String, Double>> report = new HashMap<>();
@@ -207,13 +213,10 @@ public class ScheduledTreatmentManager {
 		return scheduledTreatmentsReport;
 	}
 	
-	private double getTreatmentEarnings(ScheduledTreatment scheduledTreatment) {
+	public double getTreatmentEarnings(ScheduledTreatment scheduledTreatment) {
 		double earnings = scheduledTreatment.getPrice();
 		
 		switch(scheduledTreatment.getState()) {
-			case SCHEDULED:
-				earnings = 0;
-				break;
 			case CANCELED_SALOON:
 				earnings = 0;
 				break;
@@ -237,5 +240,10 @@ public class ScheduledTreatmentManager {
 		}
 		
 		return earnings;
+	}
+	
+	public List<ScheduledTreatment> getBeauticianSchedule(int beauticianID) {
+		Beautician beautician = (Beautician) this.userManager.findUserById(beauticianID);	
+		return this.scheduledTreatments.values().stream().filter(item -> item.getBeautician().getId() == beautician.getId() && item.getState() == State.SCHEDULED).collect(Collectors.toList());
 	}
 }
