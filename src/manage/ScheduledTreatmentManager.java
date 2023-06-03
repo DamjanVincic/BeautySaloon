@@ -30,13 +30,14 @@ public class ScheduledTreatmentManager {
     private ServiceManager serviceManager;
     // private ArrayList<ScheduledTreatment> scheduledTreatments;
     private HashMap<Integer, ScheduledTreatment> scheduledTreatments;
-    private LocalTime saloonEndTime;
+    private LocalTime saloonStartTime, saloonEndTime;
 
-    public ScheduledTreatmentManager(String scheduledTreatmentFile, UserManager userManager, ServiceManager serviceManager, LocalTime saloonEndTime) {
+    public ScheduledTreatmentManager(String scheduledTreatmentFile, UserManager userManager, ServiceManager serviceManager, LocalTime saloonStartTime, LocalTime saloonEndTime) {
         this.scheduledTreatmentFile = scheduledTreatmentFile;
         this.userManager = userManager;
         this.serviceManager = serviceManager;
         this.scheduledTreatments = new HashMap<>();
+        this.saloonStartTime = saloonStartTime;
         this.saloonEndTime = saloonEndTime;
     }
 
@@ -91,7 +92,7 @@ public class ScheduledTreatmentManager {
     			List<ScheduledTreatment> beauticianTreatments = this.scheduledTreatments.values().stream()
     																							.filter(item -> item.getState() == State.SCHEDULED && item.getBeautician().getId() == beautician.getId())
     																							.collect(Collectors.toList());
-    			if (beautician.isAvailable(dateTime, service.getLength(), beauticianTreatments, this.saloonEndTime))
+    			if (beautician.isAvailable(dateTime, service.getLength(), beauticianTreatments, this.saloonStartTime, this.saloonEndTime))
     				availableBeauticians.put(beautician.getId(), beautician);
     		}
     	}

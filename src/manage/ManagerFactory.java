@@ -12,7 +12,7 @@ public class ManagerFactory {
     private ScheduledTreatmentManager scheduledTreatmentManager;
     private PriceListManager priceListManager;
 
-    public ManagerFactory(AppSettings appSettings, LocalTime saloonEndTime) {
+    public ManagerFactory(AppSettings appSettings, LocalTime saloonStartTime, LocalTime saloonEndTime) {
         this.appSettings = appSettings;
 
         this.treatmentTypeManager = new TreatmentTypeManager(this.appSettings.getTreatmentTypeFilename());
@@ -25,7 +25,7 @@ public class ManagerFactory {
         this.priceListManager = new PriceListManager(this.appSettings.getPriceFilename(), this.serviceManager);
         // this.treatmentTypeManager.setPriceListManager(priceListManager);
         
-        this.scheduledTreatmentManager = new ScheduledTreatmentManager(this.appSettings.getScheduledTreatmentFilename(), this.userManager, this.serviceManager, saloonEndTime);
+        this.scheduledTreatmentManager = new ScheduledTreatmentManager(this.appSettings.getScheduledTreatmentFilename(), this.userManager, this.serviceManager, saloonStartTime, saloonEndTime);
         userManager.setScheduledTreatmentManager(scheduledTreatmentManager);
         serviceManager.setScheduledTreatmentManager(scheduledTreatmentManager);
     }

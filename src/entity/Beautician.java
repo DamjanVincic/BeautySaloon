@@ -50,10 +50,10 @@ public class Beautician extends Employee {
         return super.toFileString() + "," + treatmentsTrainedForString;
     }
     
-    public boolean isAvailable(LocalDateTime startTime, int duration, List<ScheduledTreatment> treatments, LocalTime saloonEndTime) {
+    public boolean isAvailable(LocalDateTime startTime, int duration, List<ScheduledTreatment> treatments, LocalTime saloonStartTime, LocalTime saloonEndTime) {
     	LocalDateTime endTime = startTime.plusMinutes(duration);
     	
-    	if (endTime.toLocalTime().isAfter(saloonEndTime))
+    	if (startTime.toLocalTime().isBefore(saloonStartTime) || endTime.toLocalTime().isAfter(saloonEndTime))
     		return false;
     	
     	for (ScheduledTreatment treatment : treatments) {
