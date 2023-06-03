@@ -230,7 +230,7 @@ public class UserManager {
 		for (User user : this.getUsers().values()) {
 			if (user instanceof Client) {
 				Client client = (Client)user;
-				if (getClientMoneySpent(client) > threshold)
+				if (getClientMoneySpent(client) >= threshold)
 					client.setLoyaltyCard(true);
 				else
 					client.setLoyaltyCard(false);

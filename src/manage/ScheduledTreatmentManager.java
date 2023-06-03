@@ -242,8 +242,24 @@ public class ScheduledTreatmentManager {
 		return earnings;
 	}
 	
+	public double getTotalEarnings() {
+		double earnings = 0;
+		
+		for (ScheduledTreatment scheduledTreatment : this.getScheduledTreatments().values()) {
+			earnings += getTreatmentEarnings(scheduledTreatment);
+		}
+		
+//		return earnings;
+		return this.scheduledTreatments.values().stream().mapToDouble(item -> getTreatmentEarnings(item)).reduce(0, (subtotal, item) -> subtotal + item);
+	}
+	
 	public List<ScheduledTreatment> getBeauticianSchedule(int beauticianID) {
 		Beautician beautician = (Beautician) this.userManager.findUserById(beauticianID);	
 		return this.scheduledTreatments.values().stream().filter(item -> item.getBeautician().getId() == beautician.getId() && item.getState() == State.SCHEDULED).collect(Collectors.toList());
+	}
+	
+	public List<ScheduledTreatment> getClientTreatments(int clientID) {
+		Client client = (Client) this.userManager.findUserById(clientID);
+		return this.scheduledTreatments.values().stream().filter(item -> item.getClient().getId() == client.getId()).collect(Collectors.toList());
 	}
 }
