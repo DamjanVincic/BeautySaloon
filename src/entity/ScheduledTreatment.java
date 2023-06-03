@@ -95,7 +95,7 @@ public class ScheduledTreatment {
 
     @Override
     public String toString() {
-        return String.format("Client: %s %s, Service: %s, Beautician: %s %s, Type: %s, DateTime: %s, Price: %s", this.client.getName(), this.client.getSurname(), this.service.getServiceType(), this.beautician.getName(), this.beautician.getSurname(), this.service.getTreatmentType().getType(), this.dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm")), this.price);
+        return String.format("Client: %s %s, Service: %s, Beautician: %s %s, Type: %s, DateTime: %s, Price: %s, State: %s", this.client.getName(), this.client.getSurname(), this.service.getServiceType(), this.beautician.getName(), this.beautician.getSurname(), this.service.getTreatmentType().getType(), this.dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm")), this.price, this.state);
     }
 
     public String toFileString() {
