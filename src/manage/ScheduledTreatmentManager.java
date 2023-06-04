@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 import entity.Beautician;
 import entity.Client;
+import entity.Employee;
 import entity.Receptionist;
 import entity.Role;
 import entity.ScheduledTreatment;
@@ -261,9 +262,9 @@ public class ScheduledTreatmentManager {
 //	    return this.userManager.getUsers().values().stream().filter(item -> item.getRole() == Role.BEAUTICIAN).mapToDouble(item -> ((Beautician) item).calculatePaycheck()*count).reduce(0, (subtotal, item) -> subtotal + item);
 	    double expenses = 0;
 	    for (User user : this.userManager.getUsers().values()) {
-	    	if (user instanceof Beautician) {
-	    		Beautician beautician = (Beautician) user;
-	    		expenses += beautician.calculatePaycheck()*count;
+	    	if (user instanceof Employee) {
+	    		Employee employee = (Employee) user;
+	    		expenses += employee.calculatePaycheck()*count;
 	    	}
 	    }
 	    
