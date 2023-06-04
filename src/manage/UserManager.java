@@ -249,25 +249,14 @@ public class UserManager {
 		return getClientMoneySpent(client);
 	}
 	
-	public double getBeauticianPerformanceScore(Beautician beautician) {
-//		Beautician beautician = (Beautician) this.findUserById(beauticianID);
-		int treatmentCount = this.scheduledTreatmentManager.getScheduledTreatments().values().stream().filter(item -> item.getBeautician().getId() == beautician.getId() && item.getState() == State.COMPLETED).collect(Collectors.toList()).size();
-		
-        if (treatmentCount >= 50) {
-            return 90.0;
-        } else if (treatmentCount >= 20) {
-            return 70.0;
-        } else {
-            return 50.0;
-        }
-	}
-	
 	// menadzer postavlja bonus na kraju svakog meseca
-	public void setBonusRequirement(double performanceScore, double bonus) {
+	public void setBonusRequirement(int treatmentsCompletedThreshold, double bonus) {
 		for (User user : this.getUsers().values()) {
 			if (user instanceof Beautician) {
 				Beautician beautician = (Beautician) user;
-				if (getBeauticianPerformanceScore(beautician) > performanceScore)
+				int treatmentsCompleted = this.scheduledTreatmentManager.getScheduledTreatments().values().stream().filter(item -> item.getBeautician().getId() == beautician.getId() && item.getState() == State.COMPLETED).collect(Collectors.toList()).size();
+				
+				if (treatmentsCompleted >= treatmentsCompletedThreshold)
 					beautician.setBonus(bonus);
 			}
 		}
