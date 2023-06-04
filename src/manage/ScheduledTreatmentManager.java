@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -240,6 +241,33 @@ public class ScheduledTreatmentManager {
 		}
 		
 		return earnings;
+	}
+	
+	public double getExpenses(LocalDate startDate, LocalDate endDate) {
+		int count = 0;
+
+	    YearMonth startYearMonth = YearMonth.from(startDate);
+	    YearMonth endYearMonth = YearMonth.from(endDate);
+
+	    YearMonth currentYearMonth = startYearMonth;
+	    while (!currentYearMonth.isAfter(endYearMonth)) {
+	        LocalDate firstOfMonth = currentYearMonth.atDay(1);
+	        if (!firstOfMonth.isAfter(endDate)) {
+	            count++;
+	        }
+	        currentYearMonth = currentYearMonth.plusMonths(1);
+	    }
+
+//	    return this.userManager.getUsers().values().stream().filter(item -> item.getRole() == Role.BEAUTICIAN).mapToDouble(item -> ((Beautician) item).calculatePaycheck()*count).reduce(0, (subtotal, item) -> subtotal + item);
+	    double expenses = 0;
+	    for (User user : this.userManager.getUsers().values()) {
+	    	if (user instanceof Beautician) {
+	    		Beautician beautician = (Beautician) user;
+	    		expenses += beautician.calculatePaycheck()*count;
+	    	}
+	    }
+	    
+	    return expenses;
 	}
 	
 	public double getTotalEarnings() {

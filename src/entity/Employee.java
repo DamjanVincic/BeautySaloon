@@ -60,6 +60,6 @@ public abstract class Employee extends User {
     }
 
     public double calculatePaycheck() {
-        return this.baseSalary * (1 + this.yearsOfExperience*0.05 + educationLevel.getBonus());
+        return this.baseSalary * (1 + this.yearsOfExperience*0.05 + educationLevel.getBonus()) + this.bonus;
     }
 }
