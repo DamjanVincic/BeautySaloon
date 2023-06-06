@@ -9,16 +9,19 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import manage.ManagerFactory;
 import manage.UserManager;
 import net.miginfocom.swing.MigLayout;
 
 public class RegisterFrame extends JFrame {
 	private static final long serialVersionUID = 1165892559091223194L;
 	
+	private ManagerFactory managerFactory;
 	private UserManager userManager;
 	
-	public RegisterFrame(UserManager userManager) {
-		this.userManager = userManager;
+	public RegisterFrame(ManagerFactory managerFactory) {
+		this.managerFactory = managerFactory;
+		this.userManager = managerFactory.getUserManager();
 		
 		setTitle("Register");
 		setResizable(false);
@@ -70,7 +73,8 @@ public class RegisterFrame extends JFrame {
 		
 		cancelButton.addActionListener(e -> {
 			dispose();
-			new MainFrame(userManager).setVisible(true);
+			MainFrame mainFrame = new MainFrame(this.managerFactory);
+			mainFrame.setVisible(true);
 		});
 		
 		registerButton.addActionListener(e -> {
@@ -80,7 +84,7 @@ public class RegisterFrame extends JFrame {
 				
 				userManager.login(usernameField.getText(), String.valueOf(passwordField.getPassword()));
 				dispose();
-				ClientFrame clientFrame = new ClientFrame(userManager);
+				ClientFrame clientFrame = new ClientFrame(this.managerFactory);
 				clientFrame.setVisible(true);
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

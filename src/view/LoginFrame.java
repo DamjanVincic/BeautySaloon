@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.Dimension;
 import java.awt.Label;
 
 import javax.swing.JButton;
@@ -11,16 +10,18 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import manage.ManagerFactory;
 import manage.UserManager;
-import entity.Role;
 
 public class LoginFrame extends JFrame{
 	private static final long serialVersionUID = -7798292689167507569L;
 	
+	private ManagerFactory managerFactory;
 	private UserManager userManager;
 
-	public LoginFrame(UserManager userManager) {
-		this.userManager = userManager;
+	public LoginFrame(ManagerFactory managerFactory) {
+		this.managerFactory = managerFactory;
+		this.userManager = managerFactory.getUserManager();
 		
 		setTitle("Login");
 		setResizable(false);
@@ -50,7 +51,7 @@ public class LoginFrame extends JFrame{
 		
 		cancelButton.addActionListener(e -> {
 			dispose();
-			MainFrame mainFrame = new MainFrame(this.userManager);
+			MainFrame mainFrame = new MainFrame(this.managerFactory);
 			mainFrame.setVisible(true);
 		});
 		
@@ -61,7 +62,7 @@ public class LoginFrame extends JFrame{
 				// ovde pozvati frame u odnosu na ulogu korisnika
 				switch (this.userManager.getCurrentUser().getRole()) {
 					case CLIENT:
-						ClientFrame clientFrame = new ClientFrame(userManager);
+						ClientFrame clientFrame = new ClientFrame(this.managerFactory);
 						clientFrame.setVisible(true);
 						break;
 					default:

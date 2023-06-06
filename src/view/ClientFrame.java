@@ -5,18 +5,20 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import entity.Client;
-import entity.User;
+import manage.ManagerFactory;
 import manage.UserManager;
 import net.miginfocom.swing.MigLayout;
 
 public class ClientFrame extends JFrame {
 	private static final long serialVersionUID = 6452299993070588719L;
 	
+	private ManagerFactory managerFactory;
 	private UserManager userManager;
 	private Client currentUser;
 	
-	public ClientFrame(UserManager userManager) {
-		this.userManager = userManager;
+	public ClientFrame(ManagerFactory managerFactory) {
+		this.managerFactory = managerFactory;
+		this.userManager = managerFactory.getUserManager();
 		this.currentUser = (Client) userManager.getCurrentUser();
 		
 		setTitle("Client Panel");
@@ -40,10 +42,15 @@ public class ClientFrame extends JFrame {
 		add(logoutButton);
 		
 		
+		scheduledTreatmentListButton.addActionListener(e -> {
+			ClientScheduledTreatmentsFrame clientScheduledTreatmentsFrame = new ClientScheduledTreatmentsFrame(this.managerFactory);
+			clientScheduledTreatmentsFrame.setVisible(true);
+		});
+		
 		logoutButton.addActionListener(e -> {
 			this.userManager.logout();
 			dispose();
-			MainFrame mainFrame = new MainFrame(userManager);
+			MainFrame mainFrame = new MainFrame(this.managerFactory);
 			mainFrame.setVisible(true);
 		});
 	}

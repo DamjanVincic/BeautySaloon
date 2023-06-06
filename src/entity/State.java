@@ -1,11 +1,11 @@
 package entity;
 
 public enum State {
-    SCHEDULED("ZAKAZAN"),
-    COMPLETED("IZVRSEN"),
-    CANCELED_CLIENT("OTKAZAO KLIJENT"),
-    CANCELED_SALOON("OTKAZAO SALON"),
-    NOT_SHOWED_UP("NIJE SE POJAVIO");
+    SCHEDULED("Scheduled"),
+    COMPLETED("Completed"),
+    CANCELED_CLIENT("Canceled by client"),
+    CANCELED_SALOON("Canceled by saloon"),
+    NOT_SHOWED_UP("Didn't show up");
     
     private final String text;
 

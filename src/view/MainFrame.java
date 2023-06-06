@@ -1,23 +1,19 @@
 package view;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 
 import net.miginfocom.swing.MigLayout;
-
-import manage.UserManager;
+import manage.ManagerFactory;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 3640724167046322832L;
 	
-	private UserManager userManager;
+	private ManagerFactory managerFactory;
 	
-	public MainFrame(UserManager userManager) {
-		this.userManager = userManager;
+	public MainFrame(ManagerFactory managerFactory) {
+		this.managerFactory = managerFactory;
 		
 		setTitle("Beauty Saloon");
 		setSize(300, 150);
@@ -38,13 +34,13 @@ public class MainFrame extends JFrame {
 		
 		loginButton.addActionListener(e -> {
 			dispose();
-			LoginFrame loginFrame = new LoginFrame(userManager);
+			LoginFrame loginFrame = new LoginFrame(this.managerFactory);
 			loginFrame.setVisible(true);
 		});
 		
 		registerButton.addActionListener(e -> {
 			dispose();
-			RegisterFrame registerFrame = new RegisterFrame(userManager);
+			RegisterFrame registerFrame = new RegisterFrame(this.managerFactory);
 			registerFrame.setVisible(true);
 		});
 	}
