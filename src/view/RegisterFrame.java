@@ -77,11 +77,14 @@ public class RegisterFrame extends JFrame {
 			try {
 				userManager.register(nameField.getText(), surnameField.getText(), genderField.getText(), phoneField.getText(), addressField.getText(), usernameField.getText(), String.valueOf(passwordField.getPassword()));
 				JOptionPane.showMessageDialog(null, "You have successfully registered.", "", JOptionPane.INFORMATION_MESSAGE);
+				
+				userManager.login(usernameField.getText(), String.valueOf(passwordField.getPassword()));
+				dispose();
+				ClientFrame clientFrame = new ClientFrame(userManager);
+				clientFrame.setVisible(true);
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
-			
-			// ovde pozvati ClientFrame posle loginovanja
 		});
 	}
 }

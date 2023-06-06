@@ -30,6 +30,7 @@ public class MainFrame extends JFrame {
 		add(new JLabel("Welcome."));
 		
 		JButton loginButton = new JButton("Login");
+		getRootPane().setDefaultButton(loginButton);
 		add(loginButton);
 		
 		JButton registerButton = new JButton("Register");

@@ -259,7 +259,14 @@ public class UserManager {
 		saveData();
 	}
 	
+	public User getCurrentUser() {
+		return this.currentUser;
+	}
+	
 	public void login(String username, String password) throws Exception {
+		if (username.isEmpty() || password.isEmpty())
+			throw new Exception("All fields must be filled.");
+		
 		User user = this.findUserByUsername(username);
 		if (user == null)
 			throw new Exception("User with the given username doesn't exist.");

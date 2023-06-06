@@ -12,6 +12,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import manage.UserManager;
+import entity.Role;
 
 public class LoginFrame extends JFrame{
 	private static final long serialVersionUID = -7798292689167507569L;
@@ -23,12 +24,12 @@ public class LoginFrame extends JFrame{
 		
 		setTitle("Login");
 		setResizable(false);
-		setSize(300, 300);
+		setSize(300, 200);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setLayout(new MigLayout("wrap 2", "[grow,right][grow,left]", "[grow][grow][grow][grow]"));
+		setLayout(new MigLayout("wrap 2", "[grow,right][grow,left]", "[]30[][]30[]"));
 		
-		getContentPane().add(new JLabel("Please log in to your account."), "span, align center");
+		add(new JLabel("Please log in to your account."), "span, align center");
 		
 		JTextField usernameTextField = new JTextField(20);
 		add(new JLabel("Username: "));
@@ -56,6 +57,16 @@ public class LoginFrame extends JFrame{
 		loginButton.addActionListener(e -> {
 			try {
 				userManager.login(usernameTextField.getText(), String.valueOf(passwordField.getPassword()));
+				dispose();
+				// ovde pozvati frame u odnosu na ulogu korisnika
+				switch (this.userManager.getCurrentUser().getRole()) {
+					case CLIENT:
+						ClientFrame clientFrame = new ClientFrame(userManager);
+						clientFrame.setVisible(true);
+						break;
+					default:
+						break;
+				}
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
 			}
