@@ -112,9 +112,6 @@ public class UserManager {
 
 
     public void add(String name, String surname, String gender, String phone, String address, String username, String password) throws Exception {
-        if (this.findUserByUsername(username) != null) {
-			throw new Exception("User with given username already exists.");
-		}
         User client = new Client(name, surname, gender, phone, address, username, password);
         this.users.put(client.getId(), client);
         this.saveData();
@@ -277,5 +274,30 @@ public class UserManager {
 	
 	public void logout() {
 		this.currentUser = null;
+	}
+	
+	public void register(String name, String surname, String gender, String phone, String address, String username, String password) throws Exception {
+		if (name.isEmpty() || surname.isEmpty() || gender.isEmpty() || phone.isEmpty() || address.isEmpty() || username.isEmpty() || password.isEmpty())
+			throw new Exception("All fields must be filled.");
+		
+		if (this.findUserByUsername(username) != null) {
+			throw new Exception("User with that username already exists.");
+		}
+		
+		
+		if (!name.matches("^[a-zA-Z ]+$"))
+			throw new Exception("Name can contain only letters and spaces.");
+		if (!surname.matches("^[a-zA-Z ]+$"))
+			throw new Exception("Surname can only contain letters and spaces.");
+		if (!phone.matches("^[\\d\\s-]+$"))
+			throw new Exception("Phone number can only contain numbers, spaces and dashes.");
+		if (!address.matches("^[\\w\\d\\s.'-]+$"))
+			throw new Exception("Invalid address input.");
+		if (!username.matches("^[\\w.]+$"))
+			throw new Exception("Invalid username input.");
+		if (!password.matches("^[^,]{8,}$"))
+			throw new Exception("Password must have at least 8 characters.");
+		
+		add(name, surname, gender, phone, address, username, password);
 	}
 }

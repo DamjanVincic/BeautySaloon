@@ -37,7 +37,14 @@ public class MainFrame extends JFrame {
 		
 		loginButton.addActionListener(e -> {
 			dispose();
-			new LoginFrame(userManager).setVisible(true);
+			LoginFrame loginFrame = new LoginFrame(userManager);
+			loginFrame.setVisible(true);
+		});
+		
+		registerButton.addActionListener(e -> {
+			dispose();
+			RegisterFrame registerFrame = new RegisterFrame(userManager);
+			registerFrame.setVisible(true);
 		});
 	}
 }

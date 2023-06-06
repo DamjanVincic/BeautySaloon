@@ -49,7 +49,8 @@ public class LoginFrame extends JFrame{
 		
 		cancelButton.addActionListener(e -> {
 			dispose();
-			new MainFrame(this.userManager).setVisible(true);
+			MainFrame mainFrame = new MainFrame(this.userManager);
+			mainFrame.setVisible(true);
 		});
 		
 		loginButton.addActionListener(e -> {
