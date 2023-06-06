@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,7 +19,6 @@ import entity.Receptionist;
 import entity.Role;
 import entity.TreatmentType;
 import entity.User;
-import entity.ScheduledTreatment;
 import entity.State;
 
 public class UserManager {
@@ -28,6 +26,7 @@ public class UserManager {
     private HashMap<Integer, User> users;
     private TreatmentTypeManager treatmentTypeManager;
     private ScheduledTreatmentManager scheduledTreatmentManager;
+    private User currentUser = null;
 
     public UserManager(String userFile, TreatmentTypeManager treatmentTypeManager) {
         this.userFile = userFile;
@@ -261,5 +260,22 @@ public class UserManager {
 			}
 		}
 		saveData();
+	}
+	
+	public void login(String username, String password) throws Exception {
+		User user = this.findUserByUsername(username);
+		if (user == null)
+			throw new Exception("User with the given username doesn't exist.");
+		
+		if (user.getPassword().equals(password)) {
+			this.currentUser = user;
+		}
+		else {
+			throw new Exception("Wrong password.");
+		}
+	}
+	
+	public void logout() {
+		this.currentUser = null;
 	}
 }
