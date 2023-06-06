@@ -3,7 +3,7 @@ package view;
 import java.awt.Dimension;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
@@ -13,12 +13,12 @@ import net.miginfocom.swing.MigLayout;
 
 import model.ClientScheduledTreatmentModel;
 
-public class ClientScheduledTreatmentsFrame extends JFrame {
+public class ClientScheduledTreatmentsModal extends JDialog {
 	private static final long serialVersionUID = -3627961294131643414L;
 	
 	private ManagerFactory managerFactory;
 
-	public ClientScheduledTreatmentsFrame(ManagerFactory managerFactory) {
+	public ClientScheduledTreatmentsModal(ManagerFactory managerFactory) {
 		this.managerFactory = managerFactory;
 		
 		setTitle("Your treatments");
@@ -26,6 +26,7 @@ public class ClientScheduledTreatmentsFrame extends JFrame {
 		setSize(800, 250);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setModal(true);
 		setLayout(new MigLayout("wrap", "[grow, center]", "[]20[]"));
 		
 //		add(new JLabel(""));

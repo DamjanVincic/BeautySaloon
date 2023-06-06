@@ -49,8 +49,8 @@ public class ClientFrame extends JFrame {
 			if (this.managerFactory.getScheduledTreatmentManager().getScheduledTreatments().values().stream().filter(item -> item.getClient().getId() == currentUser.getId()).collect(Collectors.toList()).size() == 0) {
 				JOptionPane.showMessageDialog(null, "You don't have any scheduled treatments.", "", JOptionPane.INFORMATION_MESSAGE);
 			} else {
-				ClientScheduledTreatmentsFrame clientScheduledTreatmentsFrame = new ClientScheduledTreatmentsFrame(this.managerFactory);
-				clientScheduledTreatmentsFrame.setVisible(true);
+				ClientScheduledTreatmentsModal clientScheduledTreatmentsModal = new ClientScheduledTreatmentsModal(this.managerFactory);
+				clientScheduledTreatmentsModal.setVisible(true);
 			}
 		});
 		
