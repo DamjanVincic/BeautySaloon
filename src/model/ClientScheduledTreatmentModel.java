@@ -17,8 +17,7 @@ public class ClientScheduledTreatmentModel extends AbstractTableModel {
 	private List<ScheduledTreatment> scheduledTreatments;
 	
 	public ClientScheduledTreatmentModel(ScheduledTreatmentManager scheduledTreatmentManager, Client currentUser) {
-		// vrati filter posle testiranja
-		this.scheduledTreatments = scheduledTreatmentManager.getScheduledTreatments().values().stream().collect(Collectors.toList());
+		this.scheduledTreatments = scheduledTreatmentManager.getScheduledTreatments().values().stream().filter(item -> item.getClient().getId() == currentUser.getId()).collect(Collectors.toList());
 	}
 	
 	@Override

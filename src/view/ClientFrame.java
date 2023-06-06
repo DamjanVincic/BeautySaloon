@@ -1,8 +1,11 @@
 package view;
 
+import java.util.stream.Collectors;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import entity.Client;
 import manage.ManagerFactory;
@@ -43,8 +46,12 @@ public class ClientFrame extends JFrame {
 		
 		
 		scheduledTreatmentListButton.addActionListener(e -> {
-			ClientScheduledTreatmentsFrame clientScheduledTreatmentsFrame = new ClientScheduledTreatmentsFrame(this.managerFactory);
-			clientScheduledTreatmentsFrame.setVisible(true);
+			if (this.managerFactory.getScheduledTreatmentManager().getScheduledTreatments().values().stream().filter(item -> item.getClient().getId() == currentUser.getId()).collect(Collectors.toList()).size() == 0) {
+				JOptionPane.showMessageDialog(null, "You don't have any scheduled treatments.", "", JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				ClientScheduledTreatmentsFrame clientScheduledTreatmentsFrame = new ClientScheduledTreatmentsFrame(this.managerFactory);
+				clientScheduledTreatmentsFrame.setVisible(true);
+			}
 		});
 		
 		logoutButton.addActionListener(e -> {
