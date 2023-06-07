@@ -16,7 +16,7 @@ public class ManagerFactory {
         this.appSettings = appSettings;
 
         this.treatmentTypeManager = new TreatmentTypeManager(this.appSettings.getTreatmentTypeFilename());
-        this.userManager = new UserManager(this.appSettings.getUserFilename(), treatmentTypeManager);
+        this.userManager = new UserManager(this.appSettings.getUserFilename(), treatmentTypeManager, saloonStartTime, saloonEndTime);
         treatmentTypeManager.setUserManager(userManager);
 
         this.serviceManager = new ServiceManager(this.appSettings.getServiceFilename(), this.treatmentTypeManager);

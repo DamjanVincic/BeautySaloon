@@ -110,27 +110,6 @@ public class ScheduledTreatmentManager {
     }
 
     public void add(int clientID, int serviceID, Integer beauticianID, LocalDateTime dateTime) throws Exception {
-        // ubaci proveru kada user nije kozmeticar ili ne postoji, da li postoji tip usluge, da li je kozmeticar obucen itd
-    	
-    	// dodela jednog od postojecih kozmeticara ako nije vec prosledjen
-    	Service service = this.serviceManager.findServiceByID(serviceID);
-    	
-    	if (!isClientAvailable(clientID, service, dateTime))
-    		throw new Exception("Klijent vec ima zakazan treatman u zadato vreme.");
-    	
-    	HashMap<Integer, Beautician> availableBeauticians = getAvailableBeauticians(service, dateTime);
-    
-    	if (availableBeauticians.size() == 0)
-    		throw new Exception("Ne postoje slobodni kozmeticari obuceni za dati tip tretmana.");
-    	
-    	if (beauticianID == null) {
-    		ArrayList<Beautician> availableBeauticiansValues = new ArrayList<>(availableBeauticians.values());
-    		beauticianID = availableBeauticiansValues.get(new Random().nextInt(availableBeauticians.size())).getId();
-    	} else {
-    		if (!availableBeauticians.containsKey(beauticianID))
-    			throw new Exception("Ne postoji izabrani kozmeticar za unete podatke.");
-    	}
-    	
         ScheduledTreatment scheduledTreatment = new ScheduledTreatment((Client)this.userManager.findUserById(clientID), this.serviceManager.findServiceByID(serviceID), (Beautician)this.userManager.findUserById(beauticianID), dateTime);
         this.scheduledTreatments.put(scheduledTreatment.getId(), scheduledTreatment);
         this.saveData();
@@ -157,6 +136,30 @@ public class ScheduledTreatmentManager {
         }
         this.scheduledTreatments.remove(id);
         this.saveData();
+	}
+	
+	public void scheduleTreatment(int clientID, int serviceID, Integer beauticianID, LocalDateTime dateTime) throws Exception {
+		// ubaci proveru kada user nije kozmeticar ili ne postoji, da li postoji tip usluge, da li je kozmeticar obucen itd
+    	
+    	// dodela jednog od postojecih kozmeticara ako nije vec prosledjen
+    	Service service = this.serviceManager.findServiceByID(serviceID);
+    	
+    	if (!isClientAvailable(clientID, service, dateTime))
+    		throw new Exception("Klijent vec ima zakazan treatman u zadato vreme.");
+    	
+    	HashMap<Integer, Beautician> availableBeauticians = getAvailableBeauticians(service, dateTime);
+    
+    	if (availableBeauticians.size() == 0)
+    		throw new Exception("Ne postoje slobodni kozmeticari obuceni za dati tip tretmana.");
+    	
+    	if (beauticianID == null) {
+    		ArrayList<Beautician> availableBeauticiansValues = new ArrayList<>(availableBeauticians.values());
+    		beauticianID = availableBeauticiansValues.get(new Random().nextInt(availableBeauticians.size())).getId();
+    	} else {
+    		if (!availableBeauticians.containsKey(beauticianID))
+    			throw new Exception("Ne postoji izabrani kozmeticar za unete podatke.");
+    	}
+    	this.add(clientID, serviceID, beauticianID, dateTime);
 	}
 	
 	public void cancelTreatment(int scheduledTreatmentID, int userID) {

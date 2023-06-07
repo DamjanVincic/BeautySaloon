@@ -5,6 +5,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +21,7 @@ import entity.Employee;
 import entity.Manager;
 import entity.Receptionist;
 import entity.Role;
+import entity.ScheduledTreatment;
 import entity.TreatmentType;
 import entity.User;
 import entity.State;
@@ -27,11 +31,14 @@ public class UserManager {
     private HashMap<Integer, User> users;
     private TreatmentTypeManager treatmentTypeManager;
     private ScheduledTreatmentManager scheduledTreatmentManager;
+    private LocalTime saloonStartTime, saloonEndTime;
     private User currentUser = null;
 
-    public UserManager(String userFile, TreatmentTypeManager treatmentTypeManager) {
+    public UserManager(String userFile, TreatmentTypeManager treatmentTypeManager, LocalTime saloonStartTime, LocalTime saloonEndTime) {
         this.userFile = userFile;
         this.treatmentTypeManager = treatmentTypeManager;
+        this.saloonStartTime = saloonStartTime;
+        this.saloonEndTime = saloonEndTime;
         this.users = new HashMap<>();
     }
     
@@ -311,5 +318,18 @@ public class UserManager {
 	
 	public List<Beautician> getBeauticiansTrainedForTreatmentType(int treatmentTypeID) {
 		return this.users.values().stream().filter(item -> item.getRole() == Role.BEAUTICIAN && ((Beautician)item).isTrainedForTreatmentType(treatmentTypeID)).map(item -> (Beautician)item).collect(Collectors.toList());
+	}
+	
+	public List<LocalDateTime> getAvailableTimeForBeautician(int beauticianID, LocalDate date, int duration) {
+		Beautician beautician = (Beautician) this.findUserById(beauticianID);
+		List<LocalDateTime> availableTimes = new ArrayList<>();
+		
+		for (LocalTime localTime = saloonStartTime; localTime.isBefore(saloonEndTime); localTime = localTime.plusHours(1)) {
+			LocalDateTime localDateTime = date.atTime(localTime);
+			if (beautician.isAvailable(localDateTime, duration, this.scheduledTreatmentManager.getBeauticianSchedule(beauticianID), saloonStartTime, saloonEndTime))
+				availableTimes.add(localDateTime);
+		}
+		
+		return availableTimes;
 	}
 }
