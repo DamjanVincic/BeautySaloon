@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 
 import entity.Client;
 import entity.ScheduledTreatment;
@@ -37,6 +38,7 @@ public class ClientScheduledTreatmentsModal extends JDialog {
 		
 //		add(new JLabel(""));
 		JTable table = new JTable(new ClientScheduledTreatmentModel(this.managerFactory.getScheduledTreatmentManager(), (Client) managerFactory.getUserManager().getCurrentUser()));
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setPreferredSize(new Dimension(800, 200));
 		add(scrollPane);

@@ -26,6 +26,7 @@ public class ReceptionistClientPickerDialog extends JDialog {
 		
 		JTable clientTable = new JTable(new ClientModel(managerFactory.getUserManager()));
 		clientTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		clientTable.getTableHeader().setReorderingAllowed(false);
 		JScrollPane clientTableScrollPane = new JScrollPane(clientTable);
 		add(clientTableScrollPane);
 		

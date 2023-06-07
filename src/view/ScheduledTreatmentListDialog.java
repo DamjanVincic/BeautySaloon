@@ -7,6 +7,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 
 import entity.ScheduledTreatment;
 import entity.State;
@@ -27,6 +28,7 @@ public class ScheduledTreatmentListDialog extends JDialog {
 		setLayout(new MigLayout("wrap", "[grow, center]", "[]20[]"));
 		
 		JTable table = new JTable(new ScheduledTreatmentModel(managerFactory.getScheduledTreatmentManager()));
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setPreferredSize(new Dimension(900, 200));
 		add(scrollPane);
