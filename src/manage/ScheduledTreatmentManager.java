@@ -272,11 +272,11 @@ public class ScheduledTreatmentManager {
 	}
 	
 	public double getTotalEarnings() {
-		double earnings = 0;
-		
-		for (ScheduledTreatment scheduledTreatment : this.getScheduledTreatments().values()) {
-			earnings += getTreatmentEarnings(scheduledTreatment);
-		}
+//		double earnings = 0;
+//		
+//		for (ScheduledTreatment scheduledTreatment : this.getScheduledTreatments().values()) {
+//			earnings += getTreatmentEarnings(scheduledTreatment);
+//		}
 		
 //		return earnings;
 		return this.scheduledTreatments.values().stream().mapToDouble(item -> getTreatmentEarnings(item)).reduce(0, (subtotal, item) -> subtotal + item);

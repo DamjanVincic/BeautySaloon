@@ -45,6 +45,11 @@ public class ClientFrame extends JFrame {
 		add(logoutButton);
 		
 		
+		scheduleTreatmentButton.addActionListener(e -> {
+			TreatmentScheduleDialog treatmentScheduleDialog = new TreatmentScheduleDialog(managerFactory, currentUser);
+			treatmentScheduleDialog.setVisible(true);
+		});
+		
 		scheduledTreatmentListButton.addActionListener(e -> {
 			if (this.managerFactory.getScheduledTreatmentManager().getScheduledTreatments().values().stream().filter(item -> item.getClient().getId() == currentUser.getId()).collect(Collectors.toList()).size() == 0) {
 				JOptionPane.showMessageDialog(null, "You don't have any scheduled treatments.", "", JOptionPane.INFORMATION_MESSAGE);

@@ -31,6 +31,10 @@ public class TreatmentTypeManager {
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
     }
+    
+    public HashMap<Integer, TreatmentType> getTreatmentTypes() {
+    	return this.treatmentTypes;
+    }
 
     public TreatmentType findTreatmentTypeByID(int id) {
         return treatmentTypes.get(id);

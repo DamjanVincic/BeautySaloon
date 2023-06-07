@@ -41,8 +41,9 @@ public class Beautician extends Employee {
 
     @Override
     public String toString() {
-        String treatmentsTrainedForString = this.treatmentTypesTrainedFor.values().stream().map(e -> e.getType()).collect(Collectors.joining(", "));
-        return String.format("%s, Treatments trained for: %s", super.toString(), treatmentsTrainedForString);
+//        String treatmentsTrainedForString = this.treatmentTypesTrainedFor.values().stream().map(e -> e.getType()).collect(Collectors.joining(", "));
+//        return String.format("%s, Treatments trained for: %s", super.toString(), treatmentsTrainedForString);
+    	return getName() + " " + getSurname();
     }
 
     public String toFileString() {
@@ -64,5 +65,13 @@ public class Beautician extends Employee {
                 return false;
     	}
     	return true;
+    }
+    
+    public boolean isTrainedForTreatmentType(int treatmentTypeID) {
+    	if (this.treatmentTypesTrainedFor.containsKey(treatmentTypeID))
+    		return true;
+    	else {
+			return false;
+		}
     }
 }

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -306,5 +307,9 @@ public class UserManager {
 			throw new Exception("Password must have at least 8 characters.");
 		
 		add(name, surname, gender, phone, address, username, password);
+	}
+	
+	public List<Beautician> getBeauticiansTrainedForTreatmentType(int treatmentTypeID) {
+		return this.users.values().stream().filter(item -> item.getRole() == Role.BEAUTICIAN && ((Beautician)item).isTrainedForTreatmentType(treatmentTypeID)).map(item -> (Beautician)item).collect(Collectors.toList());
 	}
 }
