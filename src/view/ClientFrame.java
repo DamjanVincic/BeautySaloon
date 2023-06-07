@@ -38,7 +38,7 @@ public class ClientFrame extends JFrame {
 		JButton scheduleTreatmentButton = new JButton("Schedule a treatment");
 		add(scheduleTreatmentButton);
 		
-		JButton scheduledTreatmentListButton = new JButton("Your scheduled treatments");
+		JButton scheduledTreatmentListButton = new JButton("Your treatments");
 		add(scheduledTreatmentListButton);
 		
 		JButton logoutButton = new JButton("Log out");

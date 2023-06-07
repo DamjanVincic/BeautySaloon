@@ -14,15 +14,23 @@ public class ClientScheduledTreatmentModel extends AbstractTableModel {
 	private static final long serialVersionUID = -727701068864683871L;
 
 	private String[] columnNames = {"Service", "Treatment Type", "Beautician", "Date & Time", "State", "Price"};
-	private List<ScheduledTreatment> scheduledTreatments;
+	private ScheduledTreatmentManager scheduledTreatmentManager;
+	private Client currentUser;
+//	private List<ScheduledTreatment> scheduledTreatments;
 	
 	public ClientScheduledTreatmentModel(ScheduledTreatmentManager scheduledTreatmentManager, Client currentUser) {
-		this.scheduledTreatments = scheduledTreatmentManager.getScheduledTreatments().values().stream().filter(item -> item.getClient().getId() == currentUser.getId()).collect(Collectors.toList());
+		this.scheduledTreatmentManager = scheduledTreatmentManager;
+		this.currentUser = currentUser;
+//		this.scheduledTreatments = scheduledTreatmentManager.getScheduledTreatments().values().stream().filter(item -> item.getClient().getId() == currentUser.getId()).collect(Collectors.toList());
+	}
+	
+	public List<ScheduledTreatment> getClientTreatments() {
+		return this.scheduledTreatmentManager.getClientTreatments(this.currentUser.getId());
 	}
 	
 	@Override
 	public int getRowCount() {
-		return this.scheduledTreatments.size();
+		return this.getClientTreatments().size();
 	}
 
 	@Override
@@ -32,7 +40,7 @@ public class ClientScheduledTreatmentModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		ScheduledTreatment scheduledTreatment = this.scheduledTreatments.get(rowIndex);
+		ScheduledTreatment scheduledTreatment = this.getClientTreatments().get(rowIndex);
 		switch (columnIndex) {
 			case 0:
 				return scheduledTreatment.getService().getServiceType();
@@ -59,6 +67,10 @@ public class ClientScheduledTreatmentModel extends AbstractTableModel {
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 		return this.getValueAt(0, columnIndex).getClass();
+	}
+	
+	public ScheduledTreatment getScheduledTreatment(int rowIndex) {
+		return this.getClientTreatments().get(rowIndex);
 	}
 
 }
