@@ -39,7 +39,7 @@ public class ClientScheduledTreatmentModel extends AbstractTableModel {
 			case 1:
 				return scheduledTreatment.getService().getTreatmentType().getType();
 			case 2:
-				return scheduledTreatment.getBeautician().getUsername();
+				return scheduledTreatment.getBeautician().getName() + " " + scheduledTreatment.getBeautician().getSurname();
 			case 3:
 				return scheduledTreatment.getDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
 			case 4:

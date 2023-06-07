@@ -1,13 +1,9 @@
 package view;
 
 import java.awt.Dimension;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.GregorianCalendar;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +11,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,6 +23,7 @@ import com.toedter.calendar.JCalendar;
 import entity.Beautician;
 import entity.Client;
 import entity.Service;
+import entity.TreatmentType;
 import manage.ManagerFactory;
 import model.ServiceModel;
 import model.TreatmentTypeModel;
@@ -34,34 +32,40 @@ import net.miginfocom.swing.MigLayout;
 public class TreatmentScheduleDialog extends JDialog {
 	private static final long serialVersionUID = 4667084812832527018L;
 	
-	private Beautician selectedBeautician;
+	private ManagerFactory managerFactory;
+	
+	private Beautician selectedBeautician = null;
 	private Service selectedService;
-	private LocalDate selectedDate;
+	private LocalDate selectedDate = null;
 	private LocalTime selectedTime;
 	
 	public TreatmentScheduleDialog(ManagerFactory managerFactory, Client currentUser) {
+		this.managerFactory = managerFactory;
 		setTitle("Treatment scheduling");
 		setResizable(false);
-		setSize(800, 800);
+		setSize(600, 500);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setModal(true);
-		setLayout(new MigLayout("wrap", "[grow, center]", "[]20[]"));
+		setLayout(new MigLayout("wrap", "[grow, center]", "[]20[]20[][]20[]"));
 		
 //		TreatmentTypeModel treatmentTypeModel = new TreatmentTypeModel(managerFactory.getTreatmentTypeManager());
 		JTable treatmentTypesTable = new JTable(new TreatmentTypeModel(managerFactory.getTreatmentTypeManager()));
 		treatmentTypesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane treatmentTypeScrollPane = new JScrollPane(treatmentTypesTable);
 		treatmentTypeScrollPane.setPreferredSize(new Dimension(200, 100));
-		add(treatmentTypeScrollPane);
+		add(treatmentTypeScrollPane, "split 2");
 		
 		JTable serviceTable = new JTable(new DefaultTableModel());
 		serviceTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane serviceTableScrollPane = new JScrollPane(serviceTable);
-		serviceTableScrollPane.setPreferredSize(new Dimension(300, 100));
+		serviceTableScrollPane.setPreferredSize(new Dimension(350, 100));
 		serviceTableScrollPane.setVisible(false);
 		add(serviceTableScrollPane);
 		
+		JLabel beauticanLabel = new JLabel("Beautician: ");
+		beauticanLabel.setVisible(false);
+		add(beauticanLabel, "split 2");
 		JComboBox<Beautician> beauticiansComboBox = new JComboBox<>();
 		beauticiansComboBox.setVisible(false);
 		add(beauticiansComboBox);
@@ -74,10 +78,6 @@ public class TreatmentScheduleDialog extends JDialog {
 		availableTimeComboBox.setVisible(false);
 		add(availableTimeComboBox);
 		
-		// ovde Label "Chosen date: <datum>" ?
-		
-		// ovde combo box sa dostupnim terminima za uneti datum (mozda preci na JDatePicker umesto JCalendar?)
-		
 		JButton scheduleButton = new JButton("Schedule");
 		scheduleButton.setVisible(false);
 		add(scheduleButton);
@@ -87,15 +87,18 @@ public class TreatmentScheduleDialog extends JDialog {
 			if (!e.getValueIsAdjusting()) {
                 int selectedRow = treatmentTypesTable.getSelectedRow();
                 if (selectedRow != -1) {
-                    int treatmentTypeID = ((TreatmentTypeModel)treatmentTypesTable.getModel()).getTreatmentType(selectedRow).getId();
+                    TreatmentType treatmentType = ((TreatmentTypeModel)treatmentTypesTable.getModel()).getTreatmentType(selectedRow);
 
-                    serviceTable.setModel(new ServiceModel(managerFactory.getServiceManager(), treatmentTypeID));
+                    serviceTable.setModel(new ServiceModel(managerFactory.getServiceManager(), treatmentType.getId()));
+                    serviceTable.setRowSelectionInterval(0, 0);
                     serviceTableScrollPane.setVisible(true);
                     
-                    List<Beautician> trainedBeauticians = managerFactory.getUserManager().getBeauticiansTrainedForTreatmentType(treatmentTypeID);
+                    List<Beautician> trainedBeauticians = managerFactory.getUserManager().getBeauticiansTrainedForTreatmentType(treatmentType);
 					beauticiansComboBox.removeAllItems();
+					beauticiansComboBox.addItem(null);
 					trainedBeauticians.forEach(item -> beauticiansComboBox.addItem(item));
-					beauticiansComboBox.setVisible(true);
+					if (this.selectedDate != null)
+						updateAvailableTimeComboBox(availableTimeComboBox);
                 }
             }
 		});
@@ -108,14 +111,17 @@ public class TreatmentScheduleDialog extends JDialog {
 //					Service service = ((ServiceModel) serviceTable.getModel()).getService(selectedRow);
 					this.selectedService = ((ServiceModel) serviceTable.getModel()).getService(selectedRow);
 					
-//					beauticiansComboBox.setVisible(true);
+					beauticanLabel.setVisible(true);
+					beauticiansComboBox.setVisible(true);
+					calendar.setVisible(true);
 				}
 			}
 		});
 		
 		beauticiansComboBox.addActionListener(e -> {
 			this.selectedBeautician = (Beautician) beauticiansComboBox.getSelectedItem();
-			calendar.setVisible(true);
+			if (this.selectedDate != null)
+				updateAvailableTimeComboBox(availableTimeComboBox);
 		});
 		
 		calendar.addPropertyChangeListener(e -> {
@@ -124,10 +130,8 @@ public class TreatmentScheduleDialog extends JDialog {
                 LocalDate localDate = selectedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                 this.selectedDate = localDate;
 
-                List<LocalDateTime> availableTimes = managerFactory.getUserManager().getAvailableTimeForBeautician(this.selectedBeautician.getId(), localDate, this.selectedService.getId());
-				availableTimeComboBox.removeAllItems();
-				availableTimes.forEach(item -> availableTimeComboBox.addItem(item.toLocalTime()));
-				availableTimeComboBox.setVisible(true);
+//                List<LocalTime> availableTimes = managerFactory.getUserManager().getAvailableTimesForBeautician(this.selectedBeautician.getId(), localDate, this.selectedService.getLength());
+				updateAvailableTimeComboBox(availableTimeComboBox);
             }
 		});
 		
@@ -138,11 +142,19 @@ public class TreatmentScheduleDialog extends JDialog {
 		
 		scheduleButton.addActionListener(e -> {
 			try {
-				managerFactory.getScheduledTreatmentManager().scheduleTreatment(currentUser.getId(), this.selectedService.getId(), this.selectedBeautician.getId(), this.selectedDate.atTime(this.selectedTime));
+				managerFactory.getScheduledTreatmentManager().scheduleTreatment(currentUser.getId(), this.selectedService.getId(), this.selectedBeautician == null ? null : this.selectedBeautician.getId(), this.selectedDate.atTime(this.selectedTime));
 				JOptionPane.showMessageDialog(null, "You have successfully scheduled a treatment.", "", JOptionPane.INFORMATION_MESSAGE);
+				dispose();
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		});
+	}
+	
+	public void updateAvailableTimeComboBox(JComboBox<LocalTime> availableTimeComboBox) {
+		List<LocalTime> availableTimes = managerFactory.getUserManager().getAvailableTimesForBeautician(this.selectedBeautician, this.selectedDate, this.selectedService.getLength());
+		availableTimeComboBox.removeAllItems();
+		availableTimes.forEach(item -> availableTimeComboBox.addItem(item));
+		availableTimeComboBox.setVisible(true);
 	}
 }
