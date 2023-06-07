@@ -1,9 +1,12 @@
 package view;
 
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -21,7 +24,7 @@ public class ClientScheduledTreatmentsModal extends JDialog {
 	
 	private ManagerFactory managerFactory;
 
-	public ClientScheduledTreatmentsModal(ManagerFactory managerFactory) {
+	public ClientScheduledTreatmentsModal(JFrame parent, ManagerFactory managerFactory) {
 		this.managerFactory = managerFactory;
 		
 		setTitle("Your treatments");
@@ -67,6 +70,13 @@ public class ClientScheduledTreatmentsModal extends JDialog {
 			} else {
 				JOptionPane.showMessageDialog(null, "You must select a treatment.", "Invalid selection", JOptionPane.INFORMATION_MESSAGE);
 			}
+		});
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+            public void windowClosed(WindowEvent e) {
+				((ClientFrame)parent).updateClientAmountSpentLabel();
+            }
 		});
 	}
 }

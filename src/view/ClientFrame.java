@@ -19,6 +19,8 @@ public class ClientFrame extends JFrame {
 	private UserManager userManager;
 	private Client currentUser;
 	
+	private JLabel clientAmountSpentLabel;
+	
 	public ClientFrame(ManagerFactory managerFactory) {
 		this.managerFactory = managerFactory;
 		this.userManager = managerFactory.getUserManager();
@@ -32,7 +34,8 @@ public class ClientFrame extends JFrame {
 		setLayout(new MigLayout("wrap", "[grow, center]", "[]20[][]30[][]30[]"));
 		
 		add(new JLabel(String.format("Welcome, %s!", this.currentUser.getUsername())));
-		add(new JLabel(String.format("Current loyalty card balance: %.2f", this.userManager.getClientAmountSpent(this.currentUser.getId()))));
+		this.clientAmountSpentLabel = new JLabel(String.format("Current loyalty card balance: %.2f", this.userManager.getClientAmountSpent(this.currentUser.getId())));
+		add(this.clientAmountSpentLabel);
 		add(new JLabel(String.format("Status: %s", this.currentUser.hasLoyaltyCard() ? "Acquired" : "Not Acquired")));
 	
 		JButton scheduleTreatmentButton = new JButton("Schedule a treatment");
@@ -46,7 +49,7 @@ public class ClientFrame extends JFrame {
 		
 		
 		scheduleTreatmentButton.addActionListener(e -> {
-			TreatmentScheduleDialog treatmentScheduleDialog = new TreatmentScheduleDialog(managerFactory, currentUser);
+			TreatmentScheduleDialog treatmentScheduleDialog = new TreatmentScheduleDialog(this, managerFactory, currentUser);
 			treatmentScheduleDialog.setVisible(true);
 		});
 		
@@ -54,7 +57,7 @@ public class ClientFrame extends JFrame {
 			if (this.managerFactory.getScheduledTreatmentManager().getScheduledTreatments().values().stream().filter(item -> item.getClient().getId() == currentUser.getId()).collect(Collectors.toList()).size() == 0) {
 				JOptionPane.showMessageDialog(null, "You don't have any scheduled treatments.", "", JOptionPane.INFORMATION_MESSAGE);
 			} else {
-				ClientScheduledTreatmentsModal clientScheduledTreatmentsModal = new ClientScheduledTreatmentsModal(this.managerFactory);
+				ClientScheduledTreatmentsModal clientScheduledTreatmentsModal = new ClientScheduledTreatmentsModal(this, this.managerFactory);
 				clientScheduledTreatmentsModal.setVisible(true);
 			}
 		});
@@ -65,5 +68,9 @@ public class ClientFrame extends JFrame {
 			MainFrame mainFrame = new MainFrame(this.managerFactory);
 			mainFrame.setVisible(true);
 		});
+	}
+	
+	public void updateClientAmountSpentLabel() {
+		this.clientAmountSpentLabel.setText(String.format("Current loyalty card balance: %.2f", this.userManager.getClientAmountSpent(this.currentUser.getId())));
 	}
 }

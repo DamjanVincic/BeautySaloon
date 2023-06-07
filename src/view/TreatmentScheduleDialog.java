@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.LocalTime;
@@ -11,6 +13,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -39,7 +42,7 @@ public class TreatmentScheduleDialog extends JDialog {
 	private LocalDate selectedDate = null;
 	private LocalTime selectedTime;
 	
-	public TreatmentScheduleDialog(ManagerFactory managerFactory, Client currentUser) {
+	public TreatmentScheduleDialog(JFrame parent, ManagerFactory managerFactory, Client currentUser) {
 		this.managerFactory = managerFactory;
 		setTitle("Treatment scheduling");
 		setResizable(false);
@@ -148,6 +151,13 @@ public class TreatmentScheduleDialog extends JDialog {
 			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
+		});
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+            public void windowClosed(WindowEvent e) {
+				((ClientFrame)parent).updateClientAmountSpentLabel();
+            }
 		});
 	}
 	

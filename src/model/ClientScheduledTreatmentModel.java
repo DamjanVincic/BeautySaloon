@@ -50,7 +50,7 @@ public class ClientScheduledTreatmentModel extends AbstractTableModel {
 			case 4:
 				return scheduledTreatment.getState().getText();
 			case 5:
-				return scheduledTreatment.getPrice();
+				return this.scheduledTreatmentManager.getTreatmentEarnings(scheduledTreatment);
 			default:
 				return null;
 		}
