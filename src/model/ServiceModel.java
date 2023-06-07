@@ -12,15 +12,21 @@ public class ServiceModel extends AbstractTableModel {
 	private static final long serialVersionUID = 5611410755412899701L;
 
 	private String[] columnNames = {"Service", "Price", "Length"};
-	private List<Service> services;
+	private ServiceManager serviceManager;
+	private int treatmentTypeID;
 	
 	public ServiceModel(ServiceManager serviceManager, int treatmentTypeID) {
-		this.services = serviceManager.getServices().values().stream().filter(item -> item.getTreatmentType().getId() == treatmentTypeID).collect(Collectors.toList());
+		this.serviceManager = serviceManager;
+		this.treatmentTypeID = treatmentTypeID;
+	}
+	
+	public List<Service> getTreatmentTypeServices() {
+		return this.serviceManager.getServices().values().stream().filter(item -> item.getTreatmentType().getId() == treatmentTypeID).collect(Collectors.toList());
 	}
 	
 	@Override
 	public int getRowCount() {
-		return this.services.size();
+		return this.getTreatmentTypeServices().size();
 	}
 
 	@Override
@@ -30,7 +36,7 @@ public class ServiceModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		Service service = this.services.get(rowIndex);
+		Service service = this.getTreatmentTypeServices().get(rowIndex);
 		switch (columnIndex) {
 			case 0:
 				return service.getServiceType();
@@ -54,7 +60,7 @@ public class ServiceModel extends AbstractTableModel {
 	}
 	
 	public Service getService(int rowIndex) {
-		return this.services.get(rowIndex);
+		return this.getTreatmentTypeServices().get(rowIndex);
 	}
 
 }

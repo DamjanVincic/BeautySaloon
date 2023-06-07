@@ -11,12 +11,10 @@ import javax.swing.JTable;
 import entity.Client;
 import entity.ScheduledTreatment;
 import entity.State;
-import entity.TreatmentType;
 import manage.ManagerFactory;
 import net.miginfocom.swing.MigLayout;
 
 import model.ClientScheduledTreatmentModel;
-import model.TreatmentTypeModel;
 
 public class ClientScheduledTreatmentsModal extends JDialog {
 	private static final long serialVersionUID = -3627961294131643414L;

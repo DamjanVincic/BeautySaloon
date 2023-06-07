@@ -2,7 +2,6 @@ package model;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -16,12 +15,10 @@ public class ClientScheduledTreatmentModel extends AbstractTableModel {
 	private String[] columnNames = {"Service", "Treatment Type", "Beautician", "Date & Time", "State", "Price"};
 	private ScheduledTreatmentManager scheduledTreatmentManager;
 	private Client currentUser;
-//	private List<ScheduledTreatment> scheduledTreatments;
 	
 	public ClientScheduledTreatmentModel(ScheduledTreatmentManager scheduledTreatmentManager, Client currentUser) {
 		this.scheduledTreatmentManager = scheduledTreatmentManager;
 		this.currentUser = currentUser;
-//		this.scheduledTreatments = scheduledTreatmentManager.getScheduledTreatments().values().stream().filter(item -> item.getClient().getId() == currentUser.getId()).collect(Collectors.toList());
 	}
 	
 	public List<ScheduledTreatment> getClientTreatments() {
