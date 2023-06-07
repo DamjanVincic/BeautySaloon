@@ -252,6 +252,10 @@ public class UserManager {
 		return getClientMoneySpent(client);
 	}
 	
+	public double getBeauticianAmountEarned(int beauticianID) {
+		return this.scheduledTreatmentManager.getScheduledTreatments().values().stream().filter(item -> item.getBeautician().getId() == beauticianID).mapToDouble(item -> this.scheduledTreatmentManager.getTreatmentEarnings(item)).reduce(0, (subtotal, item) -> subtotal + item);
+	}
+	
 	// menadzer postavlja bonus na kraju svakog meseca
 	public void setBonusRequirement(int treatmentsCompletedThreshold, double bonus) {
 		for (User user : this.getUsers().values()) {
