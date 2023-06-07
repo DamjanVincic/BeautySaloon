@@ -59,11 +59,15 @@ public class LoginFrame extends JFrame{
 			try {
 				userManager.login(usernameTextField.getText(), String.valueOf(passwordField.getPassword()));
 				dispose();
-				// ovde pozvati frame u odnosu na ulogu korisnika
+
 				switch (this.userManager.getCurrentUser().getRole()) {
 					case CLIENT:
 						ClientFrame clientFrame = new ClientFrame(this.managerFactory);
 						clientFrame.setVisible(true);
+						break;
+					case RECEPTIONIST:
+						ReceptionistFrame receptionistFrame = new ReceptionistFrame(this.managerFactory);
+						receptionistFrame.setVisible(true);
 						break;
 					default:
 						break;

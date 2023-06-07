@@ -13,7 +13,6 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -42,7 +41,7 @@ public class TreatmentScheduleDialog extends JDialog {
 	private LocalDate selectedDate = null;
 	private LocalTime selectedTime;
 	
-	public TreatmentScheduleDialog(JFrame parent, ManagerFactory managerFactory, Client currentUser) {
+	public TreatmentScheduleDialog(Object parent, ManagerFactory managerFactory, Client currentUser) {
 		this.managerFactory = managerFactory;
 		setTitle("Treatment scheduling");
 		setResizable(false);
@@ -156,7 +155,10 @@ public class TreatmentScheduleDialog extends JDialog {
 		addWindowListener(new WindowAdapter() {
 			@Override
             public void windowClosed(WindowEvent e) {
-				((ClientFrame)parent).updateClientAmountSpentLabel();
+				if (parent instanceof ClientFrame)
+					((ClientFrame) parent).updateClientAmountSpentLabel();
+				if (parent instanceof ReceptionistClientPickerDialog)
+					((ReceptionistClientPickerDialog) parent).dispose();
             }
 		});
 	}

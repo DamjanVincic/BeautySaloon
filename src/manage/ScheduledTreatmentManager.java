@@ -139,7 +139,10 @@ public class ScheduledTreatmentManager {
 	}
 	
 	public void scheduleTreatment(int clientID, int serviceID, Integer beauticianID, LocalDateTime dateTime) throws Exception {
-    	Service service = this.serviceManager.findServiceByID(serviceID);
+    	if (dateTime.isBefore(LocalDateTime.now()))
+    		throw new Exception("You have chosen an invalid date.");
+		
+		Service service = this.serviceManager.findServiceByID(serviceID);
     	
     	if (!isClientAvailable(clientID, service, dateTime))
     		throw new Exception("Client already has a scheduled treatment at that time.");
