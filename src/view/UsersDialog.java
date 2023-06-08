@@ -16,15 +16,19 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
+import entity.User;
 import manage.ManagerFactory;
 import model.ClientModel;
 import model.EmployeeModel;
 import net.miginfocom.swing.MigLayout;
+import view.addEdit.ClientAddEditDialog;
 
 public class UsersDialog extends JDialog {
 	private static final long serialVersionUID = 5443140471807417339L;
 	
 	private boolean clients = true;
+	
+	JTable usersTable;
 
 	public UsersDialog(ManagerFactory managerFactory) {
 		setTitle("Users");
@@ -58,10 +62,10 @@ public class UsersDialog extends JDialog {
 		
 		setJMenuBar(menuBar);
 		
-		JTable usersTable = new JTable(new ClientModel(managerFactory.getUserManager()));
-		usersTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		usersTable.getTableHeader().setReorderingAllowed(false);
-		JScrollPane clientTableScrollPane = new JScrollPane(usersTable);
+		this.usersTable = new JTable(new ClientModel(managerFactory.getUserManager()));
+		this.usersTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.usersTable.getTableHeader().setReorderingAllowed(false);
+		JScrollPane clientTableScrollPane = new JScrollPane(this.usersTable);
 		clientTableScrollPane.setPreferredSize(new Dimension(1400, 350));
 		add(clientTableScrollPane);
 		
@@ -87,32 +91,44 @@ public class UsersDialog extends JDialog {
 		});
 		
 		deleteMenuItem.addActionListener(e -> {
-			int row = usersTable.getSelectedRow();
-			if (row == -1)
-				JOptionPane.showMessageDialog(null, "You must select a user.", "", JOptionPane.WARNING_MESSAGE);
-			else {
-				int userID;
-				AbstractTableModel tableModel;
-				if (this.clients) {
-					tableModel = (ClientModel)usersTable.getModel();
-					userID = ((ClientModel)tableModel).getClient(row).getId();
-				}
-				else {
-					tableModel = (EmployeeModel)usersTable.getModel();
-					userID = ((EmployeeModel)tableModel).getEmployee(row).getId();
-				}
-				
+			User user = getSelectedUser();
+			if (user != null) {
 				int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the selected user?", "Delete confirmation", JOptionPane.ERROR_MESSAGE, JOptionPane.YES_NO_OPTION);
 				if (choice == JOptionPane.YES_OPTION) {
 					try {
-						managerFactory.getUserManager().remove(userID);
-						tableModel.fireTableDataChanged();
-						JOptionPane.showMessageDialog(null, "Successfully deleted.", "", JOptionPane.INFORMATION_MESSAGE);
+						managerFactory.getUserManager().remove(user.getId());
+						updateTable();
+						JOptionPane.showMessageDialog(null, "User successfully deleted.", "", JOptionPane.INFORMATION_MESSAGE);
 					} catch (Exception ex) {
 						JOptionPane.showMessageDialog(null, ex.getMessage(), "", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
 		});
+	}
+	
+	private User getSelectedUser() {
+		User user = null;
+		int row = usersTable.getSelectedRow();
+		if (row == -1)
+			JOptionPane.showMessageDialog(null, "You must select a user.", "", JOptionPane.WARNING_MESSAGE);
+		else {
+			if (this.clients) {
+				user = ((ClientModel)this.usersTable.getModel()).getClient(row);
+			}
+			else {
+				user = ((EmployeeModel)this.usersTable.getModel()).getEmployee(row);
+			}
+		}
+		return user;
+	}
+	
+	private void updateTable() {
+		AbstractTableModel tableModel;
+		if (this.clients)
+			tableModel = (ClientModel)usersTable.getModel();
+		else
+			tableModel = (EmployeeModel)usersTable.getModel();
+		tableModel.fireTableDataChanged();
 	}
 }
