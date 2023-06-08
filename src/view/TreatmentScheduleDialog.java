@@ -28,6 +28,7 @@ import entity.Service;
 import entity.TreatmentType;
 import manage.ManagerFactory;
 import model.ServiceModel;
+import model.SpecificServicesModel;
 import model.TreatmentTypeModel;
 import net.miginfocom.swing.MigLayout;
 
@@ -91,7 +92,7 @@ public class TreatmentScheduleDialog extends JDialog {
                 if (selectedRow != -1) {
                     TreatmentType treatmentType = ((TreatmentTypeModel)treatmentTypesTable.getModel()).getTreatmentType(selectedRow);
 
-                    serviceTable.setModel(new ServiceModel(managerFactory.getServiceManager(), treatmentType.getId()));
+                    serviceTable.setModel(new SpecificServicesModel(managerFactory.getServiceManager(), treatmentType.getId()));
                     serviceTable.setRowSelectionInterval(0, 0);
                     serviceTableScrollPane.setVisible(true);
                     

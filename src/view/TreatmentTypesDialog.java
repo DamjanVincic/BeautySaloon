@@ -45,8 +45,8 @@ public class TreatmentTypesDialog extends JDialog {
 		this.treatmentTypeTable = new JTable(new TreatmentTypeModel(managerFactory.getTreatmentTypeManager()));
 		this.treatmentTypeTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.treatmentTypeTable.getTableHeader().setReorderingAllowed(false);
-		JScrollPane clientTableScrollPane = new JScrollPane(this.treatmentTypeTable);
-		add(clientTableScrollPane);
+		JScrollPane treatmentTypeTableScrollPane = new JScrollPane(this.treatmentTypeTable);
+		add(treatmentTypeTableScrollPane);
 		
 		
 		addMenuItem.addActionListener(e -> {

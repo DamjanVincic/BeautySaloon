@@ -11,17 +11,15 @@ import manage.ServiceManager;
 public class ServiceModel extends AbstractTableModel {
 	private static final long serialVersionUID = 5611410755412899701L;
 
-	private String[] columnNames = {"Service", "Price", "Length"};
+	private String[] columnNames = {"Service", "Treatment Type", "Price", "Length"};
 	private ServiceManager serviceManager;
-	private int treatmentTypeID;
 	
-	public ServiceModel(ServiceManager serviceManager, int treatmentTypeID) {
+	public ServiceModel(ServiceManager serviceManager) {
 		this.serviceManager = serviceManager;
-		this.treatmentTypeID = treatmentTypeID;
 	}
 	
 	public List<Service> getTreatmentTypeServices() {
-		return this.serviceManager.getServices().values().stream().filter(item -> item.getTreatmentType().getId() == treatmentTypeID).collect(Collectors.toList());
+		return this.serviceManager.getServices().values().stream().collect(Collectors.toList());
 	}
 	
 	@Override
@@ -41,8 +39,10 @@ public class ServiceModel extends AbstractTableModel {
 			case 0:
 				return service.getServiceType();
 			case 1:
-				return service.getPrice();
+				return service.getTreatmentType().getType();
 			case 2:
+				return service.getPrice();
+			case 3:
 				return service.getLength();
 			default:
 				return null;

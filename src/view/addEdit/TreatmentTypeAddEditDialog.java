@@ -45,7 +45,7 @@ public class TreatmentTypeAddEditDialog extends JDialog {
 		doneButton.addActionListener(e -> {
 			try {
 				String treatmentTypeInput = treatmentTypeField.getText();
-				if (treatmentTypeInput == "")
+				if (treatmentTypeInput.isEmpty())
 					throw new Exception("You must fill all the fields.");
 				if (treatmentType == null) {
 					managerFactory.getTreatmentTypeManager().add(treatmentTypeInput);
