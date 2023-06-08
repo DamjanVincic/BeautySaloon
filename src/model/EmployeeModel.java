@@ -1,5 +1,6 @@
 package model;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,7 +13,7 @@ import manage.UserManager;
 public class EmployeeModel extends AbstractTableModel {
 	private static final long serialVersionUID = 6592489909228395428L;
 	
-	private String[] columnNames = {"Username", "Name", "Surname", "Gender", "Phone", "Address", "Education Level", "Years of experience", "Salary", "Bonus"};
+	private String[] columnNames = {"Role", "Username", "Name", "Surname", "Gender", "Phone", "Address", "Education Level", "Years of experience", "Salary", "Bonus"};
 	private UserManager userManager;
 	
 	public EmployeeModel(UserManager userManager) {
@@ -38,25 +39,27 @@ public class EmployeeModel extends AbstractTableModel {
 		Employee employee = getEmployees().get(rowIndex);
 		switch (columnIndex) {
 			case 0:
-				return employee.getUsername();
+				return employee.getRole().getText();
 			case 1:
-				return employee.getName();
+				return employee.getUsername();
 			case 2:
-				return employee.getSurname();
+				return employee.getName();
 			case 3:
-				return employee.getGender();
+				return employee.getSurname();
 			case 4:
-				return employee.getPhone();
+				return employee.getGender();
 			case 5:
-				return employee.getAddress();
+				return employee.getPhone();
 			case 6:
-				return employee.getEducationLevel().getText();
+				return employee.getAddress();
 			case 7:
-				return employee.getYearsOfExperience();
+				return employee.getEducationLevel().getText();
 			case 8:
-				return employee.getBaseSalary();
+				return employee.getYearsOfExperience();
 			case 9:
-				return employee.getBonus();
+				return new DecimalFormat("#0.00").format(employee.getBaseSalary());
+			case 10:
+				return new DecimalFormat("#0.00").format(employee.getBonus());
 			default:
 				return null;
 		}

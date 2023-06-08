@@ -67,6 +67,7 @@ public class ClientAddEditDialog extends JDialog{
 		
 		if (client != null) {
 			usernameField.setText(client.getUsername());
+			usernameField.setEnabled(false);
 			passwordField.setText(client.getPassword());
 			nameField.setText(client.getName());
 			surnameField.setText(client.getSurname());
@@ -80,13 +81,17 @@ public class ClientAddEditDialog extends JDialog{
 			if (client == null) {
 				try {
 					managerFactory.getUserManager().register(nameField.getText(), surnameField.getText(), genderField.getText(), phoneField.getText(), addressField.getText(), usernameField.getText(), passwordField.getText());
+					JOptionPane.showMessageDialog(null, "Client successfully added.", "", JOptionPane.INFORMATION_MESSAGE);
+					dispose();
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 			else {
 				try {
-					managerFactory.getUserManager().update(client.getId(), nameField.getText(), surnameField.getText(), genderField.getText(), phoneField.getText(), addressField.getText(), usernameField.getText(), passwordField.getText());
+					managerFactory.getUserManager().update(client.getId(), nameField.getText(), surnameField.getText(), genderField.getText(), phoneField.getText(), addressField.getText(), passwordField.getText());
+					JOptionPane.showMessageDialog(null, "Client successfully edited.", "", JOptionPane.INFORMATION_MESSAGE);
+					dispose();
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
 				}

@@ -124,7 +124,7 @@ public class UserManager {
         this.saveData();
     }
 
-	public void add(String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary, Role role, HashMap<Integer, TreatmentType> treatmentTypesTrainedFor) throws Exception {
+	public void add(String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double baseSalary, Role role, HashMap<Integer, TreatmentType> treatmentTypesTrainedFor) throws Exception {
 		if (this.findUserByUsername(username) != null) {
 			throw new Exception("User with given username already exists.");
 		}
@@ -132,17 +132,14 @@ public class UserManager {
 		User employee = null;
 		switch(role) {
 			case BEAUTICIAN:
-				// ako se ne izabere ni jedan tip tretmana moze da se prosledi prazna lista i imace isti efekat kao da nije ni prosledjena
-				if (treatmentTypesTrainedFor == null)
-					employee = new Beautician(name, surname, gender, phone, address, username, password, educationLevel, yearsOfExperience, bonus, baseSalary);
-				else
-					employee = new Beautician(name, surname, gender, phone, address, username, password, educationLevel, yearsOfExperience, bonus, baseSalary, treatmentTypesTrainedFor);
+				// ako se ne izabere ni jedan tip tretmana moze da se prosledi prazna lista i imace isti efekat kao da nije ni prosledjena	
+				employee = new Beautician(name, surname, gender, phone, address, username, password, educationLevel, yearsOfExperience, 0, baseSalary, treatmentTypesTrainedFor);
 				break;
 			case RECEPTIONIST:
-				employee = new Receptionist(name, surname, gender, phone, address, username, password, educationLevel, yearsOfExperience, bonus, baseSalary);
+				employee = new Receptionist(name, surname, gender, phone, address, username, password, educationLevel, yearsOfExperience, 0, baseSalary);
 				break;
 			case MANAGER:
-				employee = new Manager(name, surname, gender, phone, address, username, password, educationLevel, yearsOfExperience, bonus, baseSalary);
+				employee = new Manager(name, surname, gender, phone, address, username, password, educationLevel, yearsOfExperience, 0, baseSalary);
 				break;
 			default:
 				break;
@@ -152,7 +149,7 @@ public class UserManager {
         this.saveData();
     }
 
-    public void update(int id, String name, String surname, String gender, String phone, String address, String username, String password) throws Exception {
+    public void update(int id, String name, String surname, String gender, String phone, String address, String password) throws Exception {
         User user = this.findUserById(id);
         if (user == null) {
             throw new Exception("User does not exist.");
@@ -160,20 +157,19 @@ public class UserManager {
         if (user.getRole() != Role.CLIENT) {
             throw new Exception("User is not a client.");
         }
-        validateClientInput(name, surname, gender, phone, address, username, password);
+        validateClientInput(name, surname, gender, phone, address, null, password);
 
         user.setName(name);
         user.setSurname(surname);
         user.setGender(gender);
         user.setPhone(phone);
         user.setAddress(address);
-        user.setUsername(username);
         user.setPassword(password);
 
         this.saveData();
     }
 
-    public void update(int id, String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary, ArrayList<Integer> treatmentTypesIDs) throws Exception {
+    public void update(int id, String name, String surname, String gender, String phone, String address, String password, EducationLevel educationLevel, int yearsOfExperience, double baseSalary, HashMap<Integer, TreatmentType> treatmentTypesTrainedFor) throws Exception {
 		User user = this.findUserById(id);
         if (user == null) {
             throw new Exception("User does not exist.");
@@ -181,7 +177,8 @@ public class UserManager {
         if (user.getRole() == Role.CLIENT) {
             throw new Exception("User is not an employee.");
         }
-
+//        validateEmployeeInput(name, surname, gender, phone, address, null, password, yearsOfExperience, baseSalary);
+        
         Employee employee = (Employee) user;
 
         employee.setName(name);
@@ -189,16 +186,12 @@ public class UserManager {
         employee.setGender(gender);
         employee.setPhone(phone);
         employee.setAddress(address);
-        employee.setUsername(username);
         employee.setPassword(password);
 		employee.setEducationLevel(educationLevel);
 		employee.setYearsOfExperience(yearsOfExperience);
-		employee.setBonus(bonus);
 		employee.setBaseSalary(baseSalary);
 
-        if (treatmentTypesIDs != null) {
-            HashMap<Integer, TreatmentType> treatmentTypesTrainedFor = (HashMap<Integer, TreatmentType>)treatmentTypesIDs.stream()
-                                                                                    .collect(Collectors.toMap(e -> e, e -> this.treatmentTypeManager.findTreatmentTypeByID(e)));
+        if (employee instanceof Beautician) {
             ((Beautician) employee).setTreatmentTypesTrainedFor(treatmentTypesTrainedFor);
         }
 
@@ -296,10 +289,10 @@ public class UserManager {
 	}
 	
 	public void validateClientInput(String name, String surname, String gender, String phone, String address, String username, String password) throws Exception {
-		if (name.isEmpty() || surname.isEmpty() || gender.isEmpty() || phone.isEmpty() || address.isEmpty() || username.isEmpty() || password.isEmpty())
+		if (name.isEmpty() || surname.isEmpty() || gender.isEmpty() || phone.isEmpty() || address.isEmpty() || (username != null && username.isEmpty()) || password.isEmpty())
 			throw new Exception("All fields must be filled.");
 		
-		if (this.findUserByUsername(username) != null) {
+		if (username != null && this.findUserByUsername(username) != null) {
 			throw new Exception("User with that username already exists.");
 		}
 		
@@ -312,10 +305,26 @@ public class UserManager {
 			throw new Exception("Phone number can only contain numbers, spaces and dashes.");
 		if (!address.matches("^[\\w\\d\\s.'-]+$"))
 			throw new Exception("Invalid address input.");
-		if (!username.matches("^[\\w.]+$"))
+		if (username != null && !username.matches("^[\\w.]+$"))
 			throw new Exception("Invalid username input.");
 		if (!password.matches("^[^,]{8,}$"))
 			throw new Exception("Password must have at least 8 characters.");
+	}
+	
+	public void validateEmployeeInput(String name, String surname, String gender, String phone, String address, String username, String password, String yearsOfExperience, String baseSalary) throws Exception {
+		validateClientInput(name, surname, gender, phone, address, username, password);
+		
+		try {
+			Integer.parseInt(yearsOfExperience);
+		} catch (Exception ex) {
+			throw new Exception("Years of experience must be a number.");
+		}
+		
+		try {
+			Double.parseDouble(baseSalary);
+		} catch (Exception ex) {
+			throw new Exception("Salary must be a number.");
+		}
 	}
 	
 	public void register(String name, String surname, String gender, String phone, String address, String username, String password) throws Exception {

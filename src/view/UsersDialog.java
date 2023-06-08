@@ -16,12 +16,14 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 
 import entity.Client;
+import entity.Employee;
 import entity.User;
 import manage.ManagerFactory;
 import model.ClientModel;
 import model.EmployeeModel;
 import net.miginfocom.swing.MigLayout;
 import view.addEdit.ClientAddEditDialog;
+import view.addEdit.EmployeeAddEditDialog;
 
 public class UsersDialog extends JDialog {
 	private static final long serialVersionUID = 5443140471807417339L;
@@ -95,8 +97,10 @@ public class UsersDialog extends JDialog {
 				ClientAddEditDialog clientAddEditDialog = new ClientAddEditDialog(managerFactory, null);
 				clientAddEditDialog.setVisible(true);
 			} else {
-				
+				EmployeeAddEditDialog employeeAddEditDialog = new EmployeeAddEditDialog(managerFactory, null);
+				employeeAddEditDialog.setVisible(true);
 			}
+			updateTable();
 		});
 		
 		editMenuItem.addActionListener(e -> {
@@ -111,8 +115,10 @@ public class UsersDialog extends JDialog {
 				clientAddEditDialog.setVisible(true);
 			}
 			else {
-				
+				EmployeeAddEditDialog employeeAddEditDialog = new EmployeeAddEditDialog(managerFactory, (Employee)user);
+				employeeAddEditDialog.setVisible(true);
 			}
+			updateTable();
 		});
 		
 		deleteMenuItem.addActionListener(e -> {
