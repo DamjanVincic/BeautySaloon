@@ -57,6 +57,11 @@ public class ManagerFrame extends JFrame {
 			servicesDialog.setVisible(true);
 		});
 		
+		revenueExpensesButton.addActionListener(e -> {
+			RevenuesExpensesDialog revenuesExpensesDialog = new RevenuesExpensesDialog(managerFactory);
+			revenuesExpensesDialog.setVisible(true);
+		});
+		
 		logOutButton.addActionListener(e -> {
 			managerFactory.getUserManager().logout();
 			dispose();

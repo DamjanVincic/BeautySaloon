@@ -254,7 +254,7 @@ public class ScheduledTreatmentManager {
 	    YearMonth currentYearMonth = startYearMonth;
 	    while (!currentYearMonth.isAfter(endYearMonth)) {
 	        LocalDate firstOfMonth = currentYearMonth.atDay(1);
-	        if (!firstOfMonth.isAfter(endDate)) {
+	        if (!firstOfMonth.isBefore(startDate)) {
 	            count++;
 	        }
 	        currentYearMonth = currentYearMonth.plusMonths(1);
