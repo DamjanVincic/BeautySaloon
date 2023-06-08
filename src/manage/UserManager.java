@@ -78,20 +78,20 @@ public class UserManager {
 				User user = null;
 				switch(role) {
                     case CLIENT:
-                        user = new Client(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8], Boolean.parseBoolean(data[9]), Boolean.parseBoolean(data[10]));
+                        user = new Client(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8], Boolean.parseBoolean(data[10]), Boolean.parseBoolean(data[9]));
                         break;
 					case BEAUTICIAN:
                         HashMap<Integer, TreatmentType> treatmentTypesTrainedFor = new HashMap<>();
                         try {
-                            Stream.of(data[13].split(";")).forEach(e -> treatmentTypesTrainedFor.put(Integer.parseInt(e), this.treatmentTypeManager.findTreatmentTypeByID(Integer.parseInt(e))));
+                            Stream.of(data[14].split(";")).forEach(e -> treatmentTypesTrainedFor.put(Integer.parseInt(e), this.treatmentTypeManager.findTreatmentTypeByID(Integer.parseInt(e))));
                         } catch (IndexOutOfBoundsException ex) { }
-                        user = new Beautician(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8], EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]), treatmentTypesTrainedFor, Boolean.parseBoolean(data[14]));
+                        user = new Beautician(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8], EducationLevel.valueOf(data[10]), Integer.parseInt(data[11]), Double.parseDouble(data[12]), Double.parseDouble(data[13]), treatmentTypesTrainedFor, Boolean.parseBoolean(data[9]));
                         break;
 					case RECEPTIONIST:
-						user = new Receptionist(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8],  EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]), Boolean.parseBoolean(data[13]));
+						user = new Receptionist(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8],  EducationLevel.valueOf(data[10]), Integer.parseInt(data[11]), Double.parseDouble(data[12]), Double.parseDouble(data[13]), Boolean.parseBoolean(data[9]));
                         break;
 					case MANAGER:
-						user = new Manager(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8],  EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]), Boolean.parseBoolean(data[13]));
+						user = new Manager(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8],  EducationLevel.valueOf(data[10]), Integer.parseInt(data[11]), Double.parseDouble(data[12]), Double.parseDouble(data[13]), Boolean.parseBoolean(data[9]));
 						break;
 					default:
 						break;

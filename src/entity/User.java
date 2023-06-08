@@ -108,6 +108,6 @@ public abstract class User {
     }
 
     public String toFileString() {
-        return this.id + "," + this.role + "," + this.name + "," + this.surname + "," + this.gender + "," + this.phone + "," + this.address + "," + this.username + "," + this.password;
+        return this.id + "," + this.role + "," + this.name + "," + this.surname + "," + this.gender + "," + this.phone + "," + this.address + "," + this.username + "," + this.password + "," + this.deleted;
     }
 }
