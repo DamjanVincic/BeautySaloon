@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Dimension;
-import java.awt.GridLayout;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;

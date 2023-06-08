@@ -8,7 +8,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import entity.EducationLevel;
 import entity.TreatmentType;
 import manage.ManagerFactory;
 import net.miginfocom.swing.MigLayout;

@@ -1,31 +1,18 @@
 package view;
 
-import java.awt.Dimension;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.AbstractTableModel;
 
-import entity.Client;
-import entity.Employee;
 import entity.TreatmentType;
-import entity.User;
 import manage.ManagerFactory;
-import model.ClientModel;
-import model.EmployeeModel;
 import model.TreatmentTypeModel;
 import net.miginfocom.swing.MigLayout;
-import view.addEdit.ClientAddEditDialog;
-import view.addEdit.EmployeeAddEditDialog;
 import view.addEdit.TreatmentTypeAddEditDialog;
 
 public class TreatmentTypesDialog extends JDialog {
