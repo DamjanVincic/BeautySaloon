@@ -47,6 +47,11 @@ public class ManagerFrame extends JFrame {
 			usersDialog.setVisible(true);
 		});
 		
+		treatmentTypesButton.addActionListener(e -> {
+			TreatmentTypesDialog treatmentTypesDialog = new TreatmentTypesDialog(managerFactory);
+			treatmentTypesDialog.setVisible(true);
+		});
+		
 		logOutButton.addActionListener(e -> {
 			managerFactory.getUserManager().logout();
 			dispose();

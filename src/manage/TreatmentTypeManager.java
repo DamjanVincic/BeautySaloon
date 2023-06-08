@@ -100,6 +100,10 @@ public class TreatmentTypeManager {
         if (treatmentType == null) {
             throw new Exception("Treatment type does not exist.");
         }
+        TreatmentType _treatmentType;
+        if ((_treatmentType = this.findTreatmentTypeByType(type)) != null && !_treatmentType.isDeleted()) {
+            throw new Exception("Treatment type already exists.");
+        }
         treatmentType.setType(type);
 		this.saveData();
 	}

@@ -34,7 +34,7 @@ public class UsersDialog extends JDialog {
 	
 	private boolean clients = true;
 	
-	JTable usersTable;
+	private JTable usersTable;
 
 	public UsersDialog(ManagerFactory managerFactory) {
 		setTitle("Users");
