@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import javax.swing.table.AbstractTableModel;
 
 import entity.Employee;
+import entity.Role;
 import manage.UserManager;
 
 public class EmployeeModel extends AbstractTableModel {
@@ -19,7 +20,7 @@ public class EmployeeModel extends AbstractTableModel {
 	}
 	
 	public List<Employee> getEmployees() {
-		return this.userManager.getUsers().values().stream().filter(item -> item instanceof Employee).map(item -> (Employee) item).collect(Collectors.toList());
+		return this.userManager.getUsers().values().stream().filter(item -> item instanceof Employee && item.getRole() != Role.MANAGER).map(item -> (Employee) item).collect(Collectors.toList());
 	}
 
 	@Override
