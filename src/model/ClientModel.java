@@ -12,7 +12,7 @@ import manage.UserManager;
 public class ClientModel extends AbstractTableModel {
 	private static final long serialVersionUID = 2259355120910306991L;
 	
-	private String[] columnNames = {"Username", "Name", "Surname", "Gender", "Phone", "Address"};
+	private String[] columnNames = {"Username", "Name", "Surname", "Gender", "Phone", "Address", "Amount spent", "Loyalty Card"};
 	private UserManager userManager;
 	
 	public ClientModel(UserManager userManager) {
@@ -49,6 +49,10 @@ public class ClientModel extends AbstractTableModel {
 				return client.getPhone();
 			case 5:
 				return client.getAddress();
+			case 6:
+				return userManager.getClientAmountSpent(client.getId());
+			case 7:
+				return client.hasLoyaltyCard();
 			default:
 				return null;
 		}

@@ -139,6 +139,18 @@ public class UsersDialog extends JDialog {
 				JOptionPane.showMessageDialog(null, "You must select a user.", "", JOptionPane.WARNING_MESSAGE);
 			}
 		});
+		
+		loyaltyCardButton.addActionListener(e -> {
+			String input = JOptionPane.showInputDialog(null, "Threshold: ", "Loyalty Card", JOptionPane.INFORMATION_MESSAGE);
+			try {
+				double threshold = Double.parseDouble(input);
+				managerFactory.getUserManager().setLoyaltyCardThreshold(threshold);
+				JOptionPane.showMessageDialog(null, "Successfully set the loyalty card threshold.", "", JOptionPane.INFORMATION_MESSAGE);
+				updateTable();
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(null, "The input must be a number.", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		});
 	}
 	
 	private User getSelectedUser() {
