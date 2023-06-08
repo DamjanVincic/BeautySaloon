@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Dimension;
+import java.awt.GridLayout;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -14,6 +15,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 import entity.Client;
 import entity.Employee;
@@ -142,14 +146,40 @@ public class UsersDialog extends JDialog {
 		
 		loyaltyCardButton.addActionListener(e -> {
 			String input = JOptionPane.showInputDialog(null, "Threshold: ", "Loyalty Card", JOptionPane.INFORMATION_MESSAGE);
-			try {
-				double threshold = Double.parseDouble(input);
-				managerFactory.getUserManager().setLoyaltyCardThreshold(threshold);
-				JOptionPane.showMessageDialog(null, "Successfully set the loyalty card threshold.", "", JOptionPane.INFORMATION_MESSAGE);
-				updateTable();
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(null, "The input must be a number.", "Error", JOptionPane.ERROR_MESSAGE);
-			}
+			if (input != null)
+				try {
+					double threshold = Double.parseDouble(input);
+					managerFactory.getUserManager().setLoyaltyCardThreshold(threshold);
+					updateTable();
+					JOptionPane.showMessageDialog(null, "Successfully set the loyalty card threshold.", "", JOptionPane.INFORMATION_MESSAGE);
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "The input must be a number.", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+		});
+		
+		bonusButton.addActionListener(e -> {
+			JPanel panel = new JPanel(new MigLayout("wrap 2", "[right][left]", "[][]"));
+	        JLabel treatmentsCompletedThresholdLabel = new JLabel("Completed treatments threshold:");
+	        JTextField treatmentsCompletedField = new JTextField(20);
+	        JLabel bonusLabel = new JLabel("Bonus: ");
+	        JTextField bonusInput = new JTextField(20);
+	        panel.add(treatmentsCompletedThresholdLabel);
+	        panel.add(treatmentsCompletedField);
+	        panel.add(bonusLabel);
+	        panel.add(bonusInput);
+
+	        int option = JOptionPane.showOptionDialog(null, panel, "Input Dialog", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
+	        if (option == JOptionPane.OK_OPTION) {
+	        	try {
+	        		int treatmentsCompletedThreshold = Integer.parseInt(treatmentsCompletedField.getText());
+	        		double bonus = Double.parseDouble(bonusInput.getText());
+	        		managerFactory.getUserManager().setBonusRequirement(treatmentsCompletedThreshold, bonus);
+	        		updateTable();
+	        		JOptionPane.showMessageDialog(null, "Successfully set bonus requirement.", "", JOptionPane.INFORMATION_MESSAGE);
+	        	} catch (Exception ex) {
+	        		JOptionPane.showMessageDialog(null, "Invalid input", "Error", JOptionPane.ERROR_MESSAGE);
+	        	}
+	        }
 		});
 	}
 	
