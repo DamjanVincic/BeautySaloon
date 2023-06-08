@@ -33,7 +33,9 @@ public class TreatmentTypeManager {
     }
     
     public HashMap<Integer, TreatmentType> getTreatmentTypes() {
-    	return this.treatmentTypes;
+    	return (HashMap<Integer, TreatmentType>) this.treatmentTypes.entrySet().stream()
+															                .filter(e -> !e.getValue().isDeleted())
+															                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
     }
 
     public TreatmentType findTreatmentTypeByID(int id) {
