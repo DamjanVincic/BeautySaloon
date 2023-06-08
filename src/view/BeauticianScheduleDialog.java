@@ -2,7 +2,6 @@ package view;
 
 import java.awt.Dimension;
 
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;

@@ -36,6 +36,11 @@ public class BeauticianFrame extends JFrame {
 			beauticianScheduleDialog.setVisible(true);
 		});
 		
+		completedTreatmentsButton.addActionListener(e -> {
+			BeauticianCompletedTreatmentsDialog beauticianCompletedTreatmentsDialog = new BeauticianCompletedTreatmentsDialog(managerFactory);
+			beauticianCompletedTreatmentsDialog.setVisible(true);
+		});
+		
 		logOutButton.addActionListener(e -> {
 			managerFactory.getUserManager().logout();
 			dispose();
