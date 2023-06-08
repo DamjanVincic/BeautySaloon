@@ -6,8 +6,9 @@ public abstract class User {
     private int id;
     private String name, surname, gender, phone, address, username, password;
     private Role role;
+    private boolean deleted;
 
-    public User(int id, Role role, String name, String surname, String gender, String phone, String address, String username, String password) {
+    public User(int id, Role role, String name, String surname, String gender, String phone, String address, String username, String password, boolean deleted) {
         this.name = name;
         this.surname = surname;
         this.gender = gender;
@@ -17,10 +18,11 @@ public abstract class User {
         this.password = password;
         this.role = role;
         this.id = id;
+        this.deleted = deleted;
     }
 
     public User(Role role, String name, String surname, String gender, String phone, String address, String username, String password) {
-        this(0, role, name, surname, gender, phone, address, username, password);
+        this(0, role, name, surname, gender, phone, address, username, password, false);
         this.id = ++count;
     }
 
@@ -90,6 +92,13 @@ public abstract class User {
 
     public static void setCount(int count) {
         User.count = count;
+    }
+    
+    public void delete() {
+    	this.deleted = true;
+    }
+    public boolean isDeleted() {
+    	return this.deleted;
     }
 
 

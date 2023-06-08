@@ -46,7 +46,9 @@ public class UserManager {
     }
 
     public HashMap<Integer, User> getUsers() {
-        return this.users;
+    	HashMap<Integer, User> filteredUsers = new HashMap<>();
+        this.users.values().stream().filter(item -> !item.isDeleted()).forEach(item -> filteredUsers.put(item.getId(), item));
+        return filteredUsers;
     }
 
 	public User findUserById(int id) {
@@ -76,20 +78,20 @@ public class UserManager {
 				User user = null;
 				switch(role) {
                     case CLIENT:
-                        user = new Client(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8], Boolean.parseBoolean(data[9]));
+                        user = new Client(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8], Boolean.parseBoolean(data[9]), Boolean.parseBoolean(data[10]));
                         break;
 					case BEAUTICIAN:
                         HashMap<Integer, TreatmentType> treatmentTypesTrainedFor = new HashMap<>();
                         try {
                             Stream.of(data[13].split(";")).forEach(e -> treatmentTypesTrainedFor.put(Integer.parseInt(e), this.treatmentTypeManager.findTreatmentTypeByID(Integer.parseInt(e))));
                         } catch (IndexOutOfBoundsException ex) { }
-                        user = new Beautician(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8], EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]), treatmentTypesTrainedFor);
+                        user = new Beautician(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8], EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]), treatmentTypesTrainedFor, Boolean.parseBoolean(data[14]));
                         break;
 					case RECEPTIONIST:
-						user = new Receptionist(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8],  EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]));
+						user = new Receptionist(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8],  EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]), Boolean.parseBoolean(data[13]));
                         break;
 					case MANAGER:
-						user = new Manager(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8],  EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]));
+						user = new Manager(Integer.parseInt(data[0]), data[2], data[3], data[4], data[5], data[6], data[7], data[8],  EducationLevel.valueOf(data[9]), Integer.parseInt(data[10]), Double.parseDouble(data[11]), Double.parseDouble(data[12]), Boolean.parseBoolean(data[13]));
 						break;
 					default:
 						break;
@@ -199,10 +201,12 @@ public class UserManager {
 	}
 
 	public void remove(int id) throws Exception {
-        if (!this.users.containsKey(id)) {
+		User user = findUserById(id);
+        if (user == null || user.isDeleted()) {
             throw new Exception("User does not exist.");
         }
-        this.users.remove(id);
+//        this.users.remove(id);
+        user.delete();
         this.saveData();
 	}
 	

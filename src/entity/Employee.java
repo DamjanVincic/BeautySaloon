@@ -13,8 +13,8 @@ public abstract class Employee extends User {
         this.baseSalary = baseSalary;
     }
 
-    public Employee(int id, Role role, String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary) {
-        super(id, role, name, surname, gender, phone, address, username, password);
+    public Employee(int id, Role role, String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary, boolean deleted) {
+        super(id, role, name, surname, gender, phone, address, username, password, deleted);
         this.educationLevel = educationLevel;
         this.yearsOfExperience = yearsOfExperience;
         this.bonus = bonus;

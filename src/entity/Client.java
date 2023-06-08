@@ -10,12 +10,12 @@ public class Client extends User {
         super(Role.CLIENT, name, surname, gender, phone, address, username, password);
         this.loyaltyCard = false;
     }
-    public Client(int id, String name, String surname, String gender, String phone, String address, String username, String password) {
-        super(id, Role.CLIENT, name, surname, gender, phone, address, username, password);
-        this.loyaltyCard = false;
-    }
-    public Client(int id, String name, String surname, String gender, String phone, String address, String username, String password, boolean loyaltyCard) {
-        super(id, Role.CLIENT, name, surname, gender, phone, address, username, password);
+//    public Client(int id, String name, String surname, String gender, String phone, String address, String username, String password, boolean deleted) {
+//        super(id, Role.CLIENT, name, surname, gender, phone, address, username, password, deleted);
+//        this.loyaltyCard = false;
+//    }
+    public Client(int id, String name, String surname, String gender, String phone, String address, String username, String password, boolean loyaltyCard, boolean deleted) {
+        super(id, Role.CLIENT, name, surname, gender, phone, address, username, password, deleted);
         this.loyaltyCard = loyaltyCard;
     }
 

@@ -18,8 +18,8 @@ public class Beautician extends Employee {
         this.treatmentTypesTrainedFor = treatmentTypesTrainedFor;
     }
 
-    public Beautician(int id, String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary, HashMap<Integer, TreatmentType> treatmentTypesTrainedFor) {
-        super(id, Role.BEAUTICIAN, name, surname, gender, phone, address, username, password, educationLevel, yearsOfExperience, bonus, baseSalary);
+    public Beautician(int id, String name, String surname, String gender, String phone, String address, String username, String password, EducationLevel educationLevel, int yearsOfExperience, double bonus, double baseSalary, HashMap<Integer, TreatmentType> treatmentTypesTrainedFor, boolean deleted) {
+        super(id, Role.BEAUTICIAN, name, surname, gender, phone, address, username, password, educationLevel, yearsOfExperience, bonus, baseSalary, deleted);
         this.treatmentTypesTrainedFor = treatmentTypesTrainedFor;
     }
 
