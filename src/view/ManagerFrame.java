@@ -42,6 +42,11 @@ public class ManagerFrame extends JFrame {
 		add(logOutButton);
 		
 		
+		usersButton.addActionListener(e -> {
+			UsersDialog usersDialog = new UsersDialog(managerFactory);
+			usersDialog.setVisible(true);
+		});
+		
 		logOutButton.addActionListener(e -> {
 			managerFactory.getUserManager().logout();
 			dispose();
