@@ -160,6 +160,7 @@ public class UserManager {
         if (user.getRole() != Role.CLIENT) {
             throw new Exception("User is not a client.");
         }
+        validateClientInput(name, surname, gender, phone, address, username, password);
 
         user.setName(name);
         user.setSurname(surname);
@@ -294,7 +295,7 @@ public class UserManager {
 		this.currentUser = null;
 	}
 	
-	public void register(String name, String surname, String gender, String phone, String address, String username, String password) throws Exception {
+	public void validateClientInput(String name, String surname, String gender, String phone, String address, String username, String password) throws Exception {
 		if (name.isEmpty() || surname.isEmpty() || gender.isEmpty() || phone.isEmpty() || address.isEmpty() || username.isEmpty() || password.isEmpty())
 			throw new Exception("All fields must be filled.");
 		
@@ -315,6 +316,10 @@ public class UserManager {
 			throw new Exception("Invalid username input.");
 		if (!password.matches("^[^,]{8,}$"))
 			throw new Exception("Password must have at least 8 characters.");
+	}
+	
+	public void register(String name, String surname, String gender, String phone, String address, String username, String password) throws Exception {
+		validateClientInput(name, surname, gender, phone, address, username, password);
 		
 		add(name, surname, gender, phone, address, username, password);
 	}

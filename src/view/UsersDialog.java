@@ -14,8 +14,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
 
+import entity.Client;
 import entity.User;
 import manage.ManagerFactory;
 import model.ClientModel;
@@ -90,6 +90,31 @@ public class UsersDialog extends JDialog {
 			usersTable.setModel(new EmployeeModel(managerFactory.getUserManager()));
 		});
 		
+		addMenuItem.addActionListener(e -> {
+			if (this.clients) {
+				ClientAddEditDialog clientAddEditDialog = new ClientAddEditDialog(managerFactory, null);
+				clientAddEditDialog.setVisible(true);
+			} else {
+				
+			}
+		});
+		
+		editMenuItem.addActionListener(e -> {
+			User user = getSelectedUser();
+			if (user == null) {
+				JOptionPane.showMessageDialog(null, "You must select a user.", "", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+			
+			if (this.clients) {
+				ClientAddEditDialog clientAddEditDialog = new ClientAddEditDialog(managerFactory, (Client)user);
+				clientAddEditDialog.setVisible(true);
+			}
+			else {
+				
+			}
+		});
+		
 		deleteMenuItem.addActionListener(e -> {
 			User user = getSelectedUser();
 			if (user != null) {
@@ -104,15 +129,16 @@ public class UsersDialog extends JDialog {
 					}
 				}
 			}
+			else {
+				JOptionPane.showMessageDialog(null, "You must select a user.", "", JOptionPane.WARNING_MESSAGE);
+			}
 		});
 	}
 	
 	private User getSelectedUser() {
 		User user = null;
 		int row = usersTable.getSelectedRow();
-		if (row == -1)
-			JOptionPane.showMessageDialog(null, "You must select a user.", "", JOptionPane.WARNING_MESSAGE);
-		else {
+		if (row != -1) {
 			if (this.clients) {
 				user = ((ClientModel)this.usersTable.getModel()).getClient(row);
 			}
