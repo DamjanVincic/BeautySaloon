@@ -14,7 +14,7 @@ import com.toedter.calendar.JDateChooser;
 import manage.ManagerFactory;
 import net.miginfocom.swing.MigLayout;
 
-public class RevenuesExpensesDialog extends JDialog {
+public class EarningsExpensesDialog extends JDialog {
 	private static final long serialVersionUID = -6326193968350660439L;
 	
 	private double earnings = 0;
@@ -22,8 +22,8 @@ public class RevenuesExpensesDialog extends JDialog {
 	private LocalDate fromDate = null;
 	private LocalDate toDate = null;
 
-	public RevenuesExpensesDialog(ManagerFactory managerFactory) {
-		setTitle("Revenues & Expenses");
+	public EarningsExpensesDialog(ManagerFactory managerFactory) {
+		setTitle("Earnings & Expenses");
 		setResizable(false);
 		setSize(350, 300);
 		setLocationRelativeTo(null);

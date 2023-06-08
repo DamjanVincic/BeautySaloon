@@ -26,14 +26,14 @@ public class ManagerFrame extends JFrame {
 		JButton saloonButton = new JButton("Saloon");
 		add(saloonButton);
 		
-		JButton treatmentTypesButton = new JButton("Treatment types");
+		JButton treatmentTypesButton = new JButton("Treatment Types");
 		add(treatmentTypesButton);
 		
 		JButton servicesButton = new JButton("Services");
 		add(servicesButton);
 		
-		JButton revenueExpensesButton = new JButton("Revenues and expenses");
-		add(revenueExpensesButton);
+		JButton earningsExpensesButton = new JButton("Earnings and Expenses");
+		add(earningsExpensesButton);
 		
 		JButton reportsButton = new JButton("Reports");
 		add(reportsButton);
@@ -57,8 +57,8 @@ public class ManagerFrame extends JFrame {
 			servicesDialog.setVisible(true);
 		});
 		
-		revenueExpensesButton.addActionListener(e -> {
-			RevenuesExpensesDialog revenuesExpensesDialog = new RevenuesExpensesDialog(managerFactory);
+		earningsExpensesButton.addActionListener(e -> {
+			EarningsExpensesDialog revenuesExpensesDialog = new EarningsExpensesDialog(managerFactory);
 			revenuesExpensesDialog.setVisible(true);
 		});
 		
