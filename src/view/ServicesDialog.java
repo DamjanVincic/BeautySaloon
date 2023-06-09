@@ -25,7 +25,7 @@ public class ServicesDialog extends JDialog {
 	public ServicesDialog(ManagerFactory managerFactory) {
 		setTitle("Services");
 		setResizable(false);
-		setSize(600, 250);
+		setSize(600, 350);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setModal(true);
