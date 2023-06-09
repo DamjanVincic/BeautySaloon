@@ -14,6 +14,7 @@ import com.toedter.calendar.JDateChooser;
 import manage.ManagerFactory;
 import net.miginfocom.swing.MigLayout;
 import view.report.BeauticiansReport;
+import view.report.TreatmentsReport;
 
 public class ReportsDialog extends JDialog {
 	private static final long serialVersionUID = -7103095962612834562L;
@@ -75,6 +76,13 @@ public class ReportsDialog extends JDialog {
 				return;
 			BeauticiansReport beauticiansReport = new BeauticiansReport(managerFactory, fromDate, toDate);
 			beauticiansReport.setVisible(true);
+		});
+		
+		treatmentReports.addActionListener(e -> {
+			if (!validateDates())
+				return;
+			TreatmentsReport treatmentsReport = new TreatmentsReport(managerFactory, fromDate, toDate);
+			treatmentsReport.setVisible(true);
 		});
 		
 		goBackButton.addActionListener(e -> {
