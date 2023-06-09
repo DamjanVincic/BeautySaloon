@@ -7,9 +7,11 @@ import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import entity.Client;
@@ -34,9 +36,8 @@ public class ClientScheduledTreatmentsModal extends JDialog {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setModal(true);
-		setLayout(new MigLayout("wrap", "[grow, center]", "[]20[]"));
+		setLayout(new MigLayout("wrap", "[grow, center]", "[]20[][]"));
 		
-//		add(new JLabel(""));
 		JTable table = new JTable(new ClientScheduledTreatmentModel(this.managerFactory.getScheduledTreatmentManager(), (Client) managerFactory.getUserManager().getCurrentUser()));
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollPane = new JScrollPane(table);

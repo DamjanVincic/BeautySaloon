@@ -274,7 +274,6 @@ public class TreatmentScheduleDialog extends JDialog {
 	private void updateServiceFilter() {
 		if (this.lengthSearch.getText().trim().length() == 0) {
 			this.serviceTableLengthFilter = null;
-//			this.serviceTableSorter.setRowFilter(null);
 	    } else {
 	    	try {
 	    		int length = Integer.parseInt(lengthSearch.getText());
