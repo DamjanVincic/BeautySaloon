@@ -14,6 +14,7 @@ import com.toedter.calendar.JDateChooser;
 import manage.ManagerFactory;
 import net.miginfocom.swing.MigLayout;
 import view.report.BeauticiansReportDialog;
+import view.report.LoyaltyCardEligibleClientsReportDialog;
 import view.report.ServicesReportDialog;
 import view.report.TreatmentsReportDialog;
 
@@ -84,6 +85,11 @@ public class ReportsDialog extends JDialog {
 				return;
 			TreatmentsReportDialog treatmentsReport = new TreatmentsReportDialog(managerFactory, fromDate, toDate);
 			treatmentsReport.setVisible(true);
+		});
+		
+		loyaltyCardEligiblity.addActionListener(e -> {
+			LoyaltyCardEligibleClientsReportDialog loyaltyCardEligibleClientsReportDialog = new LoyaltyCardEligibleClientsReportDialog(managerFactory);
+			loyaltyCardEligibleClientsReportDialog.setVisible(true);
 		});
 		
 		serviceReports.addActionListener(e -> {
