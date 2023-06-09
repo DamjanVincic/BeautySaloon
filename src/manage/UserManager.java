@@ -301,18 +301,18 @@ public class UserManager {
 		}
 		
 		
-		if (!name.matches("^[a-zA-Z ]+$"))
-			throw new Exception("Name can contain only letters and spaces.");
-		if (!surname.matches("^[a-zA-Z ]+$"))
-			throw new Exception("Surname can only contain letters and spaces.");
-		if (!phone.matches("^[\\d\\s-]+$"))
-			throw new Exception("Phone number can only contain numbers, spaces and dashes.");
-		if (!address.matches("^[\\w\\d\\s.'-]+$"))
-			throw new Exception("Invalid address input.");
 		if (username != null && !username.matches("^[\\w.]+$"))
 			throw new Exception("Invalid username input.");
 		if (!password.matches("^[^,]{8,}$"))
 			throw new Exception("Password must have at least 8 characters.");
+		if (!name.matches("^[a-zA-Z ]+$"))
+			throw new Exception("Name can contain only letters and spaces.");
+		if (!surname.matches("^[a-zA-Z ]+$"))
+			throw new Exception("Surname can only contain letters and spaces.");
+		if (!phone.matches("^[\\d-]+$"))
+			throw new Exception("Phone number can only contain numbers and dashes.");
+		if (!address.matches("^[\\w\\d\\s.'-]+$"))
+			throw new Exception("Invalid address input.");
 	}
 	
 	public void validateEmployeeInput(String name, String surname, String gender, String phone, String address, String username, String password, String yearsOfExperience, String baseSalary) throws Exception {
