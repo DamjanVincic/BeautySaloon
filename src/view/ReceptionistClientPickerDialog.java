@@ -1,5 +1,7 @@
 package view;
 
+import java.awt.Dimension;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -18,7 +20,7 @@ public class ReceptionistClientPickerDialog extends JDialog {
 	public ReceptionistClientPickerDialog(ManagerFactory managerFactory) {
 		setTitle("Choose a client");
 		setResizable(false);
-		setSize(600, 500);
+		setSize(1100, 400);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setModal(true);
@@ -28,6 +30,7 @@ public class ReceptionistClientPickerDialog extends JDialog {
 		clientTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		clientTable.getTableHeader().setReorderingAllowed(false);
 		JScrollPane clientTableScrollPane = new JScrollPane(clientTable);
+		clientTableScrollPane.setPreferredSize(new Dimension(1100, 400));
 		add(clientTableScrollPane);
 		
 		JButton goBackButton = new JButton("Go Back");
