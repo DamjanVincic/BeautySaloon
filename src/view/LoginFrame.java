@@ -69,6 +69,9 @@ public class LoginFrame extends JFrame{
 						ReceptionistFrame receptionistFrame = new ReceptionistFrame(this.managerFactory);
 						receptionistFrame.setVisible(true);
 						break;
+					case MANAGER:
+						ManagerFrame managerFrame = new ManagerFrame(managerFactory);
+						managerFrame.setVisible(true);
 					default:
 						break;
 				}
