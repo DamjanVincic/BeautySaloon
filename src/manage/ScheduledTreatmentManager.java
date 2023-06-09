@@ -11,8 +11,10 @@ import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -30,14 +32,16 @@ public class ScheduledTreatmentManager {
     private String scheduledTreatmentFile;
     private UserManager userManager;
     private ServiceManager serviceManager;
+    private TreatmentTypeManager treatmentTypeManager;
     // private ArrayList<ScheduledTreatment> scheduledTreatments;
     private HashMap<Integer, ScheduledTreatment> scheduledTreatments;
     private LocalTime saloonStartTime, saloonEndTime;
 
-    public ScheduledTreatmentManager(String scheduledTreatmentFile, UserManager userManager, ServiceManager serviceManager, LocalTime saloonStartTime, LocalTime saloonEndTime) {
+    public ScheduledTreatmentManager(String scheduledTreatmentFile, UserManager userManager, ServiceManager serviceManager, TreatmentTypeManager treatmentTypeManager, LocalTime saloonStartTime, LocalTime saloonEndTime) {
         this.scheduledTreatmentFile = scheduledTreatmentFile;
         this.userManager = userManager;
         this.serviceManager = serviceManager;
+        this.treatmentTypeManager = treatmentTypeManager;
         this.scheduledTreatments = new HashMap<>();
         this.saloonStartTime = saloonStartTime;
         this.saloonEndTime = saloonEndTime;
@@ -231,6 +235,37 @@ public class ScheduledTreatmentManager {
 		}
 		
 		return earnings;
+	}
+	
+	public HashMap<Integer, ArrayList<Double>> getTreatmentTypesEarningsPerMonth(YearMonth startMonth, YearMonth endMonth) {
+		// <Treatment Type ID, list of earnings per month>
+		HashMap<Integer, ArrayList<Double>> treatmentTypesEarningsPerMonthReport = new HashMap<>();
+		
+		YearMonth currentMonth = startMonth;
+        while (currentMonth.isBefore(endMonth) || currentMonth.equals(endMonth)) {
+            LocalDate startDate = currentMonth.atDay(1), endDate = currentMonth.atEndOfMonth();
+            
+            HashMap<Integer, Double> monthEarningsPerTreatmentType = new HashMap<>();
+            this.treatmentTypeManager.getTreatmentTypes().values().forEach(item -> monthEarningsPerTreatmentType.put(item.getId(), 0.0));
+            for (ScheduledTreatment scheduledTreatment : this.getScheduledTreatments().values()) {
+            	LocalDate scheduledTreatmentDate = scheduledTreatment.getDateTime().toLocalDate();
+            	if (scheduledTreatmentDate.isAfter(startDate) && scheduledTreatmentDate.isBefore(endDate) || scheduledTreatmentDate.isEqual(startDate) || scheduledTreatmentDate.isEqual(endDate))
+            		monthEarningsPerTreatmentType.compute(scheduledTreatment.getService().getTreatmentType().getId(), (k, v) -> (v == null) ? getTreatmentEarnings(scheduledTreatment) : v + getTreatmentEarnings(scheduledTreatment));
+            }
+            
+            for (Map.Entry<Integer, Double> entry : monthEarningsPerTreatmentType.entrySet()) {
+            	ArrayList<Double> earningsList = treatmentTypesEarningsPerMonthReport.get(entry.getKey());
+            	if (earningsList == null) {
+            		treatmentTypesEarningsPerMonthReport.put(entry.getKey(), new ArrayList<Double>(Arrays.asList(entry.getValue())));
+            	} else {
+            		earningsList.add(entry.getValue());
+            	}
+            }
+            
+            currentMonth = currentMonth.plusMonths(1);
+        }
+        
+        return treatmentTypesEarningsPerMonthReport;
 	}
 	
 	public double getEarnings(LocalDate startDate, LocalDate endDate) {

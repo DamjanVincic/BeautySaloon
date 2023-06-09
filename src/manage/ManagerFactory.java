@@ -25,7 +25,7 @@ public class ManagerFactory {
         this.priceListManager = new PriceListManager(this.appSettings.getPriceFilename(), this.serviceManager);
         // this.treatmentTypeManager.setPriceListManager(priceListManager);
         
-        this.scheduledTreatmentManager = new ScheduledTreatmentManager(this.appSettings.getScheduledTreatmentFilename(), this.userManager, this.serviceManager, saloonStartTime, saloonEndTime);
+        this.scheduledTreatmentManager = new ScheduledTreatmentManager(this.appSettings.getScheduledTreatmentFilename(), this.userManager, this.serviceManager, this.treatmentTypeManager, saloonStartTime, saloonEndTime);
         userManager.setScheduledTreatmentManager(scheduledTreatmentManager);
         serviceManager.setScheduledTreatmentManager(scheduledTreatmentManager);
     }
