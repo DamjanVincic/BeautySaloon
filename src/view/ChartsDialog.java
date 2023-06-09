@@ -1,7 +1,13 @@
 package view;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -10,7 +16,10 @@ import javax.swing.JDialog;
 import org.knowm.xchart.PieChart;
 import org.knowm.xchart.PieChartBuilder;
 import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
 import org.knowm.xchart.style.PieStyler;
+import org.knowm.xchart.style.Styler;
 
 import entity.State;
 import manage.ManagerFactory;
@@ -38,7 +47,31 @@ public class ChartsDialog extends JDialog {
 		
 		
 		earningsPerTreatmentTypeButton.addActionListener(e -> {
+			XYChart chart = new XYChartBuilder().width(800).height(600).title("Earnings per treatment type").xAxisTitle("Month").yAxisTitle("Earnings").build();
+			chart.getStyler().setChartTitleVisible(true);
+			chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
 			
+			LocalDate currentDate = LocalDate.now();
+
+	        List<YearMonth> last12Months = new ArrayList<>();
+
+	        for (int i = 0; i < 12; i++) {
+	            YearMonth yearMonth = YearMonth.from(currentDate);
+	            last12Months.add(yearMonth);
+
+	            currentDate = currentDate.minusMonths(1);
+	        }
+	        Collections.reverse(last12Months);
+	        
+	        HashMap<Integer, ArrayList<Double>> treatmentTypesEarningsPerMonth = managerFactory.getScheduledTreatmentManager().getTreatmentTypesEarningsPerMonth(last12Months.get(0), last12Months.get(11));
+	        
+	        for (Map.Entry<Integer, ArrayList<Double>> entry : treatmentTypesEarningsPerMonth.entrySet()) {
+	        	chart.addSeries(managerFactory.getTreatmentTypeManager().findTreatmentTypeByID(entry.getKey()).getType(), entry.getValue());
+	        }
+	        chart.getStyler().setxAxisTickLabelsFormattingFunction(x -> last12Months.get(x.intValue()-1).toString());
+	        
+	        Thread t = new Thread(() -> new SwingWrapper<>(chart).displayChart().setDefaultCloseOperation(DISPOSE_ON_CLOSE));
+			t.start();
 		});
 		
 		numberOfTreatmentsPerBeautician.addActionListener(e -> {
