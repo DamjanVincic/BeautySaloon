@@ -16,7 +16,7 @@ public class ManagerFrame extends JFrame {
 		setSize(400, 400);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setLayout(new MigLayout("wrap", "[grow, center]", "20[]20[]20[][]20[][]40[]"));
+		setLayout(new MigLayout("wrap", "[grow, center]", "20[]20[]20[][]20[][][]40[]"));
 		
 		add(new JLabel(String.format("Welcome, %s!", managerFactory.getUserManager().getCurrentUser().getUsername())));
 		
@@ -34,6 +34,9 @@ public class ManagerFrame extends JFrame {
 		
 		JButton reportsButton = new JButton("Reports");
 		add(reportsButton);
+		
+		JButton chartsButton = new JButton("Charts");
+		add(chartsButton);
 		
 		JButton logOutButton = new JButton("Log out");
 		add(logOutButton);
@@ -62,6 +65,11 @@ public class ManagerFrame extends JFrame {
 		reportsButton.addActionListener(e -> {
 			ReportsDialog reportsDialog = new ReportsDialog(managerFactory);
 			reportsDialog.setVisible(true);
+		});
+		
+		chartsButton.addActionListener(e -> {
+			ChartsDialog chartsDialog = new ChartsDialog(managerFactory);
+			chartsDialog.setVisible(true);
 		});
 		
 		logOutButton.addActionListener(e -> {
