@@ -6,6 +6,7 @@ import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -17,8 +18,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.table.TableRowSorter;
 
 import com.toedter.calendar.JCalendar;
 
@@ -42,6 +49,13 @@ public class TreatmentScheduleDialog extends JDialog {
 	private LocalDate selectedDate = null;
 	private LocalTime selectedTime;
 	
+	private JTextField lengthSearch;
+	private JTextField priceSearch;
+	private RowFilter<Object, Object> serviceTableLengthFilter = null;
+	private RowFilter<Object, Object> serviceTablePriceFilter = null;
+	private TableRowSorter<AbstractTableModel> treatmentTypeTableSorter = new TableRowSorter<AbstractTableModel>();
+	private TableRowSorter<AbstractTableModel> serviceTableSorter = new TableRowSorter<AbstractTableModel>();
+	
 	public TreatmentScheduleDialog(Object parent, ManagerFactory managerFactory, Client currentUser) {
 		this.managerFactory = managerFactory;
 		setTitle("Treatment scheduling");
@@ -52,8 +66,28 @@ public class TreatmentScheduleDialog extends JDialog {
 		setModal(true);
 		setLayout(new MigLayout("wrap", "[grow, center]", "[]20[]20[][]20[]"));
 		
-//		TreatmentTypeModel treatmentTypeModel = new TreatmentTypeModel(managerFactory.getTreatmentTypeManager());
+		JLabel treatmentTypeLabel = new JLabel("Treatment type: ");
+		JTextField treatmentTypeSearch = new JTextField(10);
+		add(treatmentTypeLabel, "split 6");
+		add(treatmentTypeSearch);
+		
+		JLabel lengthLabel = new JLabel("Length: ");
+		lengthLabel.setVisible(false);
+		this.lengthSearch = new JTextField(10);
+		lengthSearch.setVisible(false);
+		add(lengthLabel);
+		add(lengthSearch);
+		
+		JLabel priceLabel = new JLabel("Price: ");
+		priceLabel.setVisible(false);
+		this.priceSearch = new JTextField(10);
+		priceSearch.setVisible(false);
+		add(priceLabel);
+		add(priceSearch);
+		
 		JTable treatmentTypesTable = new JTable(new TreatmentTypeModel(managerFactory.getTreatmentTypeManager()));
+		treatmentTypeTableSorter.setModel((TreatmentTypeModel)treatmentTypesTable.getModel());
+		treatmentTypesTable.setRowSorter(treatmentTypeTableSorter);
 		treatmentTypesTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane treatmentTypeScrollPane = new JScrollPane(treatmentTypesTable);
 		treatmentTypeScrollPane.setPreferredSize(new Dimension(200, 100));
@@ -86,6 +120,65 @@ public class TreatmentScheduleDialog extends JDialog {
 		add(scheduleButton);
 		
 		
+		treatmentTypeSearch.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				changedUpdate(e);
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				changedUpdate(e);
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				if (treatmentTypeSearch.getText().trim().length() == 0) {
+					treatmentTypeTableSorter.setRowFilter(null);
+			    } else {
+			    	treatmentTypeTableSorter.setRowFilter(RowFilter.regexFilter("(?i)" + treatmentTypeSearch.getText().trim()));
+			    }
+			}
+        });
+		
+		lengthSearch.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateServiceFilter();
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateServiceFilter();
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				updateServiceFilter();
+			}
+        });
+		
+		priceSearch.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateServiceFilter();
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateServiceFilter();
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				updateServiceFilter();
+			}
+        });
+		
+		
 		treatmentTypesTable.getSelectionModel().addListSelectionListener(e -> {
 			if (!e.getValueIsAdjusting()) {
                 int selectedRow = treatmentTypesTable.getSelectedRow();
@@ -95,6 +188,13 @@ public class TreatmentScheduleDialog extends JDialog {
                     serviceTable.setModel(new SpecificServicesModel(managerFactory.getServiceManager(), treatmentType.getId()));
                     serviceTable.setRowSelectionInterval(0, 0);
                     serviceTableScrollPane.setVisible(true);
+                    serviceTableSorter.setModel((SpecificServicesModel)serviceTable.getModel());
+                    serviceTable.setRowSorter(serviceTableSorter);
+                    
+                    lengthLabel.setVisible(true);
+                    lengthSearch.setVisible(true);
+                    priceLabel.setVisible(true);
+                    priceSearch.setVisible(true);
                     
                     List<Beautician> trainedBeauticians = managerFactory.getUserManager().getBeauticiansTrainedForTreatmentType(treatmentType);
 					beauticiansComboBox.removeAllItems();
@@ -169,5 +269,40 @@ public class TreatmentScheduleDialog extends JDialog {
 		availableTimeComboBox.removeAllItems();
 		availableTimes.forEach(item -> availableTimeComboBox.addItem(item));
 		availableTimeComboBox.setVisible(true);
+	}
+	
+	private void updateServiceFilter() {
+		if (this.lengthSearch.getText().trim().length() == 0) {
+			this.serviceTableLengthFilter = null;
+//			this.serviceTableSorter.setRowFilter(null);
+	    } else {
+	    	try {
+	    		int length = Integer.parseInt(lengthSearch.getText());
+	    		
+	    		this.serviceTableLengthFilter = RowFilter.numberFilter(RowFilter.ComparisonType.BEFORE, length + 1, 2);
+	    	} catch (Exception ex) {
+	    		this.serviceTableLengthFilter = null;
+	    	}
+	    }
+		
+		if (priceSearch.getText().trim().length() == 0) {
+			this.serviceTablePriceFilter = null;
+	    } else {
+	    	try {
+	    		double price = Double.parseDouble(priceSearch.getText());
+	    		
+	    		this.serviceTablePriceFilter = RowFilter.numberFilter(RowFilter.ComparisonType.BEFORE, price + 1, 1);
+	    	} catch (Exception ex) {
+	    		this.serviceTablePriceFilter = null;
+	    	}
+	    }
+		
+		List<RowFilter<Object, Object>> filters = new ArrayList<>();
+		if (this.serviceTableLengthFilter != null)
+			filters.add(this.serviceTableLengthFilter);
+		if (this.serviceTablePriceFilter != null)
+			filters.add(this.serviceTablePriceFilter);
+		
+		this.serviceTableSorter.setRowFilter(RowFilter.andFilter(filters));
 	}
 }
