@@ -12,6 +12,7 @@ import org.knowm.xchart.PieChartBuilder;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.style.PieStyler;
 
+import entity.State;
 import manage.ManagerFactory;
 import net.miginfocom.swing.MigLayout;
 
@@ -24,7 +25,6 @@ public class ChartsDialog extends JDialog {
 		setSize(350, 250);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-//		setModal(true);
 		setLayout(new MigLayout("wrap", "[grow, center]", "30[]20[]20[]"));
 		
 		JButton earningsPerTreatmentTypeButton = new JButton("Earnings per Treatment Type");
@@ -52,6 +52,23 @@ public class ChartsDialog extends JDialog {
 			for (Map.Entry<Integer, HashMap<String, Double>> entry : beauticiansReport.entrySet()) {
 				if (entry.getValue().get("treatmentNumber") > 0)
 					chart.addSeries(managerFactory.getUserManager().findUserById(entry.getKey()).getUsername(), entry.getValue().get("treatmentNumber"));
+			}
+			
+			Thread t = new Thread(() -> new SwingWrapper<>(chart).displayChart().setDefaultCloseOperation(DISPOSE_ON_CLOSE));
+			t.start();
+		});
+		
+		numberOfTreatmentsPerStatus.addActionListener(e -> {
+			PieChart chart = new PieChartBuilder().width(800).height(600).title("Status of treatments in the last 30 days.").build();
+
+			chart.getStyler().setLegendVisible(true);
+			chart.getStyler().setLegendPosition(PieStyler.LegendPosition.InsideNW);
+			
+			HashMap<State, Integer> beauticiansReport = managerFactory.getScheduledTreatmentManager().scheduledTreatmentsStateReport(LocalDate.now().minusMonths(1), LocalDate.now());
+
+			for (Map.Entry<State, Integer> entry : beauticiansReport.entrySet()) {
+				if (entry.getValue() > 0)
+					chart.addSeries(entry.getKey().getText(), entry.getValue());
 			}
 			
 			Thread t = new Thread(() -> new SwingWrapper<>(chart).displayChart().setDefaultCloseOperation(DISPOSE_ON_CLOSE));
