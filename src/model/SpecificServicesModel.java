@@ -40,4 +40,14 @@ public class SpecificServicesModel extends ServiceModel {
 				return null;
 		}
 	}
+	
+	@Override
+	public String getColumnName(int column) {
+		return this.columnNames[column];
+	}
+
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		return this.getValueAt(0, columnIndex).getClass();
+	}
 }
