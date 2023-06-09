@@ -10,10 +10,10 @@ import manage.ManagerFactory;
 import model.TreatmentReportModel;
 import net.miginfocom.swing.MigLayout;
 
-public class TreatmentsReport extends JDialog {
+public class TreatmentsReportDialog extends JDialog {
 	private static final long serialVersionUID = 8061063118899230848L;
 
-	public TreatmentsReport(ManagerFactory managerFactory, LocalDate startDate, LocalDate endDate) {
+	public TreatmentsReportDialog(ManagerFactory managerFactory, LocalDate startDate, LocalDate endDate) {
 		setTitle("Treatments Report");
 		setResizable(false);
 		setSize(600, 250);

@@ -13,8 +13,9 @@ import com.toedter.calendar.JDateChooser;
 
 import manage.ManagerFactory;
 import net.miginfocom.swing.MigLayout;
-import view.report.BeauticiansReport;
-import view.report.TreatmentsReport;
+import view.report.BeauticiansReportDialog;
+import view.report.ServicesReportDialog;
+import view.report.TreatmentsReportDialog;
 
 public class ReportsDialog extends JDialog {
 	private static final long serialVersionUID = -7103095962612834562L;
@@ -45,8 +46,8 @@ public class ReportsDialog extends JDialog {
 		JButton treatmentReports = new JButton("Treatment Reports");
 		add(treatmentReports, "span, center");
 		
-		JButton servicesReports = new JButton("Services Reports");
-		add(servicesReports, "span, center");
+		JButton serviceReports = new JButton("Service Reports");
+		add(serviceReports, "span, center");
 		
 		JButton loyaltyCardEligiblity = new JButton("Loyalty Card Eligibility");
 		add(loyaltyCardEligiblity, "span, center");
@@ -74,15 +75,22 @@ public class ReportsDialog extends JDialog {
 		beauticianReports.addActionListener(e -> {
 			if (!validateDates())
 				return;
-			BeauticiansReport beauticiansReport = new BeauticiansReport(managerFactory, fromDate, toDate);
+			BeauticiansReportDialog beauticiansReport = new BeauticiansReportDialog(managerFactory, fromDate, toDate);
 			beauticiansReport.setVisible(true);
 		});
 		
 		treatmentReports.addActionListener(e -> {
 			if (!validateDates())
 				return;
-			TreatmentsReport treatmentsReport = new TreatmentsReport(managerFactory, fromDate, toDate);
+			TreatmentsReportDialog treatmentsReport = new TreatmentsReportDialog(managerFactory, fromDate, toDate);
 			treatmentsReport.setVisible(true);
+		});
+		
+		serviceReports.addActionListener(e -> {
+			if (!validateDates())
+				return;
+			ServicesReportDialog servicesReportDialog = new ServicesReportDialog(managerFactory, fromDate, toDate);
+			servicesReportDialog.setVisible(true);
 		});
 		
 		goBackButton.addActionListener(e -> {
