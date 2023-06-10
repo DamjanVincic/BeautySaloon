@@ -59,7 +59,7 @@ public class UserManager {
         User user;
         try {
             ArrayList<User> filtered = new ArrayList<>(this.users.values().stream()
-                                                            .filter(c -> c.getUsername().equals(username))
+                                                            .filter(c -> !c.isDeleted() && c.getUsername().equals(username))
                                                             .collect(Collectors.toList()));
             user = filtered.get(0);
         } catch (IndexOutOfBoundsException ex) {
