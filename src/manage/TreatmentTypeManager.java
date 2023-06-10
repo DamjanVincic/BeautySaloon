@@ -46,7 +46,7 @@ public class TreatmentTypeManager {
         TreatmentType treatmentType;
         try {
             ArrayList<TreatmentType> filtered = new ArrayList<>(this.treatmentTypes.values().stream()
-                                                            .filter(t -> t.getType().equals(type))
+                                                            .filter(t -> !t.isDeleted() && t.getType().equals(type))
                                                             .collect(Collectors.toList()));
             treatmentType = filtered.get(0);
         } catch (IndexOutOfBoundsException ex) {
