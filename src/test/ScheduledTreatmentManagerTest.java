@@ -28,8 +28,6 @@ import manage.UserManager;
 
 class ScheduledTreatmentManagerTest {
 
-	private UserManager userManager;
-	private ManagerFactory managerFactory;
 	private ScheduledTreatmentManager scheduledTreatmentManager;
 
 	@BeforeEach
@@ -45,8 +43,8 @@ class ScheduledTreatmentManagerTest {
 		CosmeticSaloonManager cosmeticSaloonManager = new CosmeticSaloonManager(String.format("testdata%scosmetic_saloons.csv", sep));
 		cosmeticSaloonManager.add("Saloon", LocalTime.parse("08:00"), LocalTime.parse("16:00"), String.format("testdata%susers.csv", sep), String.format("testdata%streatment_types.csv", sep), String.format("testdata%sservices.csv", sep), String.format("testdata%sscheduled_treatments.csv", sep), String.format("testdata%sprices.csv", sep));
 		
-		managerFactory = cosmeticSaloonManager.findCosmeticSaloonById(1).getManagerFactory();
-		userManager = managerFactory.getUserManager();
+		ManagerFactory managerFactory = cosmeticSaloonManager.findCosmeticSaloonById(1).getManagerFactory();
+		UserManager userManager = managerFactory.getUserManager();
 		TreatmentTypeManager treatmentTypeManager = managerFactory.getTreatmentTypeManager();
 		ServiceManager serviceManager = managerFactory.getServiceManager();
 		scheduledTreatmentManager = managerFactory.getScheduledTreatmentManager();
