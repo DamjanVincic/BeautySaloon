@@ -241,7 +241,7 @@ public class UserManager {
 	}
 	
 	public ArrayList<Client> getLoyaltyCardEligibleClients() {
-		return new ArrayList<>(this.users.values().stream().filter(item -> item.getRole() == Role.CLIENT && ((Client)item).hasLoyaltyCard()).map(item -> (Client)item).collect(Collectors.toList()));
+		return new ArrayList<>(this.users.values().stream().filter(item -> !item.isDeleted() && item.getRole() == Role.CLIENT && ((Client)item).hasLoyaltyCard()).map(item -> (Client)item).collect(Collectors.toList()));
 	}
 	
 	public double getClientAmountSpent(int clientID) {
