@@ -35,6 +35,8 @@ public class ScheduledTreatmentModel extends AbstractTableModel{
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
+		if (rowIndex == 0)
+			return null;
 		ScheduledTreatment scheduledTreatment = this.getTreatments().get(rowIndex);
 		switch (columnIndex) {
 			case 0:
@@ -63,6 +65,8 @@ public class ScheduledTreatmentModel extends AbstractTableModel{
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
+		if (this.getValueAt(0, columnIndex) == null)
+			return Object.class;
 		return this.getValueAt(0, columnIndex).getClass();
 	}
 	

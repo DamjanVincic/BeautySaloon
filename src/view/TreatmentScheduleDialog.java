@@ -185,11 +185,16 @@ public class TreatmentScheduleDialog extends JDialog {
                 if (selectedRow != -1) {
                     TreatmentType treatmentType = ((TreatmentTypeModel)treatmentTypesTable.getModel()).getTreatmentType(selectedRow);
 
-                    serviceTable.setModel(new SpecificServicesModel(managerFactory.getServiceManager(), treatmentType.getId()));
-                    serviceTable.setRowSelectionInterval(0, 0);
-                    serviceTableScrollPane.setVisible(true);
-                    serviceTableSorter.setModel((SpecificServicesModel)serviceTable.getModel());
-                    serviceTable.setRowSorter(serviceTableSorter);
+                    try {
+	                    serviceTable.setModel(new SpecificServicesModel(managerFactory.getServiceManager(), treatmentType.getId()));
+	                    serviceTable.setRowSelectionInterval(0, 0);
+	                    serviceTableScrollPane.setVisible(true);
+	                    serviceTableSorter.setModel((SpecificServicesModel)serviceTable.getModel());
+	                    serviceTable.setRowSorter(serviceTableSorter);
+                    } catch (IllegalArgumentException ex) {
+                    	JOptionPane.showMessageDialog(null, "There are currently no services for chosen treatment type.", "", JOptionPane.INFORMATION_MESSAGE);
+                    	return;
+                    }
                     
                     lengthLabel.setVisible(true);
                     lengthSearch.setVisible(true);

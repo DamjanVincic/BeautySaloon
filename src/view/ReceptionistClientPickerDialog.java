@@ -46,8 +46,12 @@ public class ReceptionistClientPickerDialog extends JDialog {
 				JOptionPane.showMessageDialog(this, "You must select a client.", "Error", JOptionPane.WARNING_MESSAGE);
 			} else {
 				Client client = ((ClientModel) clientTable.getModel()).getClient(row);
-				TreatmentScheduleDialog treatmentScheduleDialog = new TreatmentScheduleDialog(this, managerFactory, client);
-				treatmentScheduleDialog.setVisible(true);
+				try {
+					TreatmentScheduleDialog treatmentScheduleDialog = new TreatmentScheduleDialog(this, managerFactory, client);
+					treatmentScheduleDialog.setVisible(true);
+				} catch (IndexOutOfBoundsException ex) {
+					JOptionPane.showMessageDialog(null, "There are currently no treatment types available.", "", JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
 		});
 		

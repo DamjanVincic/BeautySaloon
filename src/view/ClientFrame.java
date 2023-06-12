@@ -49,8 +49,12 @@ public class ClientFrame extends JFrame {
 		
 		
 		scheduleTreatmentButton.addActionListener(e -> {
-			TreatmentScheduleDialog treatmentScheduleDialog = new TreatmentScheduleDialog(this, managerFactory, currentUser);
-			treatmentScheduleDialog.setVisible(true);
+			try {
+				TreatmentScheduleDialog treatmentScheduleDialog = new TreatmentScheduleDialog(this, managerFactory, currentUser);
+				treatmentScheduleDialog.setVisible(true);
+			} catch (IndexOutOfBoundsException ex) {
+				JOptionPane.showMessageDialog(null, "There are currently no treatment types available.", "", JOptionPane.INFORMATION_MESSAGE);
+			}
 		});
 		
 		scheduledTreatmentListButton.addActionListener(e -> {
