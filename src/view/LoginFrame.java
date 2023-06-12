@@ -72,6 +72,11 @@ public class LoginFrame extends JFrame{
 					case MANAGER:
 						ManagerFrame managerFrame = new ManagerFrame(managerFactory);
 						managerFrame.setVisible(true);
+						break;
+					case BEAUTICIAN:
+						BeauticianFrame beauticianFrame = new BeauticianFrame(managerFactory);
+						beauticianFrame.setVisible(true);
+						break;
 					default:
 						break;
 				}
